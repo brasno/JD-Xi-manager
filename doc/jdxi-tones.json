@@ -1,0 +1,6206 @@
+{
+ "PresetToneListDS": [
+  {
+   "No": 1,
+   "Name": "JP8 Strings1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 1
+  },
+  {
+   "No": 2,
+   "Name": "Soft Pad 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 2
+  },
+  {
+   "No": 3,
+   "Name": "JP8 Strings2",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 3
+  },
+  {
+   "No": 4,
+   "Name": "JUNO Str 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 4
+  },
+  {
+   "No": 5,
+   "Name": "Oct Strings",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 5
+  },
+  {
+   "No": 6,
+   "Name": "Brite Str 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 6
+  },
+  {
+   "No": 7,
+   "Name": "Boreal Pad",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 7
+  },
+  {
+   "No": 8,
+   "Name": "JP8 Strings3",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 8
+  },
+  {
+   "No": 9,
+   "Name": "JP8 Strings4",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 9
+  },
+  {
+   "No": 10,
+   "Name": "Hollow Pad 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 10
+  },
+  {
+   "No": 11,
+   "Name": "LFO Pad 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 11
+  },
+  {
+   "No": 12,
+   "Name": "Hybrid Str",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 12
+  },
+  {
+   "No": 13,
+   "Name": "Awakening 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 13
+  },
+  {
+   "No": 14,
+   "Name": "Cincosoft 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 14
+  },
+  {
+   "No": 15,
+   "Name": "Bright Pad 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 15
+  },
+  {
+   "No": 16,
+   "Name": "Analog Str 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 16
+  },
+  {
+   "No": 17,
+   "Name": "Soft ResoPd1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 17
+  },
+  {
+   "No": 18,
+   "Name": "HPF Poly 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 18
+  },
+  {
+   "No": 19,
+   "Name": "BPF Poly",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 19
+  },
+  {
+   "No": 20,
+   "Name": "Sweep Pad 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 20
+  },
+  {
+   "No": 21,
+   "Name": "Soft Pad 2",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 21
+  },
+  {
+   "No": 22,
+   "Name": "Sweep JD 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 22
+  },
+  {
+   "No": 23,
+   "Name": "FltSweep Pd1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 23
+  },
+  {
+   "No": 24,
+   "Name": "HPF Pad",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 24
+  },
+  {
+   "No": 25,
+   "Name": "HPF SweepPd1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 25
+  },
+  {
+   "No": 26,
+   "Name": "KOff Pad",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 26
+  },
+  {
+   "No": 27,
+   "Name": "Sweep Pad 2",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 27
+  },
+  {
+   "No": 28,
+   "Name": "TrnsSweepPad",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 28
+  },
+  {
+   "No": 29,
+   "Name": "Revalation 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 29
+  },
+  {
+   "No": 30,
+   "Name": "LFO CarvePd1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 30
+  },
+  {
+   "No": 31,
+   "Name": "RETROX 139 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 31
+  },
+  {
+   "No": 32,
+   "Name": "LFO ResoPad1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 32
+  },
+  {
+   "No": 33,
+   "Name": "PLS Pad 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 33
+  },
+  {
+   "No": 34,
+   "Name": "PLS Pad 2",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 34
+  },
+  {
+   "No": 35,
+   "Name": "Trip 2 Mars1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 35
+  },
+  {
+   "No": 36,
+   "Name": "Reso S&H Pd1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 36
+  },
+  {
+   "No": 37,
+   "Name": "SideChainPd1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 37
+  },
+  {
+   "No": 38,
+   "Name": "PXZoon 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 38
+  },
+  {
+   "No": 39,
+   "Name": "Psychoscilo1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 39
+  },
+  {
+   "No": 40,
+   "Name": "Fantasy 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 40
+  },
+  {
+   "No": 41,
+   "Name": "D-50 Stack 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 41
+  },
+  {
+   "No": 42,
+   "Name": "Organ Pad",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 42
+  },
+  {
+   "No": 43,
+   "Name": "Bell Pad",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 43
+  },
+  {
+   "No": 44,
+   "Name": "Dreaming 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 44
+  },
+  {
+   "No": 45,
+   "Name": "Syn Sniper 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 45
+  },
+  {
+   "No": 46,
+   "Name": "Strings 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 46
+  },
+  {
+   "No": 47,
+   "Name": "D-50 Pizz 1",
+   "Category": "Strings/Pad",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 47
+  },
+  {
+   "No": 48,
+   "Name": "Super Saw 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 48
+  },
+  {
+   "No": 49,
+   "Name": "S-SawStacLd1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 49
+  },
+  {
+   "No": 50,
+   "Name": "Tekno Lead 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 50
+  },
+  {
+   "No": 51,
+   "Name": "Tekno Lead 2",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 51
+  },
+  {
+   "No": 52,
+   "Name": "Tekno Lead 3",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 52
+  },
+  {
+   "No": 53,
+   "Name": "OSC-SyncLd 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 53
+  },
+  {
+   "No": 54,
+   "Name": "WaveShapeLd1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 54
+  },
+  {
+   "No": 55,
+   "Name": "JD RingMod 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 55
+  },
+  {
+   "No": 56,
+   "Name": "Buzz Lead 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 56
+  },
+  {
+   "No": 57,
+   "Name": "Buzz Lead 2",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 57
+  },
+  {
+   "No": 58,
+   "Name": "SawBuzz Ld 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 58
+  },
+  {
+   "No": 59,
+   "Name": "Sqr Buzz Ld1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 59
+  },
+  {
+   "No": 60,
+   "Name": "Tekno Lead 4",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 60
+  },
+  {
+   "No": 61,
+   "Name": "Dist Flt TB1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 61
+  },
+  {
+   "No": 62,
+   "Name": "Dist TB Sqr1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 62
+  },
+  {
+   "No": 63,
+   "Name": "Glideator 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 63
+  },
+  {
+   "No": 64,
+   "Name": "Vintager 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 64
+  },
+  {
+   "No": 65,
+   "Name": "Hover Lead 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 65
+  },
+  {
+   "No": 66,
+   "Name": "Saw Lead 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 66
+  },
+  {
+   "No": 67,
+   "Name": "Saw+Tri Lead",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 67
+  },
+  {
+   "No": 68,
+   "Name": "PortaSaw Ld1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 68
+  },
+  {
+   "No": 69,
+   "Name": "Reso Saw Ld",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 69
+  },
+  {
+   "No": 70,
+   "Name": "SawTrap Ld 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 70
+  },
+  {
+   "No": 71,
+   "Name": "Fat GR Lead",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 71
+  },
+  {
+   "No": 72,
+   "Name": "Pulstar Ld",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 72
+  },
+  {
+   "No": 73,
+   "Name": "Slow Lead",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 73
+  },
+  {
+   "No": 74,
+   "Name": "AnaVox Lead",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 74
+  },
+  {
+   "No": 75,
+   "Name": "Square Ld 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 75
+  },
+  {
+   "No": 76,
+   "Name": "Square Ld 2",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 76
+  },
+  {
+   "No": 77,
+   "Name": "Sqr Lead 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 77
+  },
+  {
+   "No": 78,
+   "Name": "Sqr Trap Ld1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 78
+  },
+  {
+   "No": 79,
+   "Name": "Sine Lead 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 79
+  },
+  {
+   "No": 80,
+   "Name": "Tri Lead",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 80
+  },
+  {
+   "No": 81,
+   "Name": "Tri Stac Ld1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 81
+  },
+  {
+   "No": 82,
+   "Name": "5th SawLead1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 82
+  },
+  {
+   "No": 83,
+   "Name": "Sweet 5th 1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 83
+  },
+  {
+   "No": 84,
+   "Name": "4th Syn Lead",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 84
+  },
+  {
+   "No": 85,
+   "Name": "Maj Stack Ld",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 85
+  },
+  {
+   "No": 86,
+   "Name": "MinStack Ld1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 86
+  },
+  {
+   "No": 87,
+   "Name": "Chubby Lead1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 87
+  },
+  {
+   "No": 88,
+   "Name": "CuttingLead1",
+   "Category": "Lead",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 88
+  },
+  {
+   "No": 89,
+   "Name": "Seq Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 89
+  },
+  {
+   "No": 90,
+   "Name": "Reso Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 90
+  },
+  {
+   "No": 91,
+   "Name": "TB Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 91
+  },
+  {
+   "No": 92,
+   "Name": "106 Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 92
+  },
+  {
+   "No": 93,
+   "Name": "FilterEnvBs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 93
+  },
+  {
+   "No": 94,
+   "Name": "JUNO Sqr Bs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 94
+  },
+  {
+   "No": 95,
+   "Name": "Reso Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 95
+  },
+  {
+   "No": 96,
+   "Name": "JUNO Bass",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 96
+  },
+  {
+   "No": 97,
+   "Name": "MG Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 97
+  },
+  {
+   "No": 98,
+   "Name": "106 Bass 3",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 98
+  },
+  {
+   "No": 99,
+   "Name": "Reso Bass 3",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 99
+  },
+  {
+   "No": 100,
+   "Name": "Detune Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 100
+  },
+  {
+   "No": 101,
+   "Name": "MKS-50 Bass1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 101
+  },
+  {
+   "No": 102,
+   "Name": "Sweep Bass",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 102
+  },
+  {
+   "No": 103,
+   "Name": "MG Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 103
+  },
+  {
+   "No": 104,
+   "Name": "MG Bass 3",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 104
+  },
+  {
+   "No": 105,
+   "Name": "ResRubber Bs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 105
+  },
+  {
+   "No": 106,
+   "Name": "R&B Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 106
+  },
+  {
+   "No": 107,
+   "Name": "Reso Bass 4",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 107
+  },
+  {
+   "No": 108,
+   "Name": "Wide Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 108
+  },
+  {
+   "No": 109,
+   "Name": "Chow Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 109
+  },
+  {
+   "No": 110,
+   "Name": "Chow Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 110
+  },
+  {
+   "No": 111,
+   "Name": "SqrFilterBs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 111
+  },
+  {
+   "No": 112,
+   "Name": "Reso Bass 5",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 112
+  },
+  {
+   "No": 113,
+   "Name": "Syn Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 113
+  },
+  {
+   "No": 114,
+   "Name": "ResoSawSynBs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 114
+  },
+  {
+   "No": 115,
+   "Name": "Filter Bass1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 115
+  },
+  {
+   "No": 116,
+   "Name": "SeqFltEnvBs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 116
+  },
+  {
+   "No": 117,
+   "Name": "DnB Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 117
+  },
+  {
+   "No": 118,
+   "Name": "UnisonSynBs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 118
+  },
+  {
+   "No": 119,
+   "Name": "Modular Bs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 119
+  },
+  {
+   "No": 120,
+   "Name": "Monster Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 120
+  },
+  {
+   "No": 121,
+   "Name": "Monster Bs 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 121
+  },
+  {
+   "No": 122,
+   "Name": "Monster Bs 3",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 122
+  },
+  {
+   "No": 123,
+   "Name": "Monster Bs 4",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 123
+  },
+  {
+   "No": 124,
+   "Name": "Square Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 124
+  },
+  {
+   "No": 125,
+   "Name": "106 Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 125
+  },
+  {
+   "No": 126,
+   "Name": "5th Stac Bs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 126
+  },
+  {
+   "No": 127,
+   "Name": "SqrStacSynBs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 127
+  },
+  {
+   "No": 128,
+   "Name": "MC-202 Bs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 64,
+   "PC": 128
+  },
+  {
+   "No": 129,
+   "Name": "TB Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 1
+  },
+  {
+   "No": 130,
+   "Name": "Square Bs 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 2
+  },
+  {
+   "No": 131,
+   "Name": "SH-101 Bs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 3
+  },
+  {
+   "No": 132,
+   "Name": "R&B Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 4
+  },
+  {
+   "No": 133,
+   "Name": "MG Bass 4",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 5
+  },
+  {
+   "No": 134,
+   "Name": "Seq Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 6
+  },
+  {
+   "No": 135,
+   "Name": "Tri Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 7
+  },
+  {
+   "No": 136,
+   "Name": "BPF Syn Bs 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 8
+  },
+  {
+   "No": 137,
+   "Name": "BPF Syn Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 9
+  },
+  {
+   "No": 138,
+   "Name": "Low Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 10
+  },
+  {
+   "No": 139,
+   "Name": "Low Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 11
+  },
+  {
+   "No": 140,
+   "Name": "Kick Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 12
+  },
+  {
+   "No": 141,
+   "Name": "SinDetuneBs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 13
+  },
+  {
+   "No": 142,
+   "Name": "Organ Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 14
+  },
+  {
+   "No": 143,
+   "Name": "Growl Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 15
+  },
+  {
+   "No": 144,
+   "Name": "Talking Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 16
+  },
+  {
+   "No": 145,
+   "Name": "LFO Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 17
+  },
+  {
+   "No": 146,
+   "Name": "LFO Bass 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 18
+  },
+  {
+   "No": 147,
+   "Name": "Crack Bass",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 19
+  },
+  {
+   "No": 148,
+   "Name": "Wobble Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 20
+  },
+  {
+   "No": 149,
+   "Name": "Wobble Bs 2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 21
+  },
+  {
+   "No": 150,
+   "Name": "Wobble Bs 3",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 22
+  },
+  {
+   "No": 151,
+   "Name": "Wobble Bs 4",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 23
+  },
+  {
+   "No": 152,
+   "Name": "SideChainBs1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 24
+  },
+  {
+   "No": 153,
+   "Name": "SideChainBs2",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 25
+  },
+  {
+   "No": 154,
+   "Name": "House Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 26
+  },
+  {
+   "No": 155,
+   "Name": "FM Bass",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 27
+  },
+  {
+   "No": 156,
+   "Name": "4Op FM Bass1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 28
+  },
+  {
+   "No": 157,
+   "Name": "Ac. Bass",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 29
+  },
+  {
+   "No": 158,
+   "Name": "Fingerd Bs 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 30
+  },
+  {
+   "No": 159,
+   "Name": "Picked Bass",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 31
+  },
+  {
+   "No": 160,
+   "Name": "Fretless Bs",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 32
+  },
+  {
+   "No": 161,
+   "Name": "Slap Bass 1",
+   "Category": "Bass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 33
+  },
+  {
+   "No": 162,
+   "Name": "JD Piano 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 34
+  },
+  {
+   "No": 163,
+   "Name": "E. Grand 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 35
+  },
+  {
+   "No": 164,
+   "Name": "Trem EP 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 36
+  },
+  {
+   "No": 165,
+   "Name": "FM E. Piano 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 37
+  },
+  {
+   "No": 166,
+   "Name": "FM E. Piano 2",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 38
+  },
+  {
+   "No": 167,
+   "Name": "Vib Wurly 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 39
+  },
+  {
+   "No": 168,
+   "Name": "Pulse Clav",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 40
+  },
+  {
+   "No": 169,
+   "Name": "Clav",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 41
+  },
+  {
+   "No": 170,
+   "Name": "70's E. Organ",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 42
+  },
+  {
+   "No": 171,
+   "Name": "House Org 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 43
+  },
+  {
+   "No": 172,
+   "Name": "House Org 2",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 44
+  },
+  {
+   "No": 173,
+   "Name": "Bell 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 45
+  },
+  {
+   "No": 174,
+   "Name": "Bell 2",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 46
+  },
+  {
+   "No": 175,
+   "Name": "Organ Bell",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 47
+  },
+  {
+   "No": 176,
+   "Name": "Vibraphone 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 48
+  },
+  {
+   "No": 177,
+   "Name": "Steel Drum",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 49
+  },
+  {
+   "No": 178,
+   "Name": "Harp 1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 50
+  },
+  {
+   "No": 179,
+   "Name": "Ac. Guitar",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 51
+  },
+  {
+   "No": 180,
+   "Name": "Bright Strat",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 52
+  },
+  {
+   "No": 181,
+   "Name": "Funk Guitar1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 53
+  },
+  {
+   "No": 182,
+   "Name": "Jazz Guitar",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 54
+  },
+  {
+   "No": 183,
+   "Name": "Dist Guitar1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 55
+  },
+  {
+   "No": 184,
+   "Name": "D. Mute Gtr1",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 56
+  },
+  {
+   "No": 185,
+   "Name": "E. Sitar",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 57
+  },
+  {
+   "No": 186,
+   "Name": "Sitar Drone",
+   "Category": "Keyboard",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 58
+  },
+  {
+   "No": 187,
+   "Name": "FX 1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 59
+  },
+  {
+   "No": 188,
+   "Name": "FX 2",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 60
+  },
+  {
+   "No": 189,
+   "Name": "FX 3",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 61
+  },
+  {
+   "No": 190,
+   "Name": "Tuned Winds1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 62
+  },
+  {
+   "No": 191,
+   "Name": "Bend Lead 1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 63
+  },
+  {
+   "No": 192,
+   "Name": "RiSER 1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 64
+  },
+  {
+   "No": 193,
+   "Name": "Rising SEQ 1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 65
+  },
+  {
+   "No": 194,
+   "Name": "Scream Saw",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 66
+  },
+  {
+   "No": 195,
+   "Name": "Noise SEQ 1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 67
+  },
+  {
+   "No": 196,
+   "Name": "Syn Vox 1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 68
+  },
+  {
+   "No": 197,
+   "Name": "JD SoftVox",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 69
+  },
+  {
+   "No": 198,
+   "Name": "Vox Pad",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 70
+  },
+  {
+   "No": 199,
+   "Name": "VP-330 Chr",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 71
+  },
+  {
+   "No": 200,
+   "Name": "Orch Hit",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 72
+  },
+  {
+   "No": 201,
+   "Name": "Philly Hit",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 73
+  },
+  {
+   "No": 202,
+   "Name": "House Hit",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 74
+  },
+  {
+   "No": 203,
+   "Name": "O'Skool Hit1",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 75
+  },
+  {
+   "No": 204,
+   "Name": "Punch Hit",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 76
+  },
+  {
+   "No": 205,
+   "Name": "Tao Hit",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 77
+  },
+  {
+   "No": 206,
+   "Name": "SEQ Saw 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 78
+  },
+  {
+   "No": 207,
+   "Name": "SEQ Sqr",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 79
+  },
+  {
+   "No": 208,
+   "Name": "SEQ Tri 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 80
+  },
+  {
+   "No": 209,
+   "Name": "SEQ 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 81
+  },
+  {
+   "No": 210,
+   "Name": "SEQ 2",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 82
+  },
+  {
+   "No": 211,
+   "Name": "SEQ 3",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 83
+  },
+  {
+   "No": 212,
+   "Name": "SEQ 4",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 84
+  },
+  {
+   "No": 213,
+   "Name": "Sqr Reso Plk",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 85
+  },
+  {
+   "No": 214,
+   "Name": "Pluck Synth1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 86
+  },
+  {
+   "No": 215,
+   "Name": "Paperclip 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 87
+  },
+  {
+   "No": 216,
+   "Name": "Sonar Pluck1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 88
+  },
+  {
+   "No": 217,
+   "Name": "SqrTrapPlk 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 89
+  },
+  {
+   "No": 218,
+   "Name": "TB Saw Seq 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 90
+  },
+  {
+   "No": 219,
+   "Name": "TB Sqr Seq 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 91
+  },
+  {
+   "No": 220,
+   "Name": "JUNO Key",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 92
+  },
+  {
+   "No": 221,
+   "Name": "Analog Poly1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 93
+  },
+  {
+   "No": 222,
+   "Name": "Analog Poly2",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 94
+  },
+  {
+   "No": 223,
+   "Name": "Analog Poly3",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 95
+  },
+  {
+   "No": 224,
+   "Name": "Analog Poly4",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 96
+  },
+  {
+   "No": 225,
+   "Name": "JUNO Octavr1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 97
+  },
+  {
+   "No": 226,
+   "Name": "EDM Synth 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 98
+  },
+  {
+   "No": 227,
+   "Name": "Super Saw 2",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 99
+  },
+  {
+   "No": 228,
+   "Name": "S-Saw Poly",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 100
+  },
+  {
+   "No": 229,
+   "Name": "Trance Key 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 101
+  },
+  {
+   "No": 230,
+   "Name": "S-Saw Pad 1",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 102
+  },
+  {
+   "No": 231,
+   "Name": "7th Stac Syn",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 103
+  },
+  {
+   "No": 232,
+   "Name": "S-SawStc Syn",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 104
+  },
+  {
+   "No": 233,
+   "Name": "Trance Key 2",
+   "Category": "Seq",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 105
+  },
+  {
+   "No": 234,
+   "Name": "Analog Brass",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 106
+  },
+  {
+   "No": 235,
+   "Name": "Reso Brass",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 107
+  },
+  {
+   "No": 236,
+   "Name": "Soft Brass 1",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 108
+  },
+  {
+   "No": 237,
+   "Name": "FM Brass",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 109
+  },
+  {
+   "No": 238,
+   "Name": "Syn Brass 1",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 110
+  },
+  {
+   "No": 239,
+   "Name": "Syn Brass 2",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 111
+  },
+  {
+   "No": 240,
+   "Name": "JP8 Brass",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 112
+  },
+  {
+   "No": 241,
+   "Name": "Soft SynBrs1",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 113
+  },
+  {
+   "No": 242,
+   "Name": "Soft SynBrs2",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 114
+  },
+  {
+   "No": 243,
+   "Name": "EpicSlow Brs",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 115
+  },
+  {
+   "No": 244,
+   "Name": "JUNO Brass",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 116
+  },
+  {
+   "No": 245,
+   "Name": "Poly Brass",
+   "Category": "Brass",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 117
+  },
+  {
+   "No": 246,
+   "Name": "Voc:Ensemble",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 118
+  },
+  {
+   "No": 247,
+   "Name": "Voc:5thStack",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 119
+  },
+  {
+   "No": 248,
+   "Name": "Voc:Robot",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 120
+  },
+  {
+   "No": 249,
+   "Name": "Voc:Saw",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 121
+  },
+  {
+   "No": 250,
+   "Name": "Voc:Sqr",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 122
+  },
+  {
+   "No": 251,
+   "Name": "Voc:Rise Up",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 123
+  },
+  {
+   "No": 252,
+   "Name": "Voc:Auto Vib",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 124
+  },
+  {
+   "No": 253,
+   "Name": "Voc:PitchEnv",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 125
+  },
+  {
+   "No": 254,
+   "Name": "Voc:VP-330",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 126
+  },
+  {
+   "No": 255,
+   "Name": "Voc:Noise",
+   "Category": "FX/Other",
+   "MSB": 95,
+   "LSB": 65,
+   "PC": 127
+  }
+ ],
+ "WaveformListDS": [
+  {
+   "No": 1,
+   "Waveform Name": "Calc.Saw"
+  },
+  {
+   "No": 2,
+   "Waveform Name": "DistSaw Wave"
+  },
+  {
+   "No": 3,
+   "Waveform Name": "GR-300 Saw"
+  },
+  {
+   "No": 4,
+   "Waveform Name": "Lead Wave 1"
+  },
+  {
+   "No": 5,
+   "Waveform Name": "Lead Wave 2"
+  },
+  {
+   "No": 6,
+   "Waveform Name": "Unison Saw"
+  },
+  {
+   "No": 7,
+   "Waveform Name": "Saw+Sub Wave"
+  },
+  {
+   "No": 8,
+   "Waveform Name": "SqrLeadWave"
+  },
+  {
+   "No": 9,
+   "Waveform Name": "SqrLeadWave+"
+  },
+  {
+   "No": 10,
+   "Waveform Name": "FeedbackWave"
+  },
+  {
+   "No": 11,
+   "Waveform Name": "Bad Axe"
+  },
+  {
+   "No": 12,
+   "Waveform Name": "Cutting Lead"
+  },
+  {
+   "No": 13,
+   "Waveform Name": "DistTB Sqr"
+  },
+  {
+   "No": 14,
+   "Waveform Name": "Sync Sweep"
+  },
+  {
+   "No": 15,
+   "Waveform Name": "Saw Sync"
+  },
+  {
+   "No": 16,
+   "Waveform Name": "Unison Sync+"
+  },
+  {
+   "No": 17,
+   "Waveform Name": "Sync Wave"
+  },
+  {
+   "No": 18,
+   "Waveform Name": "Cutters"
+  },
+  {
+   "No": 19,
+   "Waveform Name": "Nasty"
+  },
+  {
+   "No": 20,
+   "Waveform Name": "Bagpipe Wave"
+  },
+  {
+   "No": 21,
+   "Waveform Name": "Wave Scan"
+  },
+  {
+   "No": 22,
+   "Waveform Name": "Wire String"
+  },
+  {
+   "No": 23,
+   "Waveform Name": "Lead Wave 3"
+  },
+  {
+   "No": 24,
+   "Waveform Name": "PWM Wave 1"
+  },
+  {
+   "No": 25,
+   "Waveform Name": "PWM Wave 2"
+  },
+  {
+   "No": 26,
+   "Waveform Name": "MIDI Clav"
+  },
+  {
+   "No": 27,
+   "Waveform Name": "Huge MIDI"
+  },
+  {
+   "No": 28,
+   "Waveform Name": "Wobble Bs 1"
+  },
+  {
+   "No": 29,
+   "Waveform Name": "Wobble Bs 2"
+  },
+  {
+   "No": 30,
+   "Waveform Name": "Hollow Bass"
+  },
+  {
+   "No": 31,
+   "Waveform Name": "SynBs Wave"
+  },
+  {
+   "No": 32,
+   "Waveform Name": "Solid Bass"
+  },
+  {
+   "No": 33,
+   "Waveform Name": "House Bass"
+  },
+  {
+   "No": 34,
+   "Waveform Name": "4OP FM Bass"
+  },
+  {
+   "No": 35,
+   "Waveform Name": "Fine Wine"
+  },
+  {
+   "No": 36,
+   "Waveform Name": "Bell Wave 1"
+  },
+  {
+   "No": 37,
+   "Waveform Name": "Bell Wave 1+"
+  },
+  {
+   "No": 38,
+   "Waveform Name": "Bell Wave 2"
+  },
+  {
+   "No": 39,
+   "Waveform Name": "Digi Wave 1"
+  },
+  {
+   "No": 40,
+   "Waveform Name": "Digi Wave 2"
+  },
+  {
+   "No": 41,
+   "Waveform Name": "Org Bell"
+  },
+  {
+   "No": 42,
+   "Waveform Name": "Gamelan"
+  },
+  {
+   "No": 43,
+   "Waveform Name": "Crystal"
+  },
+  {
+   "No": 44,
+   "Waveform Name": "Finger Bell"
+  },
+  {
+   "No": 45,
+   "Waveform Name": "DipthongWave"
+  },
+  {
+   "No": 46,
+   "Waveform Name": "DipthongWv +"
+  },
+  {
+   "No": 47,
+   "Waveform Name": "Hollo Wave1"
+  },
+  {
+   "No": 48,
+   "Waveform Name": "Hollo Wave2"
+  },
+  {
+   "No": 49,
+   "Waveform Name": "Hollo Wave2+"
+  },
+  {
+   "No": 50,
+   "Waveform Name": "Heaven Wave"
+  },
+  {
+   "No": 51,
+   "Waveform Name": "Doo"
+  },
+  {
+   "No": 52,
+   "Waveform Name": "MMM Vox"
+  },
+  {
+   "No": 53,
+   "Waveform Name": "Eeh Formant"
+  },
+  {
+   "No": 54,
+   "Waveform Name": "Iih Formant"
+  },
+  {
+   "No": 55,
+   "Waveform Name": "Syn Vox 1"
+  },
+  {
+   "No": 56,
+   "Waveform Name": "Syn Vox 2"
+  },
+  {
+   "No": 57,
+   "Waveform Name": "Org Vox"
+  },
+  {
+   "No": 58,
+   "Waveform Name": "Male Ooh"
+  },
+  {
+   "No": 59,
+   "Waveform Name": "LargeChrF 1"
+  },
+  {
+   "No": 60,
+   "Waveform Name": "LargeChrF 2"
+  },
+  {
+   "No": 61,
+   "Waveform Name": "Female Oohs"
+  },
+  {
+   "No": 62,
+   "Waveform Name": "Female Aahs"
+  },
+  {
+   "No": 63,
+   "Waveform Name": "Atmospheric"
+  },
+  {
+   "No": 64,
+   "Waveform Name": "Air Pad 1"
+  },
+  {
+   "No": 65,
+   "Waveform Name": "Air Pad 2"
+  },
+  {
+   "No": 66,
+   "Waveform Name": "Air Pad 3"
+  },
+  {
+   "No": 67,
+   "Waveform Name": "VP-330 Choir"
+  },
+  {
+   "No": 68,
+   "Waveform Name": "SynStrings 1"
+  },
+  {
+   "No": 69,
+   "Waveform Name": "SynStrings 2"
+  },
+  {
+   "No": 70,
+   "Waveform Name": "SynStrings 3"
+  },
+  {
+   "No": 71,
+   "Waveform Name": "SynStrings 4"
+  },
+  {
+   "No": 72,
+   "Waveform Name": "SynStrings 5"
+  },
+  {
+   "No": 73,
+   "Waveform Name": "SynStrings 6"
+  },
+  {
+   "No": 74,
+   "Waveform Name": "Revalation"
+  },
+  {
+   "No": 75,
+   "Waveform Name": "Alan's Pad"
+  },
+  {
+   "No": 76,
+   "Waveform Name": "LFO Poly"
+  },
+  {
+   "No": 77,
+   "Waveform Name": "Boreal Pad L"
+  },
+  {
+   "No": 78,
+   "Waveform Name": "Boreal Pad R"
+  },
+  {
+   "No": 79,
+   "Waveform Name": "HPF Pad L"
+  },
+  {
+   "No": 80,
+   "Waveform Name": "HPF Pad R"
+  },
+  {
+   "No": 81,
+   "Waveform Name": "Sweep Pad"
+  },
+  {
+   "No": 82,
+   "Waveform Name": "Chubby Ld"
+  },
+  {
+   "No": 83,
+   "Waveform Name": "Fantasy Pad"
+  },
+  {
+   "No": 84,
+   "Waveform Name": "Legend Pad"
+  },
+  {
+   "No": 85,
+   "Waveform Name": "D-50 Stack"
+  },
+  {
+   "No": 86,
+   "Waveform Name": "ChrdOfCnadaL"
+  },
+  {
+   "No": 87,
+   "Waveform Name": "ChrdOfCnadaR"
+  },
+  {
+   "No": 88,
+   "Waveform Name": "Fireflies"
+  },
+  {
+   "No": 89,
+   "Waveform Name": "JazzyBubbles"
+  },
+  {
+   "No": 90,
+   "Waveform Name": "SynthFx 1"
+  },
+  {
+   "No": 91,
+   "Waveform Name": "SynthFx 2"
+  },
+  {
+   "No": 92,
+   "Waveform Name": "X-Mod Wave 1"
+  },
+  {
+   "No": 93,
+   "Waveform Name": "X-Mod Wave 2"
+  },
+  {
+   "No": 94,
+   "Waveform Name": "SynVox Noise"
+  },
+  {
+   "No": 95,
+   "Waveform Name": "Dentist Nz"
+  },
+  {
+   "No": 96,
+   "Waveform Name": "Atmosphere"
+  },
+  {
+   "No": 97,
+   "Waveform Name": "Anklungs"
+  },
+  {
+   "No": 98,
+   "Waveform Name": "Xylo Seq"
+  },
+  {
+   "No": 99,
+   "Waveform Name": "O'Skool Hit"
+  },
+  {
+   "No": 100,
+   "Waveform Name": "Orch. Hit"
+  },
+  {
+   "No": 101,
+   "Waveform Name": "Punch Hit"
+  },
+  {
+   "No": 102,
+   "Waveform Name": "Philly Hit"
+  },
+  {
+   "No": 103,
+   "Waveform Name": "ClassicHseHt"
+  },
+  {
+   "No": 104,
+   "Waveform Name": "Tao Hit"
+  },
+  {
+   "No": 105,
+   "Waveform Name": "Smear Hit"
+  },
+  {
+   "No": 106,
+   "Waveform Name": "808 Kick 1Lp"
+  },
+  {
+   "No": 107,
+   "Waveform Name": "808 Kick 2Lp"
+  },
+  {
+   "No": 108,
+   "Waveform Name": "909 Kick Lp"
+  },
+  {
+   "No": 109,
+   "Waveform Name": "JD Piano"
+  },
+  {
+   "No": 110,
+   "Waveform Name": "E.Grand"
+  },
+  {
+   "No": 111,
+   "Waveform Name": "Stage EP"
+  },
+  {
+   "No": 112,
+   "Waveform Name": "Wurly"
+  },
+  {
+   "No": 113,
+   "Waveform Name": "EP Hard"
+  },
+  {
+   "No": 114,
+   "Waveform Name": "FM EP 1"
+  },
+  {
+   "No": 115,
+   "Waveform Name": "FM EP 2"
+  },
+  {
+   "No": 116,
+   "Waveform Name": "FM EP 3"
+  },
+  {
+   "No": 117,
+   "Waveform Name": "Harpsi Wave"
+  },
+  {
+   "No": 118,
+   "Waveform Name": "Clav Wave 1"
+  },
+  {
+   "No": 119,
+   "Waveform Name": "Clav Wave 2"
+  },
+  {
+   "No": 120,
+   "Waveform Name": "Vibe Wave"
+  },
+  {
+   "No": 121,
+   "Waveform Name": "Organ Wave 1"
+  },
+  {
+   "No": 122,
+   "Waveform Name": "Organ Wave 2"
+  },
+  {
+   "No": 123,
+   "Waveform Name": "PercOrgan 1"
+  },
+  {
+   "No": 124,
+   "Waveform Name": "PercOrgan 2"
+  },
+  {
+   "No": 125,
+   "Waveform Name": "Vint.Organ"
+  },
+  {
+   "No": 126,
+   "Waveform Name": "Harmonica"
+  },
+  {
+   "No": 127,
+   "Waveform Name": "Ac. Guitar"
+  },
+  {
+   "No": 128,
+   "Waveform Name": "Nylon Gtr"
+  },
+  {
+   "No": 129,
+   "Waveform Name": "Brt Strat"
+  },
+  {
+   "No": 130,
+   "Waveform Name": "Funk Guitar"
+  },
+  {
+   "No": 131,
+   "Waveform Name": "Jazz Guitar"
+  },
+  {
+   "No": 132,
+   "Waveform Name": "Dist Guitar"
+  },
+  {
+   "No": 133,
+   "Waveform Name": "D.Mute Gtr"
+  },
+  {
+   "No": 134,
+   "Waveform Name": "FatAc. Bass"
+  },
+  {
+   "No": 135,
+   "Waveform Name": "Fingerd Bass"
+  },
+  {
+   "No": 136,
+   "Waveform Name": "Picked Bass"
+  },
+  {
+   "No": 137,
+   "Waveform Name": "Fretless Bs"
+  },
+  {
+   "No": 138,
+   "Waveform Name": "Slap Bass"
+  },
+  {
+   "No": 139,
+   "Waveform Name": "Strings 1"
+  },
+  {
+   "No": 140,
+   "Waveform Name": "Strings 2"
+  },
+  {
+   "No": 141,
+   "Waveform Name": "Strings 3 L"
+  },
+  {
+   "No": 142,
+   "Waveform Name": "Strings 3 R"
+  },
+  {
+   "No": 143,
+   "Waveform Name": "Pizzagogo"
+  },
+  {
+   "No": 144,
+   "Waveform Name": "Harp Harm"
+  },
+  {
+   "No": 145,
+   "Waveform Name": "Harp Wave"
+  },
+  {
+   "No": 146,
+   "Waveform Name": "PopBrsAtk"
+  },
+  {
+   "No": 147,
+   "Waveform Name": "PopBrass"
+  },
+  {
+   "No": 148,
+   "Waveform Name": "Tp Section"
+  },
+  {
+   "No": 149,
+   "Waveform Name": "Studio Tp"
+  },
+  {
+   "No": 150,
+   "Waveform Name": "Tp Vib Mari"
+  },
+  {
+   "No": 151,
+   "Waveform Name": "Tp Hrmn Mt"
+  },
+  {
+   "No": 152,
+   "Waveform Name": "FM Brass"
+  },
+  {
+   "No": 153,
+   "Waveform Name": "Trombone"
+  },
+  {
+   "No": 154,
+   "Waveform Name": "Wide Sax"
+  },
+  {
+   "No": 155,
+   "Waveform Name": "Flute Wave"
+  },
+  {
+   "No": 156,
+   "Waveform Name": "Flute Push"
+  },
+  {
+   "No": 157,
+   "Waveform Name": "E.Sitar"
+  },
+  {
+   "No": 158,
+   "Waveform Name": "Sitar Drone"
+  },
+  {
+   "No": 159,
+   "Waveform Name": "Agogo"
+  },
+  {
+   "No": 160,
+   "Waveform Name": "Steel Drums"
+  }
+ ],
+ "PresetToneListAS": [
+  {
+   "No": 1,
+   "Name": "Toxic Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 1,
+   "PC": ""
+  },
+  {
+   "No": 2,
+   "Name": "Sub Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 2,
+   "PC": ""
+  },
+  {
+   "No": 3,
+   "Name": "Backwards 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 3,
+   "PC": ""
+  },
+  {
+   "No": 4,
+   "Name": "Fat as That1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 4,
+   "PC": ""
+  },
+  {
+   "No": 5,
+   "Name": "Saw+Sub Bs 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 5,
+   "PC": ""
+  },
+  {
+   "No": 6,
+   "Name": "Saw Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 6,
+   "PC": ""
+  },
+  {
+   "No": 7,
+   "Name": "Pulse Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 7,
+   "PC": ""
+  },
+  {
+   "No": 8,
+   "Name": "ResoSaw Bs 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 8,
+   "PC": ""
+  },
+  {
+   "No": 9,
+   "Name": "ResoSaw Bs 2",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 9,
+   "PC": ""
+  },
+  {
+   "No": 10,
+   "Name": "AcidSaw SEQ1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 10,
+   "PC": ""
+  },
+  {
+   "No": 11,
+   "Name": "Psy Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 11,
+   "PC": ""
+  },
+  {
+   "No": 12,
+   "Name": "Dist TB Bs 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 12,
+   "PC": ""
+  },
+  {
+   "No": 13,
+   "Name": "Sqr Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 13,
+   "PC": ""
+  },
+  {
+   "No": 14,
+   "Name": "Tri Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 14,
+   "PC": ""
+  },
+  {
+   "No": 15,
+   "Name": "Snake Glide1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 15,
+   "PC": ""
+  },
+  {
+   "No": 16,
+   "Name": "Soft Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 16,
+   "PC": ""
+  },
+  {
+   "No": 17,
+   "Name": "Tear Drop 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 17,
+   "PC": ""
+  },
+  {
+   "No": 18,
+   "Name": "Slo worn 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 18,
+   "PC": ""
+  },
+  {
+   "No": 19,
+   "Name": "Dist LFO Bs1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 19,
+   "PC": ""
+  },
+  {
+   "No": 20,
+   "Name": "ResoPulseBs1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 20,
+   "PC": ""
+  },
+  {
+   "No": 21,
+   "Name": "Squelchy 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 21,
+   "PC": ""
+  },
+  {
+   "No": 22,
+   "Name": "DnB Wobbler1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 22,
+   "PC": ""
+  },
+  {
+   "No": 23,
+   "Name": "OffBeat Wob1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 23,
+   "PC": ""
+  },
+  {
+   "No": 24,
+   "Name": "Chilled Wob",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 24,
+   "PC": ""
+  },
+  {
+   "No": 25,
+   "Name": "Bouncy Bass1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 25,
+   "PC": ""
+  },
+  {
+   "No": 26,
+   "Name": "PulseOfLife1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 26,
+   "PC": ""
+  },
+  {
+   "No": 27,
+   "Name": "PWM Base 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 27,
+   "PC": ""
+  },
+  {
+   "No": 28,
+   "Name": "Pumper Bass1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 28,
+   "PC": ""
+  },
+  {
+   "No": 29,
+   "Name": "ClickerBass1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 29,
+   "PC": ""
+  },
+  {
+   "No": 30,
+   "Name": "Psy Bass 2",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 30,
+   "PC": ""
+  },
+  {
+   "No": 31,
+   "Name": "HooverSuprt1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 31,
+   "PC": ""
+  },
+  {
+   "No": 32,
+   "Name": "Celoclip 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 32,
+   "PC": ""
+  },
+  {
+   "No": 33,
+   "Name": "Tri Fall Bs1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 33,
+   "PC": ""
+  },
+  {
+   "No": 34,
+   "Name": "808 Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 34,
+   "PC": ""
+  },
+  {
+   "No": 35,
+   "Name": "House Bass 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 35,
+   "PC": ""
+  },
+  {
+   "No": 36,
+   "Name": "Psy Bass 3",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 36,
+   "PC": ""
+  },
+  {
+   "No": 37,
+   "Name": "Reel 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 37,
+   "PC": ""
+  },
+  {
+   "No": 38,
+   "Name": "PortaSaw Ld1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 38,
+   "PC": ""
+  },
+  {
+   "No": 39,
+   "Name": "Porta Lead 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 39,
+   "PC": ""
+  },
+  {
+   "No": 40,
+   "Name": "Analog Tp 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 40,
+   "PC": ""
+  },
+  {
+   "No": 41,
+   "Name": "Tri Lead 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 41,
+   "PC": ""
+  },
+  {
+   "No": 42,
+   "Name": "Sine Lead 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 42,
+   "PC": ""
+  },
+  {
+   "No": 43,
+   "Name": "Saw Buzz 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 43,
+   "PC": ""
+  },
+  {
+   "No": 44,
+   "Name": "Buzz Saw Ld1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 44,
+   "PC": ""
+  },
+  {
+   "No": 45,
+   "Name": "Laser Lead 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 45,
+   "PC": ""
+  },
+  {
+   "No": 46,
+   "Name": "Saw & Per 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 46,
+   "PC": ""
+  },
+  {
+   "No": 47,
+   "Name": "Insect 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 47,
+   "PC": ""
+  },
+  {
+   "No": 48,
+   "Name": "Sqr SEQ 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 48,
+   "PC": ""
+  },
+  {
+   "No": 49,
+   "Name": "ZipPhase 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 49,
+   "PC": ""
+  },
+  {
+   "No": 50,
+   "Name": "Stinger 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 50,
+   "PC": ""
+  },
+  {
+   "No": 51,
+   "Name": "3 Oh 3",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 51,
+   "PC": ""
+  },
+  {
+   "No": 52,
+   "Name": "Sus Zap 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 52,
+   "PC": ""
+  },
+  {
+   "No": 53,
+   "Name": "Bowouch 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 53,
+   "PC": ""
+  },
+  {
+   "No": 54,
+   "Name": "Resocut 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 54,
+   "PC": ""
+  },
+  {
+   "No": 55,
+   "Name": "LFO FX",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 55,
+   "PC": ""
+  },
+  {
+   "No": 56,
+   "Name": "Fall Synth 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 56,
+   "PC": ""
+  },
+  {
+   "No": 57,
+   "Name": "Twister 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 57,
+   "PC": ""
+  },
+  {
+   "No": 58,
+   "Name": "Analog Kick1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 58,
+   "PC": ""
+  },
+  {
+   "No": 59,
+   "Name": "Zippers 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 59,
+   "PC": ""
+  },
+  {
+   "No": 60,
+   "Name": "Zippers 2",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 60,
+   "PC": ""
+  },
+  {
+   "No": 61,
+   "Name": "Zippers 3",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 61,
+   "PC": ""
+  },
+  {
+   "No": 62,
+   "Name": "Siren Hell 1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 62,
+   "PC": ""
+  },
+  {
+   "No": 63,
+   "Name": "SirenFX/Mod1",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 63,
+   "PC": ""
+  },
+  {
+   "No": 64,
+   "Name": "Init Tone",
+   "Category": 94,
+   "MSB": 64,
+   "LSB": 64,
+   "PC": ""
+  }
+ ],
+ "PresetDrumKitList": [
+  {
+   "No": 1,
+   "Name": "TR-909 Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 1
+  },
+  {
+   "No": 2,
+   "Name": "TR-808 Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 2
+  },
+  {
+   "No": 3,
+   "Name": "707&727 Kit1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 3
+  },
+  {
+   "No": 4,
+   "Name": "CR-78 Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 4
+  },
+  {
+   "No": 5,
+   "Name": "TR-606 Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 5
+  },
+  {
+   "No": 6,
+   "Name": "TR-626 Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 6
+  },
+  {
+   "No": 7,
+   "Name": "EDM Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 7
+  },
+  {
+   "No": 8,
+   "Name": "Drum&Bs Kit1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 8
+  },
+  {
+   "No": 9,
+   "Name": "Techno Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 9
+  },
+  {
+   "No": 10,
+   "Name": "House Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 10
+  },
+  {
+   "No": 11,
+   "Name": "Hiphop Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 11
+  },
+  {
+   "No": 12,
+   "Name": "R&B Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 12
+  },
+  {
+   "No": 13,
+   "Name": "TR-909 Kit 2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 13
+  },
+  {
+   "No": 14,
+   "Name": "TR-909 Kit 3",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 14
+  },
+  {
+   "No": 15,
+   "Name": "TR-808 Kit 2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 15
+  },
+  {
+   "No": 16,
+   "Name": "TR-808 Kit 3",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 16
+  },
+  {
+   "No": 17,
+   "Name": "TR-808 Kit 4",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 17
+  },
+  {
+   "No": 18,
+   "Name": "808&909 Kit1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 18
+  },
+  {
+   "No": 19,
+   "Name": "808&909 Kit2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 19
+  },
+  {
+   "No": 20,
+   "Name": "707&727 Kit2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 20
+  },
+  {
+   "No": 21,
+   "Name": "909&7*7 Kit1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 21
+  },
+  {
+   "No": 22,
+   "Name": "808&7*7 Kit1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 22
+  },
+  {
+   "No": 23,
+   "Name": "EDM Kit 2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 23
+  },
+  {
+   "No": 24,
+   "Name": "Techno Kit 2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 24
+  },
+  {
+   "No": 25,
+   "Name": "Hiphop Kit 2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 25
+  },
+  {
+   "No": 26,
+   "Name": "80's Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 26
+  },
+  {
+   "No": 27,
+   "Name": "90's Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 27
+  },
+  {
+   "No": 28,
+   "Name": "Noise Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 28
+  },
+  {
+   "No": 29,
+   "Name": "Pop Kit 1",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 29
+  },
+  {
+   "No": 30,
+   "Name": "Pop Kit 2",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 30
+  },
+  {
+   "No": 31,
+   "Name": "Rock Kit",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 31
+  },
+  {
+   "No": 32,
+   "Name": "Jazz Kit",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 32
+  },
+  {
+   "No": 33,
+   "Name": "Latin Kit",
+   "MSB": 86,
+   "LSB": 64,
+   "PC": 33
+  }
+ ],
+ "WaveformListDrumKit": [
+  {
+   "No": 1,
+   "Waveform Name": "78 Kick P"
+  },
+  {
+   "No": 2,
+   "Waveform Name": "606 Kick P"
+  },
+  {
+   "No": 3,
+   "Waveform Name": "808 Kick 1aP"
+  },
+  {
+   "No": 4,
+   "Waveform Name": "808 Kick 1bP"
+  },
+  {
+   "No": 5,
+   "Waveform Name": "808 Kick 1cP"
+  },
+  {
+   "No": 6,
+   "Waveform Name": "808 Kick 2aP"
+  },
+  {
+   "No": 7,
+   "Waveform Name": "808 Kick 2bP"
+  },
+  {
+   "No": 8,
+   "Waveform Name": "808 Kick 2cP"
+  },
+  {
+   "No": 9,
+   "Waveform Name": "808 Kick 3aP"
+  },
+  {
+   "No": 10,
+   "Waveform Name": "808 Kick 3bP"
+  },
+  {
+   "No": 11,
+   "Waveform Name": "808 Kick 3cP"
+  },
+  {
+   "No": 12,
+   "Waveform Name": "808 Kick 4aP"
+  },
+  {
+   "No": 13,
+   "Waveform Name": "808 Kick 4bP"
+  },
+  {
+   "No": 14,
+   "Waveform Name": "808 Kick 4cP"
+  },
+  {
+   "No": 15,
+   "Waveform Name": "808 Kick 1Lp"
+  },
+  {
+   "No": 16,
+   "Waveform Name": "808 Kick 2Lp"
+  },
+  {
+   "No": 17,
+   "Waveform Name": "909 Kick 1aP"
+  },
+  {
+   "No": 18,
+   "Waveform Name": "909 Kick 1bP"
+  },
+  {
+   "No": 19,
+   "Waveform Name": "909 Kick 1cP"
+  },
+  {
+   "No": 20,
+   "Waveform Name": "909 Kick 2bP"
+  },
+  {
+   "No": 21,
+   "Waveform Name": "909 Kick 2cP"
+  },
+  {
+   "No": 22,
+   "Waveform Name": "909 Kick 3P"
+  },
+  {
+   "No": 23,
+   "Waveform Name": "909 Kick 4"
+  },
+  {
+   "No": 24,
+   "Waveform Name": "909 Kick 5"
+  },
+  {
+   "No": 25,
+   "Waveform Name": "909 Kick 6"
+  },
+  {
+   "No": 26,
+   "Waveform Name": "909 DstKickP"
+  },
+  {
+   "No": 27,
+   "Waveform Name": "909 Kick Lp"
+  },
+  {
+   "No": 28,
+   "Waveform Name": "707 Kick 1 P"
+  },
+  {
+   "No": 29,
+   "Waveform Name": "707 Kick 2 P"
+  },
+  {
+   "No": 30,
+   "Waveform Name": "626 Kick 1 P"
+  },
+  {
+   "No": 31,
+   "Waveform Name": "626 Kick 2 P"
+  },
+  {
+   "No": 32,
+   "Waveform Name": "Analog Kick1"
+  },
+  {
+   "No": 33,
+   "Waveform Name": "Analog Kick2"
+  },
+  {
+   "No": 34,
+   "Waveform Name": "Analog Kick3"
+  },
+  {
+   "No": 35,
+   "Waveform Name": "Analog Kick4"
+  },
+  {
+   "No": 36,
+   "Waveform Name": "Analog Kick5"
+  },
+  {
+   "No": 37,
+   "Waveform Name": "PlasticKick1"
+  },
+  {
+   "No": 38,
+   "Waveform Name": "PlasticKick2"
+  },
+  {
+   "No": 39,
+   "Waveform Name": "Synth Kick 1"
+  },
+  {
+   "No": 40,
+   "Waveform Name": "Synth Kick 2"
+  },
+  {
+   "No": 41,
+   "Waveform Name": "Synth Kick 3"
+  },
+  {
+   "No": 42,
+   "Waveform Name": "Synth Kick 4"
+  },
+  {
+   "No": 43,
+   "Waveform Name": "Synth Kick 5"
+  },
+  {
+   "No": 44,
+   "Waveform Name": "Synth Kick 6"
+  },
+  {
+   "No": 45,
+   "Waveform Name": "Synth Kick 7"
+  },
+  {
+   "No": 46,
+   "Waveform Name": "Synth Kick 8"
+  },
+  {
+   "No": 47,
+   "Waveform Name": "Synth Kick 9"
+  },
+  {
+   "No": 48,
+   "Waveform Name": "Synth Kick10"
+  },
+  {
+   "No": 49,
+   "Waveform Name": "Synth Kick11"
+  },
+  {
+   "No": 50,
+   "Waveform Name": "Synth Kick12"
+  },
+  {
+   "No": 51,
+   "Waveform Name": "Synth Kick13"
+  },
+  {
+   "No": 52,
+   "Waveform Name": "Synth Kick14"
+  },
+  {
+   "No": 53,
+   "Waveform Name": "Synth Kick15"
+  },
+  {
+   "No": 54,
+   "Waveform Name": "Vint Kick P"
+  },
+  {
+   "No": 55,
+   "Waveform Name": "Jungle KickP"
+  },
+  {
+   "No": 56,
+   "Waveform Name": "HashKick 1 P"
+  },
+  {
+   "No": 57,
+   "Waveform Name": "HashKick 2 P"
+  },
+  {
+   "No": 58,
+   "Waveform Name": "Lite Kick P"
+  },
+  {
+   "No": 59,
+   "Waveform Name": "Dry Kick 1"
+  },
+  {
+   "No": 60,
+   "Waveform Name": "Dry Kick 2"
+  },
+  {
+   "No": 61,
+   "Waveform Name": "Tight Kick P"
+  },
+  {
+   "No": 62,
+   "Waveform Name": "Old Kick"
+  },
+  {
+   "No": 63,
+   "Waveform Name": "Warm Kick P"
+  },
+  {
+   "No": 64,
+   "Waveform Name": "Hush Kick P"
+  },
+  {
+   "No": 65,
+   "Waveform Name": "Power Kick"
+  },
+  {
+   "No": 66,
+   "Waveform Name": "Break Kick"
+  },
+  {
+   "No": 67,
+   "Waveform Name": "Turbo Kick"
+  },
+  {
+   "No": 68,
+   "Waveform Name": "TM-2 Kick 1"
+  },
+  {
+   "No": 69,
+   "Waveform Name": "TM-2 Kick 2"
+  },
+  {
+   "No": 70,
+   "Waveform Name": "PurePhatKckP"
+  },
+  {
+   "No": 71,
+   "Waveform Name": "Bright KickP"
+  },
+  {
+   "No": 72,
+   "Waveform Name": "LoBit Kick1P"
+  },
+  {
+   "No": 73,
+   "Waveform Name": "LoBit Kick2P"
+  },
+  {
+   "No": 74,
+   "Waveform Name": "Dance Kick P"
+  },
+  {
+   "No": 75,
+   "Waveform Name": "Hip Kick P"
+  },
+  {
+   "No": 76,
+   "Waveform Name": "HipHop Kick"
+  },
+  {
+   "No": 77,
+   "Waveform Name": "Mix Kick 1"
+  },
+  {
+   "No": 78,
+   "Waveform Name": "Mix Kick 2"
+  },
+  {
+   "No": 79,
+   "Waveform Name": "Wide Kick P"
+  },
+  {
+   "No": 80,
+   "Waveform Name": "LD Kick P"
+  },
+  {
+   "No": 81,
+   "Waveform Name": "SF Kick 1 P"
+  },
+  {
+   "No": 82,
+   "Waveform Name": "SF Kick 2 P"
+  },
+  {
+   "No": 83,
+   "Waveform Name": "TY Kick P"
+  },
+  {
+   "No": 84,
+   "Waveform Name": "WD Kick P"
+  },
+  {
+   "No": 85,
+   "Waveform Name": "Reg.Kick P"
+  },
+  {
+   "No": 86,
+   "Waveform Name": "Rock Kick P"
+  },
+  {
+   "No": 87,
+   "Waveform Name": "Jz Dry Kick"
+  },
+  {
+   "No": 88,
+   "Waveform Name": "Jazz Kick P"
+  },
+  {
+   "No": 89,
+   "Waveform Name": "78 Snr"
+  },
+  {
+   "No": 90,
+   "Waveform Name": "606 Snr 1 P"
+  },
+  {
+   "No": 91,
+   "Waveform Name": "606 Snr 2 P"
+  },
+  {
+   "No": 92,
+   "Waveform Name": "808 Snr 1a P"
+  },
+  {
+   "No": 93,
+   "Waveform Name": "808 Snr 1b P"
+  },
+  {
+   "No": 94,
+   "Waveform Name": "808 Snr 1c P"
+  },
+  {
+   "No": 95,
+   "Waveform Name": "808 Snr 2a P"
+  },
+  {
+   "No": 96,
+   "Waveform Name": "808 Snr 2b P"
+  },
+  {
+   "No": 97,
+   "Waveform Name": "808 Snr 2c P"
+  },
+  {
+   "No": 98,
+   "Waveform Name": "808 Snr 3a P"
+  },
+  {
+   "No": 99,
+   "Waveform Name": "808 Snr 3b P"
+  },
+  {
+   "No": 100,
+   "Waveform Name": "808 Snr 3c P"
+  },
+  {
+   "No": 101,
+   "Waveform Name": "909 Snr 1a P"
+  },
+  {
+   "No": 102,
+   "Waveform Name": "909 Snr 1b P"
+  },
+  {
+   "No": 103,
+   "Waveform Name": "909 Snr 1c P"
+  },
+  {
+   "No": 104,
+   "Waveform Name": "909 Snr 1d P"
+  },
+  {
+   "No": 105,
+   "Waveform Name": "909 Snr 2a P"
+  },
+  {
+   "No": 106,
+   "Waveform Name": "909 Snr 2b P"
+  },
+  {
+   "No": 107,
+   "Waveform Name": "909 Snr 2c P"
+  },
+  {
+   "No": 108,
+   "Waveform Name": "909 Snr 2d P"
+  },
+  {
+   "No": 109,
+   "Waveform Name": "909 Snr 3a P"
+  },
+  {
+   "No": 110,
+   "Waveform Name": "909 Snr 3b P"
+  },
+  {
+   "No": 111,
+   "Waveform Name": "909 Snr 3c P"
+  },
+  {
+   "No": 112,
+   "Waveform Name": "909 Snr 3d P"
+  },
+  {
+   "No": 113,
+   "Waveform Name": "909 DstSnr1P"
+  },
+  {
+   "No": 114,
+   "Waveform Name": "909 DstSnr2P"
+  },
+  {
+   "No": 115,
+   "Waveform Name": "909 DstSnr3P"
+  },
+  {
+   "No": 116,
+   "Waveform Name": "707 Snr 1a P"
+  },
+  {
+   "No": 117,
+   "Waveform Name": "707 Snr 2a P"
+  },
+  {
+   "No": 118,
+   "Waveform Name": "707 Snr 1b P"
+  },
+  {
+   "No": 119,
+   "Waveform Name": "707 Snr 2b P"
+  },
+  {
+   "No": 120,
+   "Waveform Name": "626 Snr 1"
+  },
+  {
+   "No": 121,
+   "Waveform Name": "626 Snr 2"
+  },
+  {
+   "No": 122,
+   "Waveform Name": "626 Snr 3"
+  },
+  {
+   "No": 123,
+   "Waveform Name": "626 Snr 1a P"
+  },
+  {
+   "No": 124,
+   "Waveform Name": "626 Snr 3a P"
+  },
+  {
+   "No": 125,
+   "Waveform Name": "626 Snr 1b P"
+  },
+  {
+   "No": 126,
+   "Waveform Name": "626 Snr 2 P"
+  },
+  {
+   "No": 127,
+   "Waveform Name": "626 Snr 3b P"
+  },
+  {
+   "No": 128,
+   "Waveform Name": "Analog Snr 1"
+  },
+  {
+   "No": 129,
+   "Waveform Name": "Analog Snr 2"
+  },
+  {
+   "No": 130,
+   "Waveform Name": "Analog Snr 3"
+  },
+  {
+   "No": 131,
+   "Waveform Name": "Synth Snr 1"
+  },
+  {
+   "No": 132,
+   "Waveform Name": "Synth Snr 2"
+  },
+  {
+   "No": 133,
+   "Waveform Name": "106 Snr"
+  },
+  {
+   "No": 134,
+   "Waveform Name": "Sim Snare"
+  },
+  {
+   "No": 135,
+   "Waveform Name": "Jungle Snr 1"
+  },
+  {
+   "No": 136,
+   "Waveform Name": "Jungle Snr 2"
+  },
+  {
+   "No": 137,
+   "Waveform Name": "Jungle Snr 3"
+  },
+  {
+   "No": 138,
+   "Waveform Name": "Lite Snare"
+  },
+  {
+   "No": 139,
+   "Waveform Name": "Lo-Bit Snr1P"
+  },
+  {
+   "No": 140,
+   "Waveform Name": "Lo-Bit Snr2P"
+  },
+  {
+   "No": 141,
+   "Waveform Name": "HphpJazzSnrP"
+  },
+  {
+   "No": 142,
+   "Waveform Name": "PurePhatSnrP"
+  },
+  {
+   "No": 143,
+   "Waveform Name": "DRDisco SnrP"
+  },
+  {
+   "No": 144,
+   "Waveform Name": "Ragga Snr"
+  },
+  {
+   "No": 145,
+   "Waveform Name": "Lo-Fi Snare"
+  },
+  {
+   "No": 146,
+   "Waveform Name": "DR Snare"
+  },
+  {
+   "No": 147,
+   "Waveform Name": "DanceHallSnr"
+  },
+  {
+   "No": 148,
+   "Waveform Name": "Break Snr"
+  },
+  {
+   "No": 149,
+   "Waveform Name": "Piccolo SnrP"
+  },
+  {
+   "No": 150,
+   "Waveform Name": "TM-2 Snr 1"
+  },
+  {
+   "No": 151,
+   "Waveform Name": "TM-2 Snr 2"
+  },
+  {
+   "No": 152,
+   "Waveform Name": "WoodSnr RS"
+  },
+  {
+   "No": 153,
+   "Waveform Name": "LD Snr"
+  },
+  {
+   "No": 154,
+   "Waveform Name": "SF Snr P"
+  },
+  {
+   "No": 155,
+   "Waveform Name": "TY Snr"
+  },
+  {
+   "No": 156,
+   "Waveform Name": "WD Snr P"
+  },
+  {
+   "No": 157,
+   "Waveform Name": "Tight Snr"
+  },
+  {
+   "No": 158,
+   "Waveform Name": "Reg.Snr1 P"
+  },
+  {
+   "No": 159,
+   "Waveform Name": "Reg.Snr2 P"
+  },
+  {
+   "No": 160,
+   "Waveform Name": "Ballad Snr P"
+  },
+  {
+   "No": 161,
+   "Waveform Name": "Rock Snr1 P"
+  },
+  {
+   "No": 162,
+   "Waveform Name": "Rock Snr2 P"
+  },
+  {
+   "No": 163,
+   "Waveform Name": "LD Rim"
+  },
+  {
+   "No": 164,
+   "Waveform Name": "SF Rim"
+  },
+  {
+   "No": 165,
+   "Waveform Name": "TY Rim"
+  },
+  {
+   "No": 166,
+   "Waveform Name": "WD Rim P"
+  },
+  {
+   "No": 167,
+   "Waveform Name": "Jazz Snr P"
+  },
+  {
+   "No": 168,
+   "Waveform Name": "Jazz Rim P"
+  },
+  {
+   "No": 169,
+   "Waveform Name": "Jz BrshSlapP"
+  },
+  {
+   "No": 170,
+   "Waveform Name": "Jz BrshSwshP"
+  },
+  {
+   "No": 171,
+   "Waveform Name": "Swish&Trn P"
+  },
+  {
+   "No": 172,
+   "Waveform Name": "78 Rimshot"
+  },
+  {
+   "No": 173,
+   "Waveform Name": "808 RimshotP"
+  },
+  {
+   "No": 174,
+   "Waveform Name": "909 RimshotP"
+  },
+  {
+   "No": 175,
+   "Waveform Name": "707 Rimshot"
+  },
+  {
+   "No": 176,
+   "Waveform Name": "626 Rimshot"
+  },
+  {
+   "No": 177,
+   "Waveform Name": "Vint Stick P"
+  },
+  {
+   "No": 178,
+   "Waveform Name": "Lo-Bit Stk P"
+  },
+  {
+   "No": 179,
+   "Waveform Name": "Hard Stick P"
+  },
+  {
+   "No": 180,
+   "Waveform Name": "Wild Stick P"
+  },
+  {
+   "No": 181,
+   "Waveform Name": "LD Cstick"
+  },
+  {
+   "No": 182,
+   "Waveform Name": "TY Cstick"
+  },
+  {
+   "No": 183,
+   "Waveform Name": "WD Cstick"
+  },
+  {
+   "No": 184,
+   "Waveform Name": "606 H.Tom P"
+  },
+  {
+   "No": 185,
+   "Waveform Name": "808 H.Tom P"
+  },
+  {
+   "No": 186,
+   "Waveform Name": "909 H.Tom P"
+  },
+  {
+   "No": 187,
+   "Waveform Name": "707 H.Tom P"
+  },
+  {
+   "No": 188,
+   "Waveform Name": "626 H.Tom 1"
+  },
+  {
+   "No": 189,
+   "Waveform Name": "626 H.Tom 2"
+  },
+  {
+   "No": 190,
+   "Waveform Name": "SimV Tom 1 P"
+  },
+  {
+   "No": 191,
+   "Waveform Name": "LD H.Tom P"
+  },
+  {
+   "No": 192,
+   "Waveform Name": "SF H.Tom P"
+  },
+  {
+   "No": 193,
+   "Waveform Name": "TY H.Tom P"
+  },
+  {
+   "No": 194,
+   "Waveform Name": "808 M.Tom P"
+  },
+  {
+   "No": 195,
+   "Waveform Name": "909 M.Tom P"
+  },
+  {
+   "No": 196,
+   "Waveform Name": "707 M.Tom P"
+  },
+  {
+   "No": 197,
+   "Waveform Name": "626 M.Tom 1"
+  },
+  {
+   "No": 198,
+   "Waveform Name": "626 M.Tom 2"
+  },
+  {
+   "No": 199,
+   "Waveform Name": "SimV Tom 2 P"
+  },
+  {
+   "No": 200,
+   "Waveform Name": "LD M.Tom P"
+  },
+  {
+   "No": 201,
+   "Waveform Name": "SF M.Tom P"
+  },
+  {
+   "No": 202,
+   "Waveform Name": "TY M.Tom P"
+  },
+  {
+   "No": 203,
+   "Waveform Name": "606 L.Tom P"
+  },
+  {
+   "No": 204,
+   "Waveform Name": "808 L.Tom P"
+  },
+  {
+   "No": 205,
+   "Waveform Name": "909 L.Tom P"
+  },
+  {
+   "No": 206,
+   "Waveform Name": "707 L.Tom P"
+  },
+  {
+   "No": 207,
+   "Waveform Name": "626 L.Tom 1"
+  },
+  {
+   "No": 208,
+   "Waveform Name": "626 L.Tom 2"
+  },
+  {
+   "No": 209,
+   "Waveform Name": "SimV Tom 3 P"
+  },
+  {
+   "No": 210,
+   "Waveform Name": "SimV Tom 4 P"
+  },
+  {
+   "No": 211,
+   "Waveform Name": "LD L.Tom P"
+  },
+  {
+   "No": 212,
+   "Waveform Name": "SF L.Tom P"
+  },
+  {
+   "No": 213,
+   "Waveform Name": "TY L.Tom P"
+  },
+  {
+   "No": 214,
+   "Waveform Name": "78 CHH"
+  },
+  {
+   "No": 215,
+   "Waveform Name": "606 CHH"
+  },
+  {
+   "No": 216,
+   "Waveform Name": "808 CHH"
+  },
+  {
+   "No": 217,
+   "Waveform Name": "909 CHH 1"
+  },
+  {
+   "No": 218,
+   "Waveform Name": "909 CHH 2"
+  },
+  {
+   "No": 219,
+   "Waveform Name": "909 CHH 3"
+  },
+  {
+   "No": 220,
+   "Waveform Name": "909 CHH 4"
+  },
+  {
+   "No": 221,
+   "Waveform Name": "707 CHH"
+  },
+  {
+   "No": 222,
+   "Waveform Name": "626 CHH"
+  },
+  {
+   "No": 223,
+   "Waveform Name": "HipHop CHH"
+  },
+  {
+   "No": 224,
+   "Waveform Name": "Lite CHH"
+  },
+  {
+   "No": 225,
+   "Waveform Name": "Reg.CHH"
+  },
+  {
+   "No": 226,
+   "Waveform Name": "Rock CHH"
+  },
+  {
+   "No": 227,
+   "Waveform Name": "S13 CHH Tip"
+  },
+  {
+   "No": 228,
+   "Waveform Name": "S14 CHH Tip"
+  },
+  {
+   "No": 229,
+   "Waveform Name": "606 C&OHH"
+  },
+  {
+   "No": 230,
+   "Waveform Name": "808 C&OHH S"
+  },
+  {
+   "No": 231,
+   "Waveform Name": "808 C&OHH L"
+  },
+  {
+   "No": 232,
+   "Waveform Name": "Hip PHH"
+  },
+  {
+   "No": 233,
+   "Waveform Name": "Reg.PHH"
+  },
+  {
+   "No": 234,
+   "Waveform Name": "Rock PHH"
+  },
+  {
+   "No": 235,
+   "Waveform Name": "S13 PHH"
+  },
+  {
+   "No": 236,
+   "Waveform Name": "S14 PHH"
+  },
+  {
+   "No": 237,
+   "Waveform Name": "606 OHH"
+  },
+  {
+   "No": 238,
+   "Waveform Name": "808 OHH S"
+  },
+  {
+   "No": 239,
+   "Waveform Name": "808 OHH L"
+  },
+  {
+   "No": 240,
+   "Waveform Name": "909 OHH 1"
+  },
+  {
+   "No": 241,
+   "Waveform Name": "909 OHH 2"
+  },
+  {
+   "No": 242,
+   "Waveform Name": "909 OHH 3"
+  },
+  {
+   "No": 243,
+   "Waveform Name": "707 OHH"
+  },
+  {
+   "No": 244,
+   "Waveform Name": "626 OHH"
+  },
+  {
+   "No": 245,
+   "Waveform Name": "HipHop OHH"
+  },
+  {
+   "No": 246,
+   "Waveform Name": "Lite OHH"
+  },
+  {
+   "No": 247,
+   "Waveform Name": "Reg.OHH"
+  },
+  {
+   "No": 248,
+   "Waveform Name": "Rock OHH"
+  },
+  {
+   "No": 249,
+   "Waveform Name": "S13 OHH Shft"
+  },
+  {
+   "No": 250,
+   "Waveform Name": "S14 OHH Shft"
+  },
+  {
+   "No": 251,
+   "Waveform Name": "78 Cymbal"
+  },
+  {
+   "No": 252,
+   "Waveform Name": "606 Cymbal"
+  },
+  {
+   "No": 253,
+   "Waveform Name": "808 Cymbal 1"
+  },
+  {
+   "No": 254,
+   "Waveform Name": "808 Cymbal 2"
+  },
+  {
+   "No": 255,
+   "Waveform Name": "808 Cymbal 3"
+  },
+  {
+   "No": 256,
+   "Waveform Name": "909 CrashCym"
+  },
+  {
+   "No": 257,
+   "Waveform Name": "909 Rev Cym"
+  },
+  {
+   "No": 258,
+   "Waveform Name": "MG Nz Cym"
+  },
+  {
+   "No": 259,
+   "Waveform Name": "707 CrashCym"
+  },
+  {
+   "No": 260,
+   "Waveform Name": "626 CrashCym"
+  },
+  {
+   "No": 261,
+   "Waveform Name": "Crash Cym 1"
+  },
+  {
+   "No": 262,
+   "Waveform Name": "Crash Cym 2"
+  },
+  {
+   "No": 263,
+   "Waveform Name": "Rock Crash 1"
+  },
+  {
+   "No": 264,
+   "Waveform Name": "Rock Crash 2"
+  },
+  {
+   "No": 265,
+   "Waveform Name": "P17 CrashTip"
+  },
+  {
+   "No": 266,
+   "Waveform Name": "S18 CrashTip"
+  },
+  {
+   "No": 267,
+   "Waveform Name": "Z18kCrashSft"
+  },
+  {
+   "No": 268,
+   "Waveform Name": "Jazz Crash"
+  },
+  {
+   "No": 269,
+   "Waveform Name": "909 RideCym"
+  },
+  {
+   "No": 270,
+   "Waveform Name": "707 RideCym"
+  },
+  {
+   "No": 271,
+   "Waveform Name": "626 RideCym"
+  },
+  {
+   "No": 272,
+   "Waveform Name": "Ride Cymbal"
+  },
+  {
+   "No": 273,
+   "Waveform Name": "626 ChinaCym"
+  },
+  {
+   "No": 274,
+   "Waveform Name": "China Cymbal"
+  },
+  {
+   "No": 275,
+   "Waveform Name": "Splash Cym"
+  },
+  {
+   "No": 276,
+   "Waveform Name": "626 Cup"
+  },
+  {
+   "No": 277,
+   "Waveform Name": "Rock Rd Cup"
+  },
+  {
+   "No": 278,
+   "Waveform Name": "808 ClapS1 P"
+  },
+  {
+   "No": 279,
+   "Waveform Name": "808 ClapS2 P"
+  },
+  {
+   "No": 280,
+   "Waveform Name": "808 ClapL1 P"
+  },
+  {
+   "No": 281,
+   "Waveform Name": "808 ClapL2 P"
+  },
+  {
+   "No": 282,
+   "Waveform Name": "909 Clap 1 P"
+  },
+  {
+   "No": 283,
+   "Waveform Name": "909 Clap 2 P"
+  },
+  {
+   "No": 284,
+   "Waveform Name": "909 Clap 3 P"
+  },
+  {
+   "No": 285,
+   "Waveform Name": "909 DstClapP"
+  },
+  {
+   "No": 286,
+   "Waveform Name": "707 Clap P"
+  },
+  {
+   "No": 287,
+   "Waveform Name": "626 Clap"
+  },
+  {
+   "No": 288,
+   "Waveform Name": "R8 Clap"
+  },
+  {
+   "No": 289,
+   "Waveform Name": "Cheap Clap"
+  },
+  {
+   "No": 290,
+   "Waveform Name": "Old Clap P"
+  },
+  {
+   "No": 291,
+   "Waveform Name": "Hip Clap"
+  },
+  {
+   "No": 292,
+   "Waveform Name": "Dist Clap"
+  },
+  {
+   "No": 293,
+   "Waveform Name": "Hand Clap"
+  },
+  {
+   "No": 294,
+   "Waveform Name": "Club Clap"
+  },
+  {
+   "No": 295,
+   "Waveform Name": "Real Clap"
+  },
+  {
+   "No": 296,
+   "Waveform Name": "Funk Clap"
+  },
+  {
+   "No": 297,
+   "Waveform Name": "Bright Clap"
+  },
+  {
+   "No": 298,
+   "Waveform Name": "TM-2 Clap"
+  },
+  {
+   "No": 299,
+   "Waveform Name": "Amb Clap"
+  },
+  {
+   "No": 300,
+   "Waveform Name": "Disc Clap"
+  },
+  {
+   "No": 301,
+   "Waveform Name": "Claptail"
+  },
+  {
+   "No": 302,
+   "Waveform Name": "Gospel Clap"
+  },
+  {
+   "No": 303,
+   "Waveform Name": "78 Tamb"
+  },
+  {
+   "No": 304,
+   "Waveform Name": "707 Tamb P"
+  },
+  {
+   "No": 305,
+   "Waveform Name": "626 Tamb"
+  },
+  {
+   "No": 306,
+   "Waveform Name": "TM-2 Tamb"
+  },
+  {
+   "No": 307,
+   "Waveform Name": "Tamborine 1"
+  },
+  {
+   "No": 308,
+   "Waveform Name": "Tamborine 2"
+  },
+  {
+   "No": 309,
+   "Waveform Name": "Tamborine 3"
+  },
+  {
+   "No": 310,
+   "Waveform Name": "808 CowbellP"
+  },
+  {
+   "No": 311,
+   "Waveform Name": "707 Cowbell"
+  },
+  {
+   "No": 312,
+   "Waveform Name": "626 Cowbell"
+  },
+  {
+   "No": 313,
+   "Waveform Name": "Cowbell Mute"
+  },
+  {
+   "No": 314,
+   "Waveform Name": "78 H.Bongo P"
+  },
+  {
+   "No": 315,
+   "Waveform Name": "727 H.Bongo"
+  },
+  {
+   "No": 316,
+   "Waveform Name": "Bongo Hi Mt"
+  },
+  {
+   "No": 317,
+   "Waveform Name": "Bongo Hi Slp"
+  },
+  {
+   "No": 318,
+   "Waveform Name": "Bongo Hi Op"
+  },
+  {
+   "No": 319,
+   "Waveform Name": "78 L.Bongo P"
+  },
+  {
+   "No": 320,
+   "Waveform Name": "727 L.Bongo"
+  },
+  {
+   "No": 321,
+   "Waveform Name": "Bongo Lo Op"
+  },
+  {
+   "No": 322,
+   "Waveform Name": "Bongo Lo Slp"
+  },
+  {
+   "No": 323,
+   "Waveform Name": "808 H.CongaP"
+  },
+  {
+   "No": 324,
+   "Waveform Name": "727 H.CngOpP"
+  },
+  {
+   "No": 325,
+   "Waveform Name": "727 H.CngMtP"
+  },
+  {
+   "No": 326,
+   "Waveform Name": "626 H.CngaOp"
+  },
+  {
+   "No": 327,
+   "Waveform Name": "626 H.CngaMt"
+  },
+  {
+   "No": 328,
+   "Waveform Name": "Conga Hi Mt"
+  },
+  {
+   "No": 329,
+   "Waveform Name": "Conga 2H Mt"
+  },
+  {
+   "No": 330,
+   "Waveform Name": "Conga Hi Slp"
+  },
+  {
+   "No": 331,
+   "Waveform Name": "Conga 2H Slp"
+  },
+  {
+   "No": 332,
+   "Waveform Name": "Conga Hi Op"
+  },
+  {
+   "No": 333,
+   "Waveform Name": "Conga 2H Op"
+  },
+  {
+   "No": 334,
+   "Waveform Name": "808 M.CongaP"
+  },
+  {
+   "No": 335,
+   "Waveform Name": "78 L.Conga P"
+  },
+  {
+   "No": 336,
+   "Waveform Name": "808 L.CongaP"
+  },
+  {
+   "No": 337,
+   "Waveform Name": "727 L.CongaP"
+  },
+  {
+   "No": 338,
+   "Waveform Name": "626 L.Conga"
+  },
+  {
+   "No": 339,
+   "Waveform Name": "Conga Lo Mt"
+  },
+  {
+   "No": 340,
+   "Waveform Name": "Conga Lo Slp"
+  },
+  {
+   "No": 341,
+   "Waveform Name": "Conga Lo Op"
+  },
+  {
+   "No": 342,
+   "Waveform Name": "Conga 2L Mt"
+  },
+  {
+   "No": 343,
+   "Waveform Name": "Conga 2L Op"
+  },
+  {
+   "No": 344,
+   "Waveform Name": "Conga Slp Op"
+  },
+  {
+   "No": 345,
+   "Waveform Name": "Conga Efx"
+  },
+  {
+   "No": 346,
+   "Waveform Name": "Conga Thumb"
+  },
+  {
+   "No": 347,
+   "Waveform Name": "727 H.Timbal"
+  },
+  {
+   "No": 348,
+   "Waveform Name": "626 H.Timbal"
+  },
+  {
+   "No": 349,
+   "Waveform Name": "727 L.Timbal"
+  },
+  {
+   "No": 350,
+   "Waveform Name": "626 L.Timbal"
+  },
+  {
+   "No": 351,
+   "Waveform Name": "Timbale 1"
+  },
+  {
+   "No": 352,
+   "Waveform Name": "Timbale 2"
+  },
+  {
+   "No": 353,
+   "Waveform Name": "Timbale 3"
+  },
+  {
+   "No": 354,
+   "Waveform Name": "Timbale 4"
+  },
+  {
+   "No": 355,
+   "Waveform Name": "Timbles LoOp"
+  },
+  {
+   "No": 356,
+   "Waveform Name": "Timbles LoMt"
+  },
+  {
+   "No": 357,
+   "Waveform Name": "TimbalesHand"
+  },
+  {
+   "No": 358,
+   "Waveform Name": "Timbales Rim"
+  },
+  {
+   "No": 359,
+   "Waveform Name": "TmbSideStick"
+  },
+  {
+   "No": 360,
+   "Waveform Name": "727 H.Agogo"
+  },
+  {
+   "No": 361,
+   "Waveform Name": "626 H.Agogo"
+  },
+  {
+   "No": 362,
+   "Waveform Name": "727 L.Agogo"
+  },
+  {
+   "No": 363,
+   "Waveform Name": "626 L.Agogo"
+  },
+  {
+   "No": 364,
+   "Waveform Name": "727 Cabasa P"
+  },
+  {
+   "No": 365,
+   "Waveform Name": "Cabasa Up"
+  },
+  {
+   "No": 366,
+   "Waveform Name": "Cabasa Down"
+  },
+  {
+   "No": 367,
+   "Waveform Name": "Cabasa Cut"
+  },
+  {
+   "No": 368,
+   "Waveform Name": "78 Maracas P"
+  },
+  {
+   "No": 369,
+   "Waveform Name": "808 MaracasP"
+  },
+  {
+   "No": 370,
+   "Waveform Name": "727 MaracasP"
+  },
+  {
+   "No": 371,
+   "Waveform Name": "Maracas"
+  },
+  {
+   "No": 372,
+   "Waveform Name": "727 WhistleS"
+  },
+  {
+   "No": 373,
+   "Waveform Name": "727 WhistleL"
+  },
+  {
+   "No": 374,
+   "Waveform Name": "Whistle"
+  },
+  {
+   "No": 375,
+   "Waveform Name": "78 Guiro S"
+  },
+  {
+   "No": 376,
+   "Waveform Name": "78 Guiro L"
+  },
+  {
+   "No": 377,
+   "Waveform Name": "Guiro"
+  },
+  {
+   "No": 378,
+   "Waveform Name": "Guiro Long"
+  },
+  {
+   "No": 379,
+   "Waveform Name": "78 Claves P"
+  },
+  {
+   "No": 380,
+   "Waveform Name": "808 Claves P"
+  },
+  {
+   "No": 381,
+   "Waveform Name": "626 Claves"
+  },
+  {
+   "No": 382,
+   "Waveform Name": "Claves"
+  },
+  {
+   "No": 383,
+   "Waveform Name": "Wood Block"
+  },
+  {
+   "No": 384,
+   "Waveform Name": "Triangle"
+  },
+  {
+   "No": 385,
+   "Waveform Name": "78 MetalBt P"
+  },
+  {
+   "No": 386,
+   "Waveform Name": "727 StrChime"
+  },
+  {
+   "No": 387,
+   "Waveform Name": "626 Shaker"
+  },
+  {
+   "No": 388,
+   "Waveform Name": "Shaker"
+  },
+  {
+   "No": 389,
+   "Waveform Name": "Finger Snap"
+  },
+  {
+   "No": 390,
+   "Waveform Name": "Club FinSnap"
+  },
+  {
+   "No": 391,
+   "Waveform Name": "Snap"
+  },
+  {
+   "No": 392,
+   "Waveform Name": "Group Snap"
+  },
+  {
+   "No": 393,
+   "Waveform Name": "Op Pandeiro"
+  },
+  {
+   "No": 394,
+   "Waveform Name": "Mt Pandeiro"
+  },
+  {
+   "No": 395,
+   "Waveform Name": "PandeiroOp"
+  },
+  {
+   "No": 396,
+   "Waveform Name": "PandeiroMt"
+  },
+  {
+   "No": 397,
+   "Waveform Name": "PandeiroHit"
+  },
+  {
+   "No": 398,
+   "Waveform Name": "PandeiroRim"
+  },
+  {
+   "No": 399,
+   "Waveform Name": "PandeiroCrsh"
+  },
+  {
+   "No": 400,
+   "Waveform Name": "PandeiroRoll"
+  },
+  {
+   "No": 401,
+   "Waveform Name": "727 Quijada"
+  },
+  {
+   "No": 402,
+   "Waveform Name": "TablaBayam 1"
+  },
+  {
+   "No": 403,
+   "Waveform Name": "TablaBayam 2"
+  },
+  {
+   "No": 404,
+   "Waveform Name": "TablaBayam 3"
+  },
+  {
+   "No": 405,
+   "Waveform Name": "TablaBayam 4"
+  },
+  {
+   "No": 406,
+   "Waveform Name": "TablaBayam 5"
+  },
+  {
+   "No": 407,
+   "Waveform Name": "TablaBayam 6"
+  },
+  {
+   "No": 408,
+   "Waveform Name": "TablaBayam 7"
+  },
+  {
+   "No": 409,
+   "Waveform Name": "Udo"
+  },
+  {
+   "No": 410,
+   "Waveform Name": "Udu Pot Hi"
+  },
+  {
+   "No": 411,
+   "Waveform Name": "Udu Pot Slp"
+  },
+  {
+   "No": 412,
+   "Waveform Name": "Scratch 1"
+  },
+  {
+   "No": 413,
+   "Waveform Name": "Scratch 2"
+  },
+  {
+   "No": 414,
+   "Waveform Name": "Scratch 3"
+  },
+  {
+   "No": 415,
+   "Waveform Name": "Scratch 4"
+  },
+  {
+   "No": 416,
+   "Waveform Name": "Scratch 5"
+  },
+  {
+   "No": 417,
+   "Waveform Name": "Dance M"
+  },
+  {
+   "No": 418,
+   "Waveform Name": "Ahh M"
+  },
+  {
+   "No": 419,
+   "Waveform Name": "Let's Go M"
+  },
+  {
+   "No": 420,
+   "Waveform Name": "Hah F"
+  },
+  {
+   "No": 421,
+   "Waveform Name": "Yeah F"
+  },
+  {
+   "No": 422,
+   "Waveform Name": "C'mon Baby F"
+  },
+  {
+   "No": 423,
+   "Waveform Name": "Wooh F"
+  },
+  {
+   "No": 424,
+   "Waveform Name": "White Noise"
+  },
+  {
+   "No": 425,
+   "Waveform Name": "Pink Noise"
+  },
+  {
+   "No": 426,
+   "Waveform Name": "Atmosphere"
+  },
+  {
+   "No": 427,
+   "Waveform Name": "PercOrgan 1"
+  },
+  {
+   "No": 428,
+   "Waveform Name": "PercOrgan 2"
+  },
+  {
+   "No": 429,
+   "Waveform Name": "TB Blip"
+  },
+  {
+   "No": 430,
+   "Waveform Name": "D.Mute Gtr"
+  },
+  {
+   "No": 431,
+   "Waveform Name": "Flute Fx"
+  },
+  {
+   "No": 432,
+   "Waveform Name": "Pop Brs Atk"
+  },
+  {
+   "No": 433,
+   "Waveform Name": "Strings Hit"
+  },
+  {
+   "No": 434,
+   "Waveform Name": "Smear Hit"
+  },
+  {
+   "No": 435,
+   "Waveform Name": "O'Skool Hit"
+  },
+  {
+   "No": 436,
+   "Waveform Name": "Orch. Hit"
+  },
+  {
+   "No": 437,
+   "Waveform Name": "Punch Hit"
+  },
+  {
+   "No": 438,
+   "Waveform Name": "Philly Hit"
+  },
+  {
+   "No": 439,
+   "Waveform Name": "ClassicHseHt"
+  },
+  {
+   "No": 440,
+   "Waveform Name": "Tao Hit"
+  },
+  {
+   "No": 441,
+   "Waveform Name": "MG S Zap 1"
+  },
+  {
+   "No": 442,
+   "Waveform Name": "MG S Zap 2"
+  },
+  {
+   "No": 443,
+   "Waveform Name": "MG S Zap 3"
+  },
+  {
+   "No": 444,
+   "Waveform Name": "SH2 S Zap 1"
+  },
+  {
+   "No": 445,
+   "Waveform Name": "SH2 S Zap 2"
+  },
+  {
+   "No": 446,
+   "Waveform Name": "SH2 S Zap 3"
+  },
+  {
+   "No": 447,
+   "Waveform Name": "SH2 S Zap 4"
+  },
+  {
+   "No": 448,
+   "Waveform Name": "SH2 S Zap 5"
+  },
+  {
+   "No": 449,
+   "Waveform Name": "SH2 U Zap 1"
+  },
+  {
+   "No": 450,
+   "Waveform Name": "SH2 U Zap 2"
+  },
+  {
+   "No": 451,
+   "Waveform Name": "SH2 U Zap 3"
+  },
+  {
+   "No": 452,
+   "Waveform Name": "SH2 U Zap 4"
+  },
+  {
+   "No": 453,
+   "Waveform Name": "SH2 U Zap 5"
+  }
+ ],
+ "PresetDrumKitWaveformAssignList": [
+  {
+   "Partial": "TR-909 Kit 1",
+   "BD1": "909 Kick 1aP",
+   "RIM": "909 RimshotP",
+   "BD2": "909 Kick 1bP",
+   "CLAP": "909 Clap 2 P",
+   "BD3": "909 Kick 1cP",
+   "SD1": "909 Snr 3a P",
+   "CHH": "909 CHH 1",
+   "SD2": "909 Snr 3b P",
+   "PHH": "909 CHH 3",
+   "SD3": "909 Snr 3c P",
+   "OHH": "909 OHH 3",
+   "SD4": "909 Snr 3d P",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "727 L.Bongo",
+   "CYM1": "909 CrashCym",
+   "PERC4": "727 H.Bongo",
+   "CYM2": "909 Rev Cym",
+   "PERC5": "727 H.Timbal",
+   "CYM3": "909 RideCym",
+   "HIT": "TB Blip",
+   "OTHER1": "909 DstKickP",
+   "OTHER2": "909 DstSnr2P"
+  },
+  {
+   "Partial": "TR-808 Kit 1",
+   "BD1": "808 Kick 4aP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 4bP",
+   "CLAP": "808 ClapL2 P",
+   "BD3": "808 Kick 4cP",
+   "SD1": "808 Snr 3a P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 3b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "808 Snr 3c P",
+   "OHH": "808 OHH L",
+   "SD4": "808 Snr 2c P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 1",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "Philly Hit",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "808 Kick 2Lp"
+  },
+  {
+   "Partial": "707&727 Kit1",
+   "BD1": "707 Kick 1 P",
+   "RIM": "707 Rimshot",
+   "BD2": "707 Kick 2 P",
+   "CLAP": "707 Clap P",
+   "BD3": "626 Kick 1 P",
+   "SD1": "707 Snr 1a P",
+   "CHH": "707 CHH",
+   "SD2": "707 Snr 2a P",
+   "PHH": "707 OHH",
+   "SD3": "707 Snr 1b P",
+   "OHH": "707 OHH",
+   "SD4": "707 Snr 2b P",
+   "TOM1": "707 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "707 M.Tom P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "707 H.Tom P",
+   "PERC3": "727 L.Bongo",
+   "CYM1": "707 CrashCym",
+   "PERC4": "727 H.Bongo",
+   "CYM2": "707 CrashCym",
+   "PERC5": "727 L/H.Timbal",
+   "CYM3": "707 RideCym",
+   "HIT": "PercOrgan 1",
+   "OTHER1": "727 Quijada",
+   "OTHER2": "727 StrChime"
+  },
+  {
+   "Partial": "CR-78 Kit 1",
+   "BD1": "78 Kick P",
+   "RIM": "78 Rimshot",
+   "BD2": "Lite Kick P",
+   "CLAP": "R8 Clap",
+   "BD3": "606 Kick P",
+   "SD1": "78 Snr",
+   "CHH": "78 CHH",
+   "SD2": "Lite Snare",
+   "PHH": "78 Cymbal",
+   "SD3": "808 Snr 1a P",
+   "OHH": "78 Cymbal",
+   "SD4": "808 Snr 3c P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "78 Tamb",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "78 MetalBt P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "78 L.Conga P",
+   "CYM1": "MG Nz Cym",
+   "PERC4": "78 L.Bongo P",
+   "CYM2": "606 Cymbal",
+   "PERC5": "78 H.Bongo P",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "78 Guiro S/L",
+   "OTHER1": "78 Maracas P",
+   "OTHER2": "78 Claves P"
+  },
+  {
+   "Partial": "TR-606 Kit 1",
+   "BD1": "606 Kick P",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 1aP",
+   "CLAP": "808 ClapS2 P",
+   "BD3": "808 Kick 2aP",
+   "SD1": "606 Snr 1 P",
+   "CHH": "606 CHH",
+   "SD2": "606 Snr 2 P",
+   "PHH": "606 C&OHH",
+   "SD3": "808 Snr 1a P",
+   "OHH": "606 OHH",
+   "SD4": "808 Snr 2a P",
+   "TOM1": "606 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "606 L.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "606 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "606 Cymbal",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "MG S Zap 3",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "808 Kick 2Lp"
+  },
+  {
+   "Partial": "TR-626 Kit 1",
+   "BD1": "626 Kick 1 P",
+   "RIM": "626 Rimshot",
+   "BD2": "626 Kick 2 P",
+   "CLAP": "626 Clap",
+   "BD3": "707 Kick 1 P",
+   "SD1": "626 Snr 1",
+   "CHH": "626 CHH",
+   "SD2": "626 Snr 2",
+   "PHH": "626 OHH",
+   "SD3": "626 Snr 3",
+   "OHH": "626 OHH",
+   "SD4": "626 Snr 1b P",
+   "TOM1": "626 L.Tom 1",
+   "PERC1": "626 Cowbell",
+   "TOM2": "626 M.Tom 1",
+   "PERC2": "626 Tamb",
+   "TOM3": "626 H.Tom 1",
+   "PERC3": "626 L.Conga",
+   "CYM1": "626 CrashCym",
+   "PERC4": "626 H.CngaOp/Mt",
+   "CYM2": "626 RideCym",
+   "PERC5": "626 Claves",
+   "CYM3": "626 ChinaCym",
+   "HIT": "Tao Hit",
+   "OTHER1": "626 Shaker",
+   "OTHER2": "626 L/H.Timbal"
+  },
+  {
+   "Partial": "EDM Kit 1",
+   "BD1": "Synth Kick10",
+   "RIM": "Wild Stick P",
+   "BD2": "Synth Kick 9",
+   "CLAP": "909 DstClapP",
+   "BD3": "909 Kick 4",
+   "SD1": "909 DstSnr3P",
+   "CHH": "909 CHH 1",
+   "SD2": "626 Snr 1a P",
+   "PHH": "909 CHH 2",
+   "SD3": "626 Snr 1b P",
+   "OHH": "909 OHH 3",
+   "SD4": "106 Snr",
+   "TOM1": "SF L.Tom P",
+   "PERC1": "626 L.Agogo",
+   "TOM2": "SF M.Tom P",
+   "PERC2": "626 H.Agogo",
+   "TOM3": "SF H.Tom P",
+   "PERC3": "626 L.Conga",
+   "CYM1": "909 CrashCym",
+   "PERC4": "626 H.CngaOp",
+   "CYM2": "909 CrashCym",
+   "PERC5": "626 H.Timbal",
+   "CYM3": "909 RideCym",
+   "HIT": "Flute Fx",
+   "OTHER1": "Ahh M",
+   "OTHER2": "Yeah F"
+  },
+  {
+   "Partial": "Drum&Bs Kit1",
+   "BD1": "Jungle KickP",
+   "RIM": "WD Cstick",
+   "BD2": "TM-2 Kick 1",
+   "CLAP": "Dist Clap",
+   "BD3": "Synth Kick 5",
+   "SD1": "Jungle Snr 3",
+   "CHH": "S13 CHH Tip",
+   "SD2": "TM-2 Snr 2",
+   "PHH": "S13 PHH",
+   "SD3": "Rock Snr2 P",
+   "OHH": "S13 OHH Shft",
+   "SD4": "Jazz Rim P",
+   "TOM1": "LD L.Tom P",
+   "PERC1": "Tamborine 1",
+   "TOM2": "LD M.Tom P",
+   "PERC2": "Tamborine 2",
+   "TOM3": "LD H.Tom P",
+   "PERC3": "Conga Hi Mt",
+   "CYM1": "Crash Cym 1",
+   "PERC4": "Conga Lo Op",
+   "CYM2": "Crash Cym 2",
+   "PERC5": "Conga Hi Op",
+   "CYM3": "Ride Cymbal",
+   "HIT": "Strings Hit",
+   "OTHER1": "SH2 S Zap 2",
+   "OTHER2": "MG S Zap 2"
+  },
+  {
+   "Partial": "Techno Kit 1",
+   "BD1": "Synth Kick 7",
+   "RIM": "909 RimshotP",
+   "BD2": "Synth Kick 1",
+   "CLAP": "909 Clap 3 P",
+   "BD3": "Synth Kick 2",
+   "SD1": "Analog Snr 2",
+   "CHH": "909 CHH 1",
+   "SD2": "Analog Snr 3",
+   "PHH": "909 CHH 3",
+   "SD3": "Analog Snr 1",
+   "OHH": "909 OHH 2",
+   "SD4": "Synth Snr 2",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "626 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "78 MetalBt P",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "Udu Pot Hi",
+   "CYM1": "909 CrashCym",
+   "PERC4": "Udo",
+   "CYM2": "909 CrashCym",
+   "PERC5": "Udu Pot Slp",
+   "CYM3": "909 RideCym",
+   "HIT": "O'Skool Hit",
+   "OTHER1": "White Noise",
+   "OTHER2": "SH2 S Zap 3"
+  },
+  {
+   "Partial": "House Kit 1",
+   "BD1": "909 Kick 2cP",
+   "RIM": "909 RimshotP",
+   "BD2": "909 Kick 3P",
+   "CLAP": "Bright Clap",
+   "BD3": "Warm Kick P",
+   "SD1": "909 Snr 2b P",
+   "CHH": "909 CHH 1",
+   "SD2": "909 Snr 1c P",
+   "PHH": "909 CHH 3",
+   "SD3": "DanceHallSnr",
+   "OHH": "909 OHH 1",
+   "SD4": "Ragga Snr",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "626 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "TM-2 Tamb",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "Bongo Lo Op / Hi Mt",
+   "CYM1": "909 CrashCym",
+   "PERC4": "Conga Lo / Hi Op",
+   "CYM2": "P17 CrashTip",
+   "PERC5": "Timbale 1 / 2",
+   "CYM3": "909 RideCym",
+   "HIT": "Strings Hit",
+   "OTHER1": "Triangle",
+   "OTHER2": "Triangle"
+  },
+  {
+   "Partial": "Hiphop Kit 1",
+   "BD1": "808 Kick 4bP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 4cP",
+   "CLAP": "808 ClapL1 P",
+   "BD3": "Mix Kick 1",
+   "SD1": "808 Snr 3b P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 3b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "HphpJazzSnrP",
+   "OHH": "808 OHH L",
+   "SD4": "DanceHallSnr",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 1",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "Philly Hit",
+   "OTHER1": "Scratch 1",
+   "OTHER2": "Scratch 5"
+  },
+  {
+   "Partial": "R&B Kit 1",
+   "BD1": "808 Kick 2bP",
+   "RIM": "TY Cstick",
+   "BD2": "Mix Kick 1",
+   "CLAP": "808 ClapS1 P",
+   "BD3": "Mix Kick 2",
+   "SD1": "808 Snr 2b P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 2b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "Real Clap",
+   "OHH": "808 OHH L",
+   "SD4": "Club FinSnap",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "TM-2 Tamb",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 3",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "606 Cymbal",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "78 Cymbal",
+   "HIT": "C'mon Baby F",
+   "OTHER1": "Shaker",
+   "OTHER2": "SH2 U Zap 4"
+  },
+  {
+   "Partial": "TR-909 Kit 2",
+   "BD1": "909 Kick 1aP",
+   "RIM": "909 RimshotP",
+   "BD2": "909 Kick 2bP",
+   "CLAP": "909 Clap 3 P",
+   "BD3": "909 Kick 2cP",
+   "SD1": "909 Snr 1a P",
+   "CHH": "909 CHH 1",
+   "SD2": "909 Snr 1b P",
+   "PHH": "909 CHH 3",
+   "SD3": "909 Snr 1c P",
+   "OHH": "909 OHH 3",
+   "SD4": "909 Snr 1d P",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "727 L.CongaP",
+   "CYM1": "909 CrashCym",
+   "PERC4": "727 H.CngOpP",
+   "CYM2": "909 Rev Cym",
+   "PERC5": "727 H.Timbal",
+   "CYM3": "909 RideCym",
+   "HIT": "Smear Hit",
+   "OTHER1": "909 Kick 1aP",
+   "OTHER2": "909 DstSnr2P"
+  },
+  {
+   "Partial": "TR-909 Kit 3",
+   "BD1": "909 Kick 3P",
+   "RIM": "909 RimshotP",
+   "BD2": "909 Kick Lp",
+   "CLAP": "909 DstClapP",
+   "BD3": "909 DstKickP",
+   "SD1": "909 Snr 2a P",
+   "CHH": "909 CHH 1",
+   "SD2": "909 Snr 2b P",
+   "PHH": "909 CHH 3",
+   "SD3": "909 Snr 2c P",
+   "OHH": "909 OHH 3",
+   "SD4": "909 Snr 2d P",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "727 L.Bongo",
+   "CYM1": "909 CrashCym",
+   "PERC4": "727 H.Bongo",
+   "CYM2": "909 Rev Cym",
+   "PERC5": "727 H.Timbal",
+   "CYM3": "909 RideCym",
+   "HIT": "ClassicHseHt",
+   "OTHER1": "909 DstKickP",
+   "OTHER2": "909 DstSnr3P"
+  },
+  {
+   "Partial": "TR-808 Kit 2",
+   "BD1": "808 Kick 1aP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 1bP",
+   "CLAP": "808 ClapS1 P",
+   "BD3": "808 Kick 1cP",
+   "SD1": "808 Snr 1a P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 1b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "808 Snr 1c P",
+   "OHH": "808 OHH L",
+   "SD4": "808 Snr 3c P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 1",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "O'Skool Hit",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "808 Kick 2Lp"
+  },
+  {
+   "Partial": "TR-808 Kit 3",
+   "BD1": "808 Kick 2aP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 2bP",
+   "CLAP": "808 ClapS2 P",
+   "BD3": "808 Kick 2cP",
+   "SD1": "808 Snr 2a P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 2b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "808 Snr 2c P",
+   "OHH": "808 OHH L",
+   "SD4": "808 Snr 3c P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 1",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "Punch Hit",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "808 Kick 2Lp"
+  },
+  {
+   "Partial": "TR-808 Kit 4",
+   "BD1": "808 Kick 3aP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 3bP",
+   "CLAP": "808 ClapL1 P",
+   "BD3": "808 Kick 3cP",
+   "SD1": "808 Snr 3a P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 3b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "808 Snr 3c P",
+   "OHH": "808 OHH L",
+   "SD4": "808 Snr 1c P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 1",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "Wooh F",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "808 Kick 2Lp"
+  },
+  {
+   "Partial": "808&909 Kit1",
+   "BD1": "808 Kick 4cP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 3aP",
+   "CLAP": "909 Clap 2 P",
+   "BD3": "909 Kick 2bP",
+   "SD1": "808 Snr 1c P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 3b P",
+   "PHH": "808 C&OHH L",
+   "SD3": "909 Snr 1c P",
+   "OHH": "808 OHH L",
+   "SD4": "909 Snr 3c P",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "808 Cymbal 1",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 2",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "808 Cymbal 3",
+   "HIT": "Tao Hit",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "808 Kick 1Lp"
+  },
+  {
+   "Partial": "808&909 Kit2",
+   "BD1": "808 Kick 2cP",
+   "RIM": "909 RimshotP",
+   "BD2": "808 Kick 1bP",
+   "CLAP": "808 ClapL1 P",
+   "BD3": "909 Kick 1bP",
+   "SD1": "808 Snr 2a P",
+   "CHH": "909 CHH 1",
+   "SD2": "808 Snr 3c P",
+   "PHH": "909 CHH 3",
+   "SD3": "909 Snr 2c P",
+   "OHH": "909 OHH 3",
+   "SD4": "909 Snr 3c P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "808 CowbellP",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "808 Claves P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "808 L.CongaP",
+   "CYM1": "909 CrashCym",
+   "PERC4": "808 M.CongaP",
+   "CYM2": "808 Cymbal 3",
+   "PERC5": "808 H.CongaP",
+   "CYM3": "909 RideCym",
+   "HIT": "ClassicHseHt",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "909 Kick Lp"
+  },
+  {
+   "Partial": "707&727 Kit2",
+   "BD1": "707 Kick 1 P",
+   "RIM": "707 Rimshot",
+   "BD2": "707 Kick 2 P",
+   "CLAP": "707 Clap P",
+   "BD3": "626 Kick 1 P",
+   "SD1": "707 Snr 1a P",
+   "CHH": "707 CHH",
+   "SD2": "707 Snr 2a P",
+   "PHH": "707 OHH",
+   "SD3": "707 Snr 1b P",
+   "OHH": "707 OHH",
+   "SD4": "707 Snr 2b P",
+   "TOM1": "707 L.Tom P",
+   "PERC1": "727 L.Agogo",
+   "TOM2": "707 M.Tom P",
+   "PERC2": "727 H.Agogo",
+   "TOM3": "707 H.Tom P",
+   "PERC3": "727 L.CongaP",
+   "CYM1": "707 CrashCym",
+   "PERC4": "727 H.CngMtP",
+   "CYM2": "707 CrashCym",
+   "PERC5": "727 H.CngOpP",
+   "CYM3": "707 RideCym",
+   "HIT": "PercOrgan 2",
+   "OTHER1": "727 MaracasP/727 Cabasa P",
+   "OTHER2": "727 WhistleS/L"
+  },
+  {
+   "Partial": "909&707 Kit1",
+   "BD1": "909 Kick 1bP",
+   "RIM": "909 RimshotP",
+   "BD2": "909 Kick 1cP",
+   "CLAP": "909 Clap 3 P",
+   "BD3": "707 Kick 1 P",
+   "SD1": "909 Snr 3b P",
+   "CHH": "909 CHH 1",
+   "SD2": "909 Snr 3c P",
+   "PHH": "909 CHH 3",
+   "SD3": "707 Snr 1a P",
+   "OHH": "909 OHH 3",
+   "SD4": "707 Snr 2a P",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "727 L.CongaP",
+   "CYM1": "909 CrashCym",
+   "PERC4": "727 H.CngOpP",
+   "CYM2": "707 CrashCym",
+   "PERC5": "727 H.Timbal",
+   "CYM3": "909 RideCym",
+   "HIT": "O'Skool Hit",
+   "OTHER1": "727 L.Agogo",
+   "OTHER2": "727 H.Agogo"
+  },
+  {
+   "Partial": "808&7*7 Kit1",
+   "BD1": "808 Kick 4bP",
+   "RIM": "808 RimshotP",
+   "BD2": "808 Kick 2Lp",
+   "CLAP": "808 ClapS1 P",
+   "BD3": "707 Kick 1 P",
+   "SD1": "808 Snr 3a P",
+   "CHH": "808 CHH",
+   "SD2": "808 Snr 2c P",
+   "PHH": "808 C&OHH L",
+   "SD3": "707 Snr 1a P",
+   "OHH": "808 OHH L",
+   "SD4": "707 Snr 2a P",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "727 L.CongaP",
+   "CYM1": "808 Cymbal 2",
+   "PERC4": "727 H.CngOpP",
+   "CYM2": "707 CrashCym",
+   "PERC5": "727 H.Timbal",
+   "CYM3": "707 RideCym",
+   "HIT": "Philly Hit",
+   "OTHER1": "808 MaracasP",
+   "OTHER2": "727 Quijada"
+  },
+  {
+   "Partial": "EDM Kit 2",
+   "BD1": "Synth Kick15",
+   "RIM": "808 RimshotP",
+   "BD2": "909 Kick 4",
+   "CLAP": "808 ClapS1 P",
+   "BD3": "Synth Kick 5",
+   "SD1": "626 Snr 1, Real Clap",
+   "CHH": "S13 CHH Tip",
+   "SD2": "626 Snr 1, Finger Snap",
+   "PHH": "S13 PHH",
+   "SD3": "626 Snr 1, Claptail",
+   "OHH": "S13 OHH Shft",
+   "SD4": "626 Snr 1, Dist Clap",
+   "TOM1": "808 L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "808 M.Tom P",
+   "PERC2": "Tamborine 2",
+   "TOM3": "808 H.Tom P",
+   "PERC3": "Bongo Lo Op",
+   "CYM1": "P17 CrashTip",
+   "PERC4": "Bongo Hi Op",
+   "CYM2": "S18 CrashTip",
+   "PERC5": "Bongo Hi Slp",
+   "CYM3": "Z18kCrashSft",
+   "HIT": "Hah F",
+   "OTHER1": "Maracas",
+   "OTHER2": "Cabasa Cut"
+  },
+  {
+   "Partial": "Techno Kit 2",
+   "BD1": "Analog Kick5",
+   "RIM": "909 RimshotP",
+   "BD2": "Synth Kick13",
+   "CLAP": "909 Clap 1 P",
+   "BD3": "PlasticKick1",
+   "SD1": "Synth Snr 1",
+   "CHH": "808 CHH",
+   "SD2": "106 Snr",
+   "PHH": "808 C&OHH S",
+   "SD3": "909 DstSnr2P",
+   "OHH": "808 OHH L",
+   "SD4": "909 DstSnr3P",
+   "TOM1": "909 L.Tom P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "909 M.Tom P",
+   "PERC2": "78 Tamb",
+   "TOM3": "909 H.Tom P",
+   "PERC3": "Conga Lo Op",
+   "CYM1": "909 CrashCym",
+   "PERC4": "Conga Slp Op",
+   "CYM2": "909 CrashCym",
+   "PERC5": "Conga Hi Op",
+   "CYM3": "909 RideCym",
+   "HIT": "ClassicHseHt",
+   "OTHER1": "Atmosphere",
+   "OTHER2": "MG S Zap 2"
+  },
+  {
+   "Partial": "Hiphop Kit 2",
+   "BD1": "PurePhatKckP",
+   "RIM": "Wild Stick P",
+   "BD2": "Mix Kick 2",
+   "CLAP": "Gospel Clap",
+   "BD3": "HipHop Kick",
+   "SD1": "PurePhatSnrP",
+   "CHH": "HipHop CHH",
+   "SD2": "HphpJazzSnrP",
+   "PHH": "Hip PHH",
+   "SD3": "Break Snr",
+   "OHH": "HipHop OHH",
+   "SD4": "Jungle Snr 1",
+   "TOM1": "SF L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "SF M.Tom P",
+   "PERC2": "TM-2 Tamb",
+   "TOM3": "SF H.Tom P",
+   "PERC3": "TablaBayam 1/3",
+   "CYM1": "Crash Cym 2",
+   "PERC4": "TablaBayam 4/5",
+   "CYM2": "Rock Crash 1",
+   "PERC5": "TablaBayam 2",
+   "CYM3": "Ride Cymbal",
+   "HIT": "Smear Hit",
+   "OTHER1": "Scratch 2",
+   "OTHER2": "Ahh M"
+  },
+  {
+   "Partial": "80's Kit 1",
+   "BD1": "HashKick 1 P",
+   "RIM": "Vint Stick P",
+   "BD2": "HashKick 2 P",
+   "CLAP": "Old Clap P",
+   "BD3": "Vint Kick P",
+   "SD1": "Sim Snare",
+   "CHH": "707 CHH",
+   "SD2": "DanceHallSnr",
+   "PHH": "707 OHH",
+   "SD3": "Lo-Fi Snare",
+   "OHH": "707 OHH",
+   "SD4": "626 Snr 1b P",
+   "TOM1": "SimV Tom 3 P",
+   "PERC1": "707 Cowbell",
+   "TOM2": "SimV Tom 2 P",
+   "PERC2": "707 Tamb P",
+   "TOM3": "SimV Tom 1 P",
+   "PERC3": "727 L.CongaP",
+   "CYM1": "626 CrashCym",
+   "PERC4": "626 H.CngaMt",
+   "CYM2": "626 Cup",
+   "PERC5": "626 H.CngaOp",
+   "CYM3": "626 RideCym",
+   "HIT": "Orch. Hit",
+   "OTHER1": "727 L.Agogo",
+   "OTHER2": "727 H.Agogo"
+  },
+  {
+   "Partial": "90's Kit 1",
+   "BD1": "LoBit Kick1P",
+   "RIM": "Lo-Bit Stk P",
+   "BD2": "LoBit Kick2P",
+   "CLAP": "Dist Clap",
+   "BD3": "Reg.Kick P",
+   "SD1": "Lo-Bit Snr1P",
+   "CHH": "S13 CHH Tip",
+   "SD2": "Lo-Bit Snr2P",
+   "PHH": "S13 PHH",
+   "SD3": "Reg.Snr1 P",
+   "OHH": "S13 OHH Shft",
+   "SD4": "Reg.Snr2 P",
+   "TOM1": "LD L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "LD M.Tom P",
+   "PERC2": "Tamborine 3",
+   "TOM3": "LD H.Tom P",
+   "PERC3": "Conga Lo Op",
+   "CYM1": "Crash Cym 1",
+   "PERC4": "Conga Hi Mt",
+   "CYM2": "Crash Cym 2",
+   "PERC5": "Conga Hi Op",
+   "CYM3": "Ride Cymbal",
+   "HIT": "Punch Hit",
+   "OTHER1": "Maracas",
+   "OTHER2": "Shaker"
+  },
+  {
+   "Partial": "Noise Kit",
+   "BD1": "Pink Noise",
+   "RIM": "White Noise",
+   "BD2": "White Noise",
+   "CLAP": "White Noise",
+   "BD3": "White Noise",
+   "SD1": "Pink Noise",
+   "CHH": "White Noise",
+   "SD2": "White Noise",
+   "PHH": "White Noise",
+   "SD3": "White Noise",
+   "OHH": "White Noise",
+   "SD4": "White Noise",
+   "TOM1": "White Noise",
+   "PERC1": "White Noise",
+   "TOM2": "White Noise",
+   "PERC2": "White Noise",
+   "TOM3": "White Noise",
+   "PERC3": "White Noise",
+   "CYM1": "White Noise",
+   "PERC4": "White Noise",
+   "CYM2": "White Noise",
+   "PERC5": "White Noise",
+   "CYM3": "White Noise",
+   "HIT": "White Noise",
+   "OTHER1": "White Noise",
+   "OTHER2": "White Noise"
+  },
+  {
+   "Partial": "Pop Kit 1",
+   "BD1": "WD Kick P",
+   "RIM": "WD Cstick",
+   "BD2": "LD Kick P",
+   "CLAP": "Real Clap",
+   "BD3": "TY Kick P",
+   "SD1": "WoodSnr RS",
+   "CHH": "S14 CHH Tip",
+   "SD2": "LD Snr",
+   "PHH": "S14 PHH",
+   "SD3": "WD Snr P",
+   "OHH": "S14 OHH Shft",
+   "SD4": "WD Rim P",
+   "TOM1": "LD L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "LD M.Tom P ",
+   "PERC2": "TM-2 Tamb",
+   "TOM3": "LD H.Tom P",
+   "PERC3": "Conga Lo Op",
+   "CYM1": "Rock Crash 1",
+   "PERC4": "Conga Hi Op",
+   "CYM2": "Splash Cym",
+   "PERC5": "Conga Slp Op",
+   "CYM3": "China Cymbal",
+   "HIT": "Orch. Hit",
+   "OTHER1": "Cabasa Cut",
+   "OTHER2": "Shaker"
+  },
+  {
+   "Partial": "Pop Kit 2",
+   "BD1": "SF Kick 1 P",
+   "RIM": "LD Cstick",
+   "BD2": "SF Kick 2 P",
+   "CLAP": "Hand Clap",
+   "BD3": "Bright KickP",
+   "SD1": "SF Snr P",
+   "CHH": "S13 CHH Tip",
+   "SD2": "Reg.Snr1 P",
+   "PHH": "S13 PHH",
+   "SD3": "Reg.Snr2 P",
+   "OHH": "S13 OHH Shft",
+   "SD4": "Ballad Snr P",
+   "TOM1": "TY L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "TY M.Tom P",
+   "PERC2": "TM-2 Tamb",
+   "TOM3": "TY H.Tom P",
+   "PERC3": "Conga Lo Op",
+   "CYM1": "S18 CrashTip",
+   "PERC4": "Conga Hi Op",
+   "CYM2": "Z18kCrashSft",
+   "PERC5": "Conga Slp Op",
+   "CYM3": "China Cymbal",
+   "HIT": "Punch Hit",
+   "OTHER1": "Claves",
+   "OTHER2": "Wood Block"
+  },
+  {
+   "Partial": "Rock Kit",
+   "BD1": "WD Kick P",
+   "RIM": "WD Cstick",
+   "BD2": "Rock Kick P",
+   "CLAP": "Bright Clap",
+   "BD3": "Wide Kick P",
+   "SD1": "TY Rim",
+   "CHH": "Rock CHH",
+   "SD2": "Rock Snr1 P",
+   "PHH": "Rock PHH",
+   "SD3": "Rock Snr2 P",
+   "OHH": "Rock OHH",
+   "SD4": "SF Rim",
+   "TOM1": "SF L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "SF M.Tom P",
+   "PERC2": "Tamborine 3",
+   "TOM3": "SF H.Tom P",
+   "PERC3": "Conga Lo Op",
+   "CYM1": "Rock Crash 1",
+   "PERC4": "Conga Hi Mt",
+   "CYM2": "Rock Crash 2",
+   "PERC5": "Conga Hi Op",
+   "CYM3": "Rock Rd Cup",
+   "HIT": "D.Mute Gtr",
+   "OTHER1": "Z18kCrashSft",
+   "OTHER2": "China Cymbal"
+  },
+  {
+   "Partial": "Jazz Kit",
+   "BD1": "Jz Dry Kick",
+   "RIM": "LD Cstick",
+   "BD2": "Old Kick",
+   "CLAP": "Hand Clap",
+   "BD3": "Jazz Kick P",
+   "SD1": "Jz BrshSlapP",
+   "CHH": "Reg.CHH",
+   "SD2": "Jz BrshSwshP",
+   "PHH": "Reg.PHH",
+   "SD3": "Swish&Trn P",
+   "OHH": "Reg.OHH",
+   "SD4": "Jazz Rim P",
+   "TOM1": "SF L.Tom P",
+   "PERC1": "Cowbell Mute",
+   "TOM2": "SF M.Tom P",
+   "PERC2": "TM-2 Tamb",
+   "TOM3": "SF H.Tom P",
+   "PERC3": "Conga 2L Op",
+   "CYM1": "Jazz Crash",
+   "PERC4": "Conga 2H Slp",
+   "CYM2": "Crash Cym 1",
+   "PERC5": "Conga 2H Op",
+   "CYM3": "Ride Cymbal",
+   "HIT": "Pop Brs Atk",
+   "OTHER1": "Finger Snap",
+   "OTHER2": "Club FinSnap"
+  },
+  {
+   "Partial": "Latin Kit",
+   "BD1": "Power Kick",
+   "RIM": "Hard Stick P",
+   "BD2": "Warm Kick P",
+   "CLAP": "Real Clap",
+   "BD3": "Hush Kick P",
+   "SD1": "Ballad Snr P",
+   "CHH": "S13 CHH Tip",
+   "SD2": "Piccolo SnrP",
+   "PHH": "S13 PHH",
+   "SD3": "Jazz Rim P",
+   "OHH": "S13 OHH Shft",
+   "SD4": "Tight Snr",
+   "TOM1": "TY L.Tom P",
+   "PERC1": "PandeiroMt/Op",
+   "TOM2": "TY M.Tom P",
+   "PERC2": "Tamborine 2/3",
+   "TOM3": "TY H.Tom P",
+   "PERC3": "Conga Lo/Hi Op",
+   "CYM1": "P17 CrashTip",
+   "PERC4": "Conga Thumb/Efx",
+   "CYM2": "S18 CrashTip",
+   "PERC5": "Timbale 1/2",
+   "CYM3": "Z18kCrashSft",
+   "HIT": "Pop Brs Atk",
+   "OTHER1": "Cabasa Up/Down",
+   "OTHER2": "Whistle"
+  }
+ ]
+}
