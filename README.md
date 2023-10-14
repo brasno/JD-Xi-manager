@@ -5,3 +5,6 @@ After many years, I am trying to pull more beautiful sounds from this small, but
 Pakages into consideration are:
 -  PySimpleGUI - https://www.pysimplegui.org/en/latest/
 -  mido - https://mido.readthedocs.io/en/stable/
+
+Latest SysEx ID table taken 9.10.2023. from  https://www.midi.org and converted to JSON file [ManufacturerSysExIDs.json](docs/ManufacturerSysExIDs.json).
+
