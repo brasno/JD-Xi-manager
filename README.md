@@ -8,3 +8,4 @@ Pakages into consideration are:
 
 Latest SysEx ID table taken 9.10.2023. from  https://www.midi.org and converted to JSON file [ManufacturerSysExIDs.json](ManufacturerSysExIDs.json).
 
+Added line
