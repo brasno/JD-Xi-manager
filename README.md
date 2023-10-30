@@ -10,4 +10,4 @@ Latest SysEx ID table taken 9.10.2023. from  https://www.midi.org and converted 
 
 Memory map is from Roland's Parameter Address Map found in JD-Xi_MIDI_Imple_e01_W.pdf file. Here is extract of that chapter: [address_map.txt](address_map.txt) containing all mentioned maps in Roland's dociment.
 
-Here area samples of [Main](docs/Main_jdxi_controller.png)  and [AnalogSynth](doc/AnalogSynth.png) windows.
+Here area samples of [Main](doc/Main_jdxi_controller.png)  and [AnalogSynth](doc/AnalogSynth.png) windows.
