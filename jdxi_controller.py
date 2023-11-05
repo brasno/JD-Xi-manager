@@ -321,7 +321,11 @@ def control_change(chid,func, value):
                 LSB=64
             elif chid==15:  # Preset program
                MSB=85
-               LSB=64
+               if value>=128:
+                   LSB=65
+                   PC=value-128
+               else:
+                   LSB=64
                 
             msg=mido.Message('control_change', channel=chid, control=0, value=MSB, time=0)
             outport.send(msg)
@@ -380,29 +384,175 @@ def make_arpeggio_window(theme,loc,siz):
     return psg.Window('Arpeggio', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 def make_program_window(theme,loc,siz):
+    global presetprogramlist, presetprogramall
     prefix='-PROGRAM-'
     key_value=prefix
     key_value.replace(' ','_')
 
     psg.theme(theme)
     layout = [[psg.Button('Exit')],
-              [psg.Combo([i for i in range(128)], default_value=3, key=key_value+'LIST-',
-                                  readonly=True,enable_events=True,size=10),
-               psg.Button('Activate program'),]]
+              [psg.Combo(presetprogramlist, default_value=presetprogramlist[0], key=key_value+'LIST-',
+                                  readonly=True,enable_events=True,size=15),
+               psg.Button('Activate program')],
+              [psg.Frame('',[[psg.Text('Program:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
+               psg.Text(presetprogramall[0][1],k=key_value+'Program',text_color='black',background_color='yellow'),
+              psg.Text('Name:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
+              psg.Text(presetprogramall[0][2],k=key_value+'Name',text_color='black',background_color='yellow')]],
+                         background_color='yellow',border_width=0,expand_x=True)],
+              [psg.Text('Genre:',size=(8),font=('Arial',10,'bold')),
+               psg.Text(presetprogramall[0][10],k=key_value+'Genre')],
+              [psg.Column(
+              [
+               
+               [psg.Text('D1:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][3],k=key_value+'D1')],
+               [psg.Text('D2:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][4],k=key_value+'D2')],
+               [psg.Text('DR:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][5],k=key_value+'DR')],
+               [psg.Text('AN:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][6],k=key_value+'AN')]]),
+               psg.Column(
+               [[psg.Text('MSB:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][7],k=key_value+'MSB')],
+                [psg.Text('LSB:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][8],k=key_value+'LSB')],
+                [psg.Text('PC:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][9],k=key_value+'PC')],
+                [psg.Text('Tempo:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][11],k=key_value+'Tempo')]])],
+              [psg.Button('Program start'),psg.Button('Program stop')]
+              ]
     return psg.Window('Program', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 
-def send_sysex(instrument, ID, value):
-    sysexdata=instrument.baseaddress+[ID,value,0]
-    printdebug(sys._getframe().f_lineno, 
-               "sysex"+str(sysexdata))
+def send_sysex_DT1(instrument, address, values):
+    """
+    This message sends data to the other device. The address
+and size indicate the type and amount of data that is requested.
+    instrument : List of data for specific instrument
+    address : base address where to save data (last byte,base address will be defined in the instrument)
+    values : list of values
+    Returns: None.
+    """
+    sysexdata=instrument.sysexsetlist+[address]+values+[0] #zero is checksum, i. e. not needed to calculate
+    printdebug(sys._getframe().f_lineno, "sysex"+str(sysexdata))
     msg=mido.Message('sysex', data=sysexdata) 
     outport.send(msg)
+
+def send_sysex_RQ1(deviceID, address, size):
+    """
+    This message requests the other device to transmit data. The address
+and size indicate the type and amount of data that is requested.
+    Parameters
+    ----------
+    deviceID : List of data for specific device - [0x41,0x10,0x00,0x00,0x00,0x0e] for Roland JD-Xi
+    address : base address where to save data (last byte,base address will be defined in the instrument)
+    size : list of four bytes- [MSB, 2nd, 3rd, LSB]
+    """
+    sysexdata=deviceID+[0x11]+address+size+[0]
+    printdebug(sys._getframe().f_lineno, "sysex"+str(sysexdata))
+    msg=mido.Message('sysex', data=sysexdata) 
+    outport.send(msg)
+
+    time.sleep(.2)
+    counter=0
+    found=False
+    while True:
+        counter+=1
+        msg=inport.poll()
+        if msg is not None:
+            if msg.type=='clock':
+                continue
+            printdebug(sys._getframe().f_lineno, str("Msg type: "+msg.type))
+            if msg.type=='sysex':
+                printdebug(sys._getframe().f_lineno, str("Msg data: "+str(msg.data)))
+                printdebug(sys._getframe().f_lineno, str("Msg hex: "+"".join('%02x' % i for i in msg.data)))
+                if(list(msg.data)[:11]==deviceID+[0x12]+address):
+                    printdebug(sys._getframe().f_lineno, 
+                    str("This is good message."))
+                    found=True
+                    break
+        else:
+            break
+        if counter>100:
+            logger.warning("Waiting too log for stauts identification.")
+    if(found):
+        return (list(msg.data)[11:-1])
+    else:
+        return 'unknown'
+
+class System_Setup():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['ProgramBSMSB']=[40,4,1]
+        self.attributes['ProgramBSLSB']=[127,5,1]
+        self.attributes['ProgramPC']=[15,6,1]
+
+        self.baseaddress=[0x01,0x00]
+        self.datelength=[0x00,0x00,0x00,0x3B]
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+# required for SysEx Data set 1 (DT1=0x12) 
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]
+    
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+        print(data)
+        return
+
+class System_Common():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['MasterTune']=[[0x00,0x04,0x00,0x00],0,4]
+        self.attributes['MasterKeyShift']=[40,4,1]
+        self.attributes['MasterLevel']=[127,5,1]
+        self.attributes['ProgramCC']=[15,17,1]
+        self.attributes['ReceiveProgramChange']=[1,41,1]
+        self.attributes['ReceiveBankSelect']=[1,42,1]
+
+        self.baseaddress=[0x02,0x00]
+        self.datelength=[0x00,0x00,0x00,0x2B]
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+# required for SysEx Data set 1 (DT1=0x12) 
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]
+    
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr!='MasterTune':
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+        print(data)
+        return
+
+
+class Digital_Synth():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0]
+    def get_data():
+        return
+    def push_data():
+        return
+
+class Digital_Synth1(Digital_Synth):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.baseaddress=[0x19,0x01]
+        self.datelength=[0x00,0x00,0x00,0x40]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+
+class Digital_Synth2(Digital_Synth):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.baseaddress=[0x19,0x21]
+        self.datelength=[0x00,0x00,0x00,0x40]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+
     
 class Analog_Synth():
     def __init__(self, *args, **kwargs):
         self.attributes={}
-        self.attributes['Name']=[32,0]
+        self.attributes['Name']=['INIT',0]
         self.attributes['LFOShape']=[0,13]
         self.attributes['LFORate']=[53,14]
         self.attributes['LFOFade']=[0,15]
@@ -449,12 +599,488 @@ class Analog_Synth():
         self.attributes['LFOFilterMC']=[64,57]
         self.attributes['LFOAmpMC']=[64,58]
         self.attributes['LFORateMC']=[82,59]
-# 
-        self.baseaddress=[0x41,0x10,0x00,0x00,0x00,0x0e,0x12,0x19,0x42,0x00]
+        self.baseaddress=[0x19,0x42]
+        self.datelength=[0x00,0x00,0x00,0x40]
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+# required for SysEx Data set 1 (DT1=0x12) 
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]
 
-    def get_data():
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr!='Name':
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+            else:
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+12]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+    def push_data():
         return
 
+class Drum_Kit():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0]
+        self.baseaddress=[0x19,0x70]
+        self.datelength=[0x00,0x00,0x00,0x12]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        return
+    def push_data(self):
+        return
+
+class Program_Common():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x00]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Vocal_Effect():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x01]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Effect1():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x02]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Effect2():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x04]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Delay():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x06]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Reverb():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x08]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Part_DS1():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x20]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Part_DS2():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x21]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Part_AS():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x22]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Part_DR():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x23]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Zone_DS1():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x30]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Zone_DS2():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x31]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+    
+class Program_Zone_AS():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x32]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Zone_DR():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x33]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
+
+class Program_Controller():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT',0,12]
+        self.attributes['ProgramLevel']=[127,16,1]
+        self.attributes['ProgramTempo']=[[0x03,0x06,0x0b,0x00],17,4]
+        self.attributes['VocalEffect']=[0,22,1]
+        self.attributes['VocalEffectNumber']=[0,28,1]
+        self.attributes['VocalEffectPart']=[0,29,1]
+        self.attributes['AutoNoteSwitch']=[0,30,1]
+        self.baseaddress=[0x18,0x40]
+        self.datelength=[0x00,0x00,0x00,0x24]
+        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
+        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        for attr in self.attributes:
+            if attr=='Name':
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+self.attributes[attr][1]]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+            elif attr=='ProgramTempo':
+                self.attributes[attr][0]=data[self.attributes[attr][1]:self.attributes[attr][1]+4]
+            else:
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return
 
 onoff2 = b'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'
 onoff4 = b'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'
@@ -748,7 +1374,7 @@ def main():
     global DEBUG, CONFIG_FILE, ManufacturerSysExIDsFile
     global notesstring, testingnote, testingch, testingvolume, testingduration
     global input_ports, current_inport, current_outport, inport, outport
-    global tonelistDS, tonelistAS, drumkitDR
+    global tonelistDS, tonelistAS, drumkitDR, presetprogramlist,presetprogramall
     global defaultinstrument, instrumentlist
     global Manufacturer, devicename
     
@@ -861,12 +1487,20 @@ def main():
                     tonelistAS=tonesdata['PresetToneListAS']
                 else:
                     tonelistAS=[dict(No=i,Name='Name_'+str(i)) for i in range(128)]
+                if 'PresetProgram' in tonesdata:
+                    presetprogram=tonesdata['PresetProgram']
+                else:
+                    presetprogram=[dict(No=i,Name='Name_'+str(i)) for i in range(128)]
      
     # prepare lists, leave only 'No' and 'Name'
     # old one: drumkitDR=[dict(No=i['No'],Name=i['Name']) for i in drumkitDR]
     drumkitDR=[[i['No'],i['Name']] for i in drumkitDR]
     tonelistDS=[[i['No'],i['Name']] for i in tonelistDS]
     tonelistAS=[[i['No'],i['Name']] for i in tonelistAS]
+    presetprogramlist=[[i['No'],i['Name']] for i in presetprogram]
+    presetprogramall=[[i['No'],i['Program'],i['Name'],i['D1'],i['D2'],i['DR'],i['AN'],i['MSB'],i['LSB'],
+                       i['PC'],i['Genre'],i['Tempo']] for i in presetprogram]
+    
     instrumentlist=drumkitDR
     defaultinstrument=instrumentlist[0] 
     printdebug(sys._getframe().f_lineno, str("Current file:"+str(__file__)))
@@ -967,7 +1601,7 @@ def main():
             analog_window[event.replace('-AS_SLIDER-','-AS_TEXT_SLIDER-')+'value'].update(int(values[event]))
             attr=event[len('-AS_SLIDER-'):-1]
             AnalogSynth.attributes[attr][0]=int(values[event])
-            send_sysex(AnalogSynth,AnalogSynth.attributes[attr][1],int(values[event]))
+            send_sysex_DT1(AnalogSynth,AnalogSynth.attributes[attr][1],[int(values[event])])
         elif event.startswith('-AS_ONOFF-'):
             #analog_window[event].update(int(values[event]))
             #attr=event[len('-AS_ONOFF-'):]
@@ -983,7 +1617,7 @@ def main():
                     analog_window[action[0]].metadata[1]=0
                 else:
                     analog_window[action[0]].metadata[1]=1
-                send_sysex(AnalogSynth,int(AnalogSynth.attributes[attr][1]),int(analog_window[action[0]].metadata[1]))
+                send_sysex_DT1(AnalogSynth,int(AnalogSynth.attributes[attr][1]),[int(analog_window[action[0]].metadata[1])])
                 AnalogSynth.attributes[attr][0]=analog_window[action[0]].metadata[1]
             analog_window[action[0]].update(image_data=onoff_data[index+2*analog_window[action[0]].metadata[1]],image_subsample=IMAGE_SUBSAMPLE)
         elif event.startswith('-AS_LISTBUTTON-'):
@@ -998,7 +1632,7 @@ def main():
             current_button=analog_window['-AS_LISTBUTTON-'+attr+'- '+str(attr_value)]
             if current_button.metadata[0]!=0:
                 continue
-            send_sysex(AnalogSynth,int(AnalogSynth.attributes[attr][1]),attr_value)
+            send_sysex_DT1(AnalogSynth,int(AnalogSynth.attributes[attr][1]),[attr_value])
             for others in current_button.metadata[1]:
                 tmp_button=analog_window['-AS_LISTBUTTON-'+attr+'- '+str(others)]
                 tmp_button.update(image_data=images[tmp_button.metadata[2]][0],image_subsample=IMAGE_SUBSAMPLE)
@@ -1009,7 +1643,7 @@ def main():
             attr=event[len('-AS_LIST-'):-1]
             attr_value=analog_window[event].widget.current()
             AnalogSynth.attributes[attr][0]=attr_value
-            send_sysex(AnalogSynth,int(AnalogSynth.attributes[attr][1]),attr_value)
+            send_sysex_DT1(AnalogSynth,int(AnalogSynth.attributes[attr][1]),[attr_value])
             
         elif event == '-MAIN_COMBO-INPUT-':
             printdebug(sys._getframe().f_lineno, "Combo for:"+str(values['-MAIN_COMBO-INPUT-']))
@@ -1051,9 +1685,35 @@ def main():
             outport.send(msg)
             time.sleep(1)
             tone_off(testingch, testingnote, 80, .1)
+        elif event=='-PROGRAM-LIST-':
+            attr_value=program_window['-PROGRAM-LIST-'].widget.current()
+            program_window['-PROGRAM-'+'Program'].update(presetprogramall[attr_value][1])
+            program_window['-PROGRAM-'+'Name'].update(presetprogramall[attr_value][2])
+            program_window['-PROGRAM-'+'Genre'].update(presetprogramall[attr_value][10])
+            program_window['-PROGRAM-'+'D1'].update(presetprogramall[attr_value][3])
+            program_window['-PROGRAM-'+'D2'].update(presetprogramall[attr_value][4])
+            program_window['-PROGRAM-'+'DR'].update(presetprogramall[attr_value][5])
+            program_window['-PROGRAM-'+'AN'].update(presetprogramall[attr_value][6])
+            program_window['-PROGRAM-'+'MSB'].update(presetprogramall[attr_value][7])
+            program_window['-PROGRAM-'+'LSB'].update(presetprogramall[attr_value][8])
+            program_window['-PROGRAM-'+'PC'].update(presetprogramall[attr_value][9])
+            program_window['-PROGRAM-'+'Tempo'].update(presetprogramall[attr_value][11])
+            pass
+        elif event=='PopupARPEGGIO':
+            AnalogSynth.get_data()
+            print(AnalogSynth.attributes['Name'])
+#            send_sysex_DT1(AnalogSynth,AnalogSynth.attributes['LegatoSw'][1],[1,66])
+            pass
         elif event=='Activate program':
-            control_change(15,'Bank Select',int(values['-PROGRAM-LIST-']))
-
+            attr_value=program_window['-PROGRAM-LIST-'].widget.current()
+#            control_change(15,'Bank Select',int(values['-PROGRAM-LIST-']))
+            control_change(15,'Bank Select',int(attr_value))
+        elif event=='Program start':
+            msg=mido.Message('start')
+            outport.send(msg)
+        elif event=='Program stop':
+            msg=mido.Message('stop')
+            outport.send(msg)
         elif event == "Set Theme":
             new_theme = values['-THEME LISTBOX-'][0]
             printdebug(sys._getframe().f_lineno, "New theme: " + str(new_theme))
