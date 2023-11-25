@@ -15,8 +15,11 @@ Main
 
 ![Main](doc/Main_jdxi_controller.png)  
 
-and Analog Synth
+Analog Synth
 
 ![AnalogSynth](doc/AnalogSynth.png) 
 
+and Digital Synth in progress
+
+![DigitalSynth](doc/DigitalSynth.png) 
 windows.
