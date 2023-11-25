@@ -1,0 +1,30 @@
+{"Skeleton":
+["Name","ShortName","Address","Length","Group","Label","Column","Frame","VerticalGroup","Orientation","Type","ValueFrom","ValueTo","RangeFrom","RangeTo","Default","List","Description"
+],
+"data":[
+["Tone Name","Name","0","12","GENERAL","General","0","","","horizontal","TEXT","32","127","32","127","32",[],""],
+["Tone Level","ToneLevel","12","1","GENERAL","General","0","","","horizontal","SLIDER","0","127","0","127","127",[],""],
+["Portamento Switch","PortamentoSw","18","1","GENERAL","General","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Portamento Time","PortamentoTime","19","1","GENERAL","General","0","","","horizontal","SLIDER","0","127","0","127","20",[],"(CC# 5)"],
+["Mono Switch","MonoSw","20","1","GENERAL","General","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Octave Shift","OctaveShift","21","1","GENERAL","General","0","","","horizontal","SLIDER","61","67","-3","3","64",[],"-3 - +3"],
+["Pitch Bend Range Up","PitchBendRangeUp","22","1","GENERAL","General","0","","","horizontal","SLIDER","0","24","0","24","2",[],""],
+["Pitch Bend Range Down","PitchBendRangeDown","23","1","GENERAL","General","0","","","horizontal","SLIDER","0","24","0","24","2",[],""],
+["Partial1 Switch","Partial1Sw","25","1","PARTIALS","Partials","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Partial1 Select","Partial1Sel","26","1","PARTIALS","Partials","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Partia2 Switch","Partial2Sw","27","1","PARTIALS","Partials","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Partial2 Select","Partial2Sel","28","1","PARTIALS","Partials","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Partial3 Switch","Partial3Sw","29","1","PARTIALS","Partials","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Partial3 Select","Partial3Sel","30","1","PARTIALS","Partials","0","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["RING Switch","RINGSw","31","1","GENERAL","General","1","","","horizontal","ONOFF","0","2","0","2","0",["OFF", "---", "ON"],"OFF, ON"],
+["Unison Switch","UnisonSw","46","1","GENERAL","General","1","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Portamento Mode","PortamentoMode","49","1","GENERAL","General","1","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"NORMAL, LEGATO"],
+["Legato Switch","LegatoSw","50","1","GENERAL","General","1","","","horizontal","ONOFF","0","1","0","1","0",["OFF", "ON"],"OFF, ON"],
+["Analog Feel","AnalogFeel","52","1","GENERAL","General","1","","","horizontal","SLIDER","0","127","0","127","20",[],""],
+["Wave Shape","WaveShape","53","1","GENERAL","General","1","","","horizontal","SLIDER","0","127","0","127","20",[],""],
+["Tone Category","ToneCategory","54","1","GENERAL","General","1","","","horizontal","SLIDER","0","127","0","127","20",[],""],
+["Unison Size","UnisonSize","60","1","GENERAL","General","1","","","horizontal","SLIDER","0","3","2","8","0",[2,4,6,8],"2,4,6,8"]
+]
+}
+
+
