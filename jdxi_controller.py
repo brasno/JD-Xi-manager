@@ -6,6 +6,7 @@ Created on Fri Mar 31 23:10:39 2023
 @author: brasno
 """
 import time
+import threading
 import smtplib
 import datetime
 import json
@@ -121,6 +122,14 @@ def change_log_level(level):
     for handler in logger.handlers:
         handler.setLevel(logging.getLevelName(level.upper()))
     
+def delayed_event(window, delay, event, value):
+    i=0.001
+    delta=.1
+    while i<=delay:
+        time.sleep(delta)
+        i+=delta
+#        print(i)
+    window.write_event_value(event, value)
 
 def get_manufacturer_name(ManufacturerTupleINT):
   global ManufacturerSysExIDsFile, ManufacturerIDs
@@ -184,15 +193,17 @@ def identify_device():
                     ManufacturerID=list(msg.data)[4]
                     printdebug(sys._getframe().f_lineno, "ManufacturerName: "+ManufacturerName)
                     printdebug(sys._getframe().f_lineno, "This is ManufacturerID:"+ ManufacturerHEX+" ("+ManufacturerName+"). Don't know how to work with it.")
-                break
+                    break
         else:
             break
         if counter>100:
             logger.warning("Waiting too log for stauts identification.")
+            break
     if(found):
         return devicename
     else:
         return 'unknown'
+    
 def tone(func, channel, pitch, velocity, duration):
     """
     Parameters
@@ -241,6 +252,29 @@ def get_io_ports():
     printdebug(sys._getframe().f_lineno, str(output_ports)) # To list the output ports
     printdebug(sys._getframe().f_lineno, str(input_ports)) # To list the input ports
 
+def get_ports():
+    global outport, inport, current_inport, current_outport, output_ports, input_ports
+    get_io_ports()
+    current_outport='JD-Xi:JD-Xi MIDI 1'
+    if current_outport not in output_ports:
+        current_outport=output_ports[0]
+    # outport=mido.open_output(current_outport)
+    current_inport='JD-Xi:JD-Xi MIDI 1'
+    if current_inport not in input_ports:
+        current_inport=input_ports[0]
+    outport=mido.open_output(current_outport)
+    port_panic()
+    port_reset()
+    printdebug(sys._getframe().f_lineno, str(outport))
+    inport=mido.open_input(current_inport)
+    printdebug(sys._getframe().f_lineno, str(inport))
+    get_device=identify_device()
+    if get_device=='JD-Xi':
+       printdebug(sys._getframe().f_lineno, str('Testing '+get_device))
+       jdxi_test()
+       return('JD-Xi')
+    else:
+        return('7OF9')
     
 def port_open():
     global outport, inport, current_inport, current_outport
@@ -264,12 +298,18 @@ def port_close():
                 break
     logger.warning("Closing out port "+ str(outport))
     inport.close()
-    logger.warning("Closing in port "+ str(inport))
+    logger.warning("Closing i)n port "+ str(inport))
     
 def port_panic():
     global outport, inport, current_inport, current_outport
     outport.panic()
     logger.warning("Sent panic to "+ str(outport))
+
+def port_reset():
+    global outport, inport, current_inport, current_outport
+    outport.reset()
+    logger.warning("Sent reset to "+ str(outport))
+
 
 def add_digital_synth(chid, desc):
   global digitalsynth
@@ -392,7 +432,7 @@ def make_program_window(theme,loc,siz):
     psg.theme(theme)
     layout = [[psg.Button('Exit')],
               [psg.Combo(presetprogramlist, default_value=presetprogramlist[0], key=key_value+'LIST-',
-                                  readonly=True,enable_events=True,size=15),
+                                  readonly=True,enable_events=True,size=20),
                psg.Button('Activate program')],
               [psg.Frame('',[[psg.Text('Program:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
                psg.Text(presetprogramall[0][1],k=key_value+'Program',text_color='black',background_color='yellow'),
@@ -465,10 +505,11 @@ and size indicate the type and amount of data that is requested.
                     str("This is good message."))
                     found=True
                     break
-        else:
-            break
+                else:
+                    continue
         if counter>100:
             logger.warning("Waiting too log for stauts identification.")
+            break
     if(found):
         return (list(msg.data)[11:-1])
     else:
@@ -482,14 +523,16 @@ class System_Setup():
         self.attributes['ProgramPC']=[15,6,1]
 
         self.baseaddress=[0x01,0x00]
+        self.offset=[0x00]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x3B]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
-# required for SysEx Data set 1 (DT1=0x12) 
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]
+# required for SysEx Data set 1 (DT1=0x12). Last byte must be added at the end
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]
     
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
                 self.attributes[attr][0]=data[self.attributes[attr][1]]
         print(data)
@@ -504,16 +547,17 @@ class System_Common():
         self.attributes['ProgramCC']=[15,17,1]
         self.attributes['ReceiveProgramChange']=[1,41,1]
         self.attributes['ReceiveBankSelect']=[1,42,1]
-
         self.baseaddress=[0x02,0x00]
+        self.offset=[0x00]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x2B]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
 # required for SysEx Data set 1 (DT1=0x12) 
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]
     
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr!='MasterTune':
                 self.attributes[attr][0]=data[self.attributes[attr][1]]
@@ -526,88 +570,43 @@ class System_Common():
 class Digital_Synth():
     def __init__(self, *args, **kwargs):
         self.attributes={}
-        self.attributes['Name']=['INIT',0]
-    def get_data():
-        return
-    def push_data():
-        return
-
-class Digital_Synth1(Digital_Synth):
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
-        self.baseaddress=[0x19,0x01]
-        self.datelength=[0x00,0x00,0x00,0x40]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
-
-class Digital_Synth2(Digital_Synth):
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
-        self.baseaddress=[0x19,0x21]
-        self.datelength=[0x00,0x00,0x00,0x40]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
-
-    
-class Analog_Synth():
-    def __init__(self, *args, **kwargs):
-        self.attributes={}
-        self.attributes['Name']=['INIT',0]
-        self.attributes['LFOShape']=[0,13]
-        self.attributes['LFORate']=[53,14]
-        self.attributes['LFOFade']=[0,15]
-        self.attributes['LFOTempoSynSw']=[0,16]
-        self.attributes['LFOTempoSynNote']=[17,17]
-        self.attributes['LFOPitchDepth']=[64,18]
-        self.attributes['LFOFilterDepth']=[64,19]
-        self.attributes['LFOAmpDepth']=[64,20]
-        self.attributes['LFOKeyTrigger']=[1,21]
-        self.attributes['OSCWaveform']=[0,22]
-        self.attributes['OSCPitchCoarse']=[64,23]
-        self.attributes['OSCPitchFine']=[64,24]
-        self.attributes['OSCPulseWidth']=[0,25]
-        self.attributes['OSCPulseWidthModDepth']=[0,26]
-        self.attributes['OSCPEVelocitySens']=[64,27]
-        self.attributes['OSCPEAttackTime']=[0,28]
-        self.attributes['OSCPEDecay']=[0,29]
-        self.attributes['OSCPEDepth']=[64,30]
-        self.attributes['SubOscType']=[0,31]
-        self.attributes['FilterSwitch']=[1,32]
-        self.attributes['FilterCutoff']=[127,33]
-        self.attributes['FilterCutoffKeyfollow']=[64,34]
-        self.attributes['FilterResonance']=[0,35]
-        self.attributes['FilterEVelocitySens']=[64,36]
-        self.attributes['FilterEAttackTime']=[0,37]
-        self.attributes['FilterEDecayTime']=[0,38]
-        self.attributes['FilterESustainLevel']=[127,39]
-        self.attributes['FilterEReleaseTime']=[0,40]
-        self.attributes['FilterEDepth']=[64,41]
-        self.attributes['AMPLevel']=[127,42]
-        self.attributes['AMPLevelKeyfollow']=[64,43]
-        self.attributes['AMPLevelVelocitySens']=[64,44]
-        self.attributes['AMPEAttackTime']=[0,45]
-        self.attributes['AMPEDecayTime']=[0,46]
-        self.attributes['AMPESustainLevel']=[127,47]
-        self.attributes['AMPEReleaseTime']=[0,48]
-        self.attributes['PortamentoSw']=[0,49]
-        self.attributes['PortamentoTime']=[20,50]
-        self.attributes['LegatoSw']=[0,51]
-        self.attributes['OctaveShift']=[64,52]
-        self.attributes['PitchBendRangeUp']=[2,53]
-        self.attributes['PitchBendRangeDown']=[2,54]
-        self.attributes['LFOPitchMC']=[80,56]
-        self.attributes['LFOFilterMC']=[64,57]
-        self.attributes['LFOAmpMC']=[64,58]
-        self.attributes['LFORateMC']=[82,59]
-        self.baseaddress=[0x19,0x42]
-        self.datelength=[0x00,0x00,0x00,0x40]
+        self.attributes['Name']=['INIT TONE',0,12]
+        self.attributes['ToneLevel']=[127,12,1]
+        self.attributes['PortamentoSw']=[0,18,1]
+        self.attributes['PortamentoTime']=[20,19,1]
+        self.attributes['MonoSw']=[0,20,1]
+        self.attributes['OctaveShift']=[64,21,1]
+        self.attributes['PitchBendRangeUp']=[2,22,1]
+        self.attributes['PitchBendRangeDown']=[2,23,1]
+        self.attributes['Partial1Sw']=[0,25,1]
+        self.attributes['Partial1Sel']=[0,26,1]
+        self.attributes['Partial2Sw']=[0,27,1]
+        self.attributes['Partial2Sel']=[0,28,1]
+        self.attributes['Partial3Sw']=[0,29,1]
+        self.attributes['Partial3Sel']=[0,30,1]
+        self.attributes['RINGSw']=[0,31,1]
+        self.attributes['UnisonSw']=[0,46,1]
+        self.attributes['PortamentoMode']=[0,49,1]
+        self.attributes['LegatoSw']=[0,50,1]
+        self.attributes['AnalogFeel']=[20,52,1]
+        self.attributes['WaveShape']=[20,53,1]
+        self.attributes['ToneCategory']=[20,54,1]
+        self.attributes['UnisonSize']=[0,60,1]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
-# required for SysEx Data set 1 (DT1=0x12) 
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]
-
+        self.id=0
+        self.baseaddress=[0x19,0x00]
+        self.offset=[0x01]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
+        self.datelength=[0x00,0x00,0x00,0x40]
+ 
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        if data=='unknown':
+            self.devicestatus='unknown'
+            return('7OF9')
+        else:
+            self.devicestatus='OK'
         for attr in self.attributes:
             if attr!='Name':
                 self.attributes[attr][0]=data[self.attributes[attr][1]]
@@ -616,8 +615,151 @@ class Analog_Synth():
                 for c in data[self.attributes[attr][1]:self.attributes[attr][1]+12]:
                     name+=chr(c)
                 self.attributes[attr][0]=name
-        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        return('OK')
+    def push_data(self):
         return
+
+class Digital_Synth_Modify():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT TONE',0,12]
+        self.attributes['ToneLevel']=[127,12,1]
+        self.attributes['PortamentoSw']=[0,18,1]
+        self.attributes['PortamentoTime']=[20,19,1]
+        self.attributes['MonoSw']=[0,20,1]
+        self.attributes['OctaveShift']=[64,21,1]
+        self.attributes['PitchBendRangeUp']=[2,22,1]
+        self.attributes['PitchBendRangeDown']=[2,23,1]
+        self.attributes['Partial1Sw']=[0,25,1]
+        self.attributes['Partial1Sel']=[0,26,1]
+        self.attributes['Partial2Sw']=[0,27,1]
+        self.attributes['Partial2Sel']=[0,28,1]
+        self.attributes['Partial3Sw']=[0,29,1]
+        self.attributes['Partial3Sel']=[0,30,1]
+        self.attributes['RINGSw']=[0,31,1]
+        self.attributes['UnisonSw']=[0,46,1]
+        self.attributes['PortamentoMode']=[0,49,1]
+        self.attributes['LegatoSw']=[0,50,1]
+        self.attributes['AnalogFeel']=[20,52,1]
+        self.attributes['WaveShape']=[20,53,1]
+        self.attributes['ToneCategory']=[20,54,1]
+        self.attributes['UnisonSize']=[0,60,1]
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.id=0
+        self.baseaddress=[0x19,0x00]
+        self.offset=[0x50]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
+        self.datelength=[0x00,0x00,0x00,0x40]
+ 
+    def get__modify_data(self):
+        return('not')
+    def push_modify_data(self):
+        return
+
+
+class Digital_Synth1(Digital_Synth):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.id=1
+        self.baseaddress=[0x19,0x00]
+        self.offset=[0x01]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
+        self.datelength=[0x00,0x00,0x00,0x40]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+
+
+
+
+class Digital_Synth2(Digital_Synth):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.id=2
+        self.baseaddress=[0x19,0x20]
+        self.offset=[0x01]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
+        self.datelength=[0x00,0x00,0x00,0x40]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+
+    
+class Analog_Synth():
+    def __init__(self, *args, **kwargs):
+        self.attributes={}
+        self.attributes['Name']=['INIT TONE   ',0,12]
+        self.attributes['LFOShape']=[0,13,1]
+        self.attributes['LFORate']=[53,14,1]
+        self.attributes['LFOFade']=[0,15,1]
+        self.attributes['LFOTempoSynSw']=[0,16,1]
+        self.attributes['LFOTempoSynNote']=[17,17,1]
+        self.attributes['LFOPitchDepth']=[64,18,1]
+        self.attributes['LFOFilterDepth']=[64,19,1]
+        self.attributes['LFOAmpDepth']=[64,20,1]
+        self.attributes['LFOKeyTrigger']=[1,21,1]
+        self.attributes['OSCWaveform']=[0,22,1]
+        self.attributes['OSCPitchCoarse']=[64,23,1]
+        self.attributes['OSCPitchFine']=[64,24,1]
+        self.attributes['OSCPulseWidth']=[0,25,1]
+        self.attributes['OSCPulseWidthModDepth']=[0,26,1]
+        self.attributes['OSCPEVelocitySens']=[64,27,1]
+        self.attributes['OSCPEAttackTime']=[0,28,1]
+        self.attributes['OSCPEDecay']=[0,29,1]
+        self.attributes['OSCPEDepth']=[64,30,1]
+        self.attributes['SubOscType']=[0,31,1]
+        self.attributes['FilterSwitch']=[1,32,1]
+        self.attributes['FilterCutoff']=[127,33,1]
+        self.attributes['FilterCutoffKeyfollow']=[64,34,1]
+        self.attributes['FilterResonance']=[0,35,1]
+        self.attributes['FilterEVelocitySens']=[64,36,1]
+        self.attributes['FilterEAttackTime']=[0,37,1]
+        self.attributes['FilterEDecayTime']=[0,38,1]
+        self.attributes['FilterESustainLevel']=[127,39,1]
+        self.attributes['FilterEReleaseTime']=[0,40,1]
+        self.attributes['FilterEDepth']=[64,41,1]
+        self.attributes['AMPLevel']=[127,42,1]
+        self.attributes['AMPLevelKeyfollow']=[64,43,1]
+        self.attributes['AMPLevelVelocitySens']=[64,44,1]
+        self.attributes['AMPEAttackTime']=[0,45,1]
+        self.attributes['AMPEDecayTime']=[0,46,1]
+        self.attributes['AMPESustainLevel']=[127,47,1]
+        self.attributes['AMPEReleaseTime']=[0,48,1]
+        self.attributes['PortamentoSw']=[0,49,1]
+        self.attributes['PortamentoTime']=[20,50,1]
+        self.attributes['LegatoSw']=[0,51,1]
+        self.attributes['OctaveShift']=[64,52,1]
+        self.attributes['PitchBendRangeUp']=[2,53,1]
+        self.attributes['PitchBendRangeDown']=[2,54,1]
+        self.attributes['LFOPitchMC']=[80,56,1]
+        self.attributes['LFOFilterMC']=[64,57,1]
+        self.attributes['LFOAmpMC']=[64,58,1]
+        self.attributes['LFORateMC']=[82,59,1]
+        self.baseaddress=[0x19,0x40]
+        self.offset=[0x02]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
+        self.datelength=[0x00,0x00,0x00,0x40]
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+# required for SysEx Data set 1 (DT1=0x12) 
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]
+        self.devicestatus='unknown'
+
+    def get_data(self):
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
+        printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
+        if data=='unknown':
+            self.devicestatus='unknown'
+            return('7OF9')
+        else:
+            self.devicestatus='OK'
+        for attr in self.attributes:
+            if attr!='Name':
+                self.attributes[attr][0]=data[self.attributes[attr][1]]
+            else:
+                name=''
+                for c in data[self.attributes[attr][1]:self.attributes[attr][1]+12]:
+                    name+=chr(c)
+                self.attributes[attr][0]=name
+        return('OK')
     def push_data():
         return
 
@@ -625,10 +767,13 @@ class Drum_Kit():
     def __init__(self, *args, **kwargs):
         self.attributes={}
         self.attributes['Name']=['INIT',0]
-        self.baseaddress=[0x19,0x70]
+        self.baseaddress=[0x19,0x60]
+        self.offset=[0x10]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x12]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
         return
     def push_data(self):
@@ -645,11 +790,14 @@ class Program_Common():
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
         self.baseaddress=[0x18,0x00]
+        self.offset=[0x00]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -673,12 +821,15 @@ class Program_Vocal_Effect():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x01]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x01]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -702,12 +853,15 @@ class Program_Effect1():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x02]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x02]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -732,12 +886,15 @@ class Program_Effect2():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x04]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x04]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -762,12 +919,15 @@ class Program_Delay():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x06]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x06]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -792,12 +952,15 @@ class Program_Reverb():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x08]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x08]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -822,12 +985,15 @@ class Program_Part_DS1():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x20]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x20]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -852,12 +1018,15 @@ class Program_Part_DS2():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x21]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x21]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -882,12 +1051,15 @@ class Program_Part_AS():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x22]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x22]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -912,12 +1084,15 @@ class Program_Part_DR():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x23]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x23]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -942,12 +1117,15 @@ class Program_Zone_DS1():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x30]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x30]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -972,12 +1150,15 @@ class Program_Zone_DS2():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x31]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x31]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -1002,12 +1183,15 @@ class Program_Zone_AS():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x32]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x32]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -1032,12 +1216,15 @@ class Program_Zone_DR():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x33]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x33]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -1062,12 +1249,15 @@ class Program_Controller():
         self.attributes['VocalEffectNumber']=[0,28,1]
         self.attributes['VocalEffectPart']=[0,29,1]
         self.attributes['AutoNoteSwitch']=[0,30,1]
-        self.baseaddress=[0x18,0x40]
+        self.baseaddress=[0x18,0x00]
+        self.offset=[0x40]
+        self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datelength=[0x00,0x00,0x00,0x24]
-        self.sysexsetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x12]+self.baseaddress+[0x00]
-        self.sysexgetlist=[0x41,0x10,0x00,0x00,0x00,0x0e]+[0x11]+self.baseaddress+self.datelength
+        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.sysexsetlist=self.deviceID+[0x12]+self.address+[0x00]
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.baseaddress+[0x00,0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00,0x00], self.datelength)
         for attr in self.attributes:
             if attr=='Name':
                 name=''
@@ -1191,7 +1381,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
                         if tempframe:
                             tempframe.add_row(psg.Text(row[name_index],size=TEXT_SIZE))
                             tempframe.Rows[-1].append(psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
-                                       default_value=int(row[default_index]), orientation='horizontal',
+                                       default_value=AS.attributes[row[short_name_index]][0], orientation='horizontal',
                                        size=(20,10),enable_events=True,key=key_value,disable_number_display=True))
                             tempframe.Rows[-1].append(psg.Text(int(row[default_index]), enable_events=True, key=text_key_value))
                             # tempframe.add_row([psg.Text(row[name_index],size=28),
@@ -1202,21 +1392,21 @@ def make_analog_synth_window(AS,theme,loc,siz):
                         else:
                             group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
                             psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
-                                       default_value=int(row[default_index]), orientation='horizontal',
+                                       default_value=AS.attributes[row[short_name_index]][0], orientation='horizontal',
                                        size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
                             psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
                     else:
                         if row[verticalgroup_index]=='':
                             group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
                                 psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
-                                           default_value=int(row[default_index]), orientation='vertical',
+                                           default_value=AS.attributes[row[short_name_index]][0], orientation='vertical',
                                            size=(5,None),enable_events=True,key=key_value,disable_number_display=True),
                                 psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
                         else:
                             ADSR_Frame[-1].extend([psg.Column(
                                 [[psg.Text(row[label_index],k=text_key_value+'top')],
                                  [psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
-                                           default_value=int(row[default_index]), orientation='vertical',
+                                           default_value=AS.attributes[row[short_name_index]][0], orientation='vertical',
                                            size=(5,10),enable_events=True,key=key_value,disable_number_display=True)],
                                  [psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]
                                 ]
@@ -1225,7 +1415,12 @@ def make_analog_synth_window(AS,theme,loc,siz):
                                 group[row[group_index]]+=[[psg.Frame(row[frame_index],[ADSR_Frame[-1]],k='-AS_FRAME-'+row[frame_index]+'vert')]]
                                 ADSR_Frame.append([])
   
-                    AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                    #AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                elif row[type_index]=='TEXT':
+                    key_value='-AS_NAME-'+row[short_name_index]+'-'
+                    key_value.replace(' ','_')
+                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
+                                               psg.Text(AS.attributes[row[short_name_index]][0],size=TEXT_SIZE)]]
                 elif row[type_index]=='ONOFF':
                     key_value='-AS_ONOFF-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
@@ -1233,7 +1428,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
                               psg.Button(image_data=onoff_data[0],metadata=[0,0],auto_size_button=True,border_width=0,
                                          button_color=(psg.theme_element_background_color(),psg.theme_element_background_color() ),
                                          key=key_value, image_subsample=IMAGE_SUBSAMPLE)]]
-                    AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                    #AS.attributes[row[short_name_index]][0]=int(row[default_index])
                 elif row[type_index]=='LISTBUTTON':
                      key_value='-AS_LISTBUTTON-'+row[short_name_index]+'-'
                      key_value.replace(' ','_')
@@ -1247,15 +1442,15 @@ def make_analog_synth_window(AS,theme,loc,siz):
                                               [ i for i in range(int(row[valuefrom_index]),int(row[valueto_index])+1) if i!=part ],
                                               row[list_index][part]], key=key_value+' '+str(part))]
                      group[row[group_index]]+=[tmp_layout]
-                     AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
                 elif row[type_index]=='LIST':
                     key_value='-AS_LIST-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
                     group[row[group_index]]+=[[
                         psg.Text(row[name_index],size=TEXT_SIZE),
-                        psg.Combo(row[list_index], default_value=row[list_index][int(row[default_index])], key=key_value,
+                        psg.Combo(row[list_index], default_value=row[list_index][AS.attributes[row[short_name_index]][0]], key=key_value,
                                   readonly=True,enable_events=True,size=10)]]
-                    AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                    #AS.attributes[row[short_name_index]][0]=int(row[default_index])
     layout = [[psg.Button('Fake buttton'), psg.Button('Popup'), psg.Button('Exit')]]
     current_column=0
     col=[[],[]]
@@ -1266,6 +1461,157 @@ def make_analog_synth_window(AS,theme,loc,siz):
     layout+=[[psg.Frame('',col[0],border_width=0),psg.VerticalSeparator(),psg.Frame('',col[1],border_width=0,vertical_alignment='top')]]
     return psg.Window('Analog Synth', layout, location=loc, resizable=True, size=siz, finalize=True, 
                       icon= music,return_keyboard_events=True)
+
+def make_digital_synth_window(DS,theme,loc,siz):
+    prefix='-DIGITAL_SYNTH_'+str(DS.id)+'-'
+    short_prefix='-DS_'+str(DS.id)
+    group={}
+    column={}
+    frames={}
+    ADSR_Frame_number=0
+    ADSR_Frame=[[]]
+    psg.theme(theme)
+    DIGITAL_JSON_FILE='digital.json'
+    with open(DIGITAL_JSON_FILE) as json_file:
+        digital_parameters = json.load(json_file)
+        if 'Skeleton' in digital_parameters:
+            column_names=digital_parameters['Skeleton']
+            layout=[]
+        else:
+            layout=[[psg.Text('Cannot create layout for'+prefix)]]
+            column_names=None
+        if 'data' in digital_parameters and column_names:
+     
+            name_index=0 if 'Name' not in column_names else column_names.index('Name')
+            short_name_index=0 if 'ShortName' not in column_names else column_names.index('ShortName')
+            address_index=0 if 'Address' not in column_names else column_names.index('Address')
+            length_index=0 if 'Length' not in column_names else column_names.index('Length')
+            group_index=0 if 'Group' not in column_names else column_names.index('Group')
+            label_index=0 if 'Label' not in column_names else column_names.index('Label')
+            column_index=0 if 'Column' not in column_names else column_names.index('Column')
+            frame_index=0 if 'Frame' not in column_names else column_names.index('Frame')
+            verticalgroup_index=0 if 'VerticalGroup' not in column_names else column_names.index('VerticalGroup')
+            orientation_index=0 if 'Orientation' not in column_names else column_names.index('Orientation')
+            type_index=0 if 'Type' not in column_names else column_names.index('Type')
+            valuefrom_index=0 if 'ValueFrom' not in column_names else column_names.index('ValueFrom')
+            valueto_index=0 if 'ValueTo' not in column_names else column_names.index('ValueTo')
+            rangefrom_index=0 if 'RangeFrom' not in column_names else column_names.index('RangeFrom')
+            rangeto_index=0 if 'RangeTo' not in column_names else column_names.index('RangeTo')
+            default_index=0 if 'Default' not in column_names else column_names.index('Default')
+            list_index=0 if 'List' not in column_names else column_names.index('List')
+            description_index=0 if 'Description' not in column_names else column_names.index('Description')
+           
+            for row in digital_parameters['data']:
+                
+                if row[group_index] not in group and row[group_index] !='N/A':
+                    if row[label_index]!='N/A':
+                        group[row[group_index]]=[[psg.Text(row[label_index],expand_x=True,justification='center',
+                                                           background_color='yellow',relief='raised',text_color='black',
+                                                           font=('Arial',12,'bold'))]]
+                        column[row[group_index]]=row[column_index]
+                    else:
+                        group[row[group_index]]=[]
+                        column[row[group_index]]=row[column_index]
+                    if row[frame_index]=='':
+                        tempframe=None
+                    if row[frame_index]!='' and row[frame_index] not in frames:
+                        tempframe=psg.Frame(row[frame_index],[],key='-AS_FRAME-'+row[frame_index]+'-')
+                        frames[row[frame_index]]=[psg.Frame(row[frame_index],[],key='-AS_FRAME-'+row[frame_index]+'-')]
+                        group[row[group_index]]+=[[tempframe]]
+#                if row[verticalgroup_index]!=''and ADSR_Frame[-1]==None:
+#                    ADSR_Frame[-1]=[]
+                if row[type_index]=='SLIDER':
+                    key_value=short_prefix+'_SLIDER-'+row[short_name_index]+'-'
+                    key_value.replace(' ','_')
+                    text_key_value=short_prefix+'_TEXT_SLIDER-'+row[short_name_index]+'-value'
+                    text_key_value.replace(' ','_')
+                    orient='horizontal' if row[orientation_index]=='horizontal' else 'vertical'
+                    if orient=='horizontal':
+                        if tempframe:
+                            tempframe.add_row(psg.Text(row[name_index],size=TEXT_SIZE))
+                            tempframe.Rows[-1].append(psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                                       default_value=DS.attributes[row[short_name_index]][0], orientation='horizontal',
+                                       size=(20,10),enable_events=True,key=key_value,disable_number_display=True))
+                            tempframe.Rows[-1].append(psg.Text(int(row[default_index]), enable_events=True, key=text_key_value))
+                            # tempframe.add_row([psg.Text(row[name_index],size=28),
+                            # psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            #            default_value=int(row[default_index]), orientation='horizontal',
+                            #            size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
+                            # psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)])
+                        else:
+                            group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
+                            psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                                       default_value=DS.attributes[row[short_name_index]][0], orientation='horizontal',
+                                       size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
+                            psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
+                    else:
+                        if row[verticalgroup_index]=='':
+                            group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
+                                psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                                           default_value=DS.attributes[row[short_name_index]][0], orientation='vertical',
+                                           size=(5,None),enable_events=True,key=key_value,disable_number_display=True),
+                                psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
+                        else:
+                            ADSR_Frame[-1].extend([psg.Column(
+                                [[psg.Text(row[label_index],k=text_key_value+'top')],
+                                 [psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                                           default_value=DS.attributes[row[short_name_index]][0], orientation='vertical',
+                                           size=(5,10),enable_events=True,key=key_value,disable_number_display=True)],
+                                 [psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]
+                                ]
+                                 )])
+                            if row[verticalgroup_index]=='END':
+                                group[row[group_index]]+=[[psg.Frame(row[frame_index],[ADSR_Frame[-1]],k=short_prefix+'_FRAME-'+row[frame_index]+'vert')]]
+                                ADSR_Frame.append([])
+  
+                    #AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                elif row[type_index]=='TEXT':
+                    key_value=short_prefix+'_NAME-'+row[short_name_index]+'-'
+                    key_value.replace(' ','_')
+                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
+                                               psg.Text(DS.attributes[row[short_name_index]][0],size=TEXT_SIZE)]]
+                elif row[type_index]=='ONOFF':
+                    key_value=short_prefix+'_ONOFF-'+row[short_name_index]+'-'
+                    key_value.replace(' ','_')
+                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
+                              psg.Button(image_data=onoff_data[0],metadata=[0,0],auto_size_button=True,border_width=0,
+                                         button_color=(psg.theme_element_background_color(),psg.theme_element_background_color() ),
+                                         key=key_value, image_subsample=IMAGE_SUBSAMPLE)]]
+                    #AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                elif row[type_index]=='LISTBUTTON':
+                     key_value=short_prefix+'_LISTBUTTON-'+row[short_name_index]+'-'
+                     key_value.replace(' ','_')
+                     tmp_layout=[psg.Text(row[name_index],size=TEXT_SIZE)]
+                     for part in range(int(row[valuefrom_index]),int(row[valueto_index])+1):
+                         tmp_layout+=[psg.Button('',auto_size_button=True,border_width=0,
+                                    image_data=images[row[list_index][part]][1 if int(row[default_index])==part else 0], 
+                                    image_subsample=IMAGE_SUBSAMPLE, mouseover_colors=(psg.YELLOWS[0],psg.YELLOWS[0]),
+                                    button_color=(psg.theme_element_background_color(),psg.theme_element_background_color()),
+                                    metadata=[1 if int(row[default_index])==part else 0,
+                                              [ i for i in range(int(row[valuefrom_index]),int(row[valueto_index])+1) if i!=part ],
+                                              row[list_index][part]], key=key_value+' '+str(part))]
+                     group[row[group_index]]+=[tmp_layout]
+                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
+                elif row[type_index]=='LIST':
+                    key_value=short_prefix+'_LIST-'+row[short_name_index]+'-'
+                    key_value.replace(' ','_')
+                    group[row[group_index]]+=[[
+                        psg.Text(row[name_index],size=TEXT_SIZE),
+                        psg.Combo(row[list_index], default_value=row[list_index][DS.attributes[row[short_name_index]][0]], key=key_value,
+                                  readonly=True,enable_events=True,size=10)]]
+                    #AS.attributes[row[short_name_index]][0]=int(row[default_index])
+    layout = [[psg.Button('DS'+str(DS.id)+' Fake buttton'), psg.Button('DS'+str(DS.id)+' Popup'), psg.Button('Exit')]]
+    current_column=0
+    col=[[],[]]
+    for line in group:
+#        if column[line]!=current_column:
+        col[int(column[line])]+=group[line]
+#    for ccc in col:
+    layout+=[[psg.Frame('',col[0],border_width=0),psg.VerticalSeparator(),psg.Frame('',col[1],border_width=0,vertical_alignment='top')]]
+    return psg.Window('Digital Synth '+str(DS.id), layout, location=loc, resizable=True, size=siz, finalize=True, 
+                      icon= music,return_keyboard_events=True)
+
+
 
 def make_main_window(theme, loc, siz):
   global notesstring, defaultinstrument, instrumentlist
@@ -1281,7 +1627,7 @@ def make_main_window(theme, loc, siz):
    psg.Combo(list(i for i in range(1,17)), default_value=16, key='-MAIN_COMBO-PC-', 
              readonly=True,enable_events=True,
              tooltip='Specifies the channel used to\ntransmit and receive MIDI messages for the program.'),
-   psg.Text('                              '),
+   psg.Text('                              ',key='-MAIN-ALERT-'),
    psg.Button('Exit', button_color=( 'red2','green2'),s=(8,1),font=('Arial',14,'bold'))
    ]]
 
@@ -1331,7 +1677,8 @@ def make_main_window(theme, loc, siz):
      psg.Button('Test Sound',size=(10,2))],
     
     
-    [psg.Button('Analog'),psg.Button('Voice'),psg.Button('Effects'),
+    [psg.Button('Analog'),psg.Button('Digital 1'),psg.Button('Digital 2'),
+     psg.Button('Voice'),psg.Button('Effects'),
      psg.Button('Arpeggio'),psg.Button('Program')]
   ]
   
@@ -1505,28 +1852,34 @@ def main():
     defaultinstrument=instrumentlist[0] 
     printdebug(sys._getframe().f_lineno, str("Current file:"+str(__file__)))
     # get MIDI ports
-    get_io_ports()
-    current_outport='JD-Xi:JD-Xi MIDI 1'
-    if current_outport not in output_ports:
-        current_outport=output_ports[0]
-    # outport=mido.open_output(current_outport)
-    current_inport='JD-Xi:JD-Xi MIDI 1'
-    if current_inport not in input_ports:
-        current_inport=input_ports[0]
-    outport=mido.open_output(current_outport)
-    outport.reset()
-    printdebug(sys._getframe().f_lineno, str(outport))
-    inport=mido.open_input(current_inport)
-    printdebug(sys._getframe().f_lineno, str(inport))
-    get_device=identify_device()
-    if get_device=='JD-Xi':
-       printdebug(sys._getframe().f_lineno, str('Testing '+get_device))
-       jdxi_test()
+    ret=get_ports()
+    
     psg.theme('DarkBlue12')
     main_window=make_main_window(psg.theme(),(10,1),(565, 575))
     AnalogSynth=Analog_Synth()
+    ret=AnalogSynth.get_data()
+    if ret=='7OF9':
+        c_thread = threading.Thread(target=delayed_event, args=(main_window, 2.0,'-NO_DEVICE-','on'), daemon=True)
+        c_thread.start()
+    DigitalSynth1=Digital_Synth1()
+    ret=DigitalSynth1.get_data()
+    if ret=='7OF9':
+        printdebug(sys._getframe().f_lineno, str("Cannot create digital synth 1 window."))
+    # else:
+    #     print(ret)
+
+    DigitalSynth2=Digital_Synth2()
+    ret=DigitalSynth2.get_data()
+    if ret=='7OF9':
+        printdebug(sys._getframe().f_lineno, str("Cannot create digital synth 2 window."))
+    # else:
+    #     print(ret)
+ 
     
     analog_window=make_analog_synth_window(AnalogSynth,psg.theme(),(585,10),(940, 975))
+    digital1_window=make_digital_synth_window(DigitalSynth1,psg.theme(),(595,10),(940, 975))
+    digital2_window=make_digital_synth_window(DigitalSynth2,psg.theme(),(595,10),(940, 975))
+    
     effects_window=make_effects_window(psg.theme(),(1535,10),(350, 120))
     vocalFX_window=make_vocalFX_window(psg.theme(),(1535,165),(350, 120))
     arpeggio_window= make_arpeggio_window(psg.theme(),(1535,320),(350, 120))
@@ -1580,6 +1933,7 @@ def main():
                 main_window['Play'].update(text='Play')
 
         elif event == 'Reload':
+            port_panic()
             port_close()
             get_io_ports()
             main_window['-MAIN_COMBO-INPUT-'].update(values=input_ports, 
@@ -1664,18 +2018,27 @@ def main():
             if instrumenttype=='DS':
                 main_window['-MAIN_COMBO-instrument-'].update(values=tonelistDS, value=tonelistDS[0])
             elif instrumenttype=='AS':
-                main_window['-MAIN_COMBO-instrument-'].update(values=tonelistAS, value=tonelistAS[0])
+                main_window['-MAIN_COMBO-instrument-'].update(values=tonelistAS, value=tonelistAS[0])   
             elif instrumenttype=='DR':
                 main_window['-MAIN_COMBO-instrument-'].update(values=drumkitDR, value=drumkitDR[0])
             printdebug(sys._getframe().f_lineno, "Instrument type:"+instrumenttype)
     
-        elif event == '-MAIN_COMBO-BANK-':
-            printdebug(sys._getframe().f_lineno, "Combo for:"+str(values['-MAIN_COMBO-BANK-']))
-            control_change(testingch,'Bank Select',int(values['-MAIN_COMBO-BANK-']))
+        # elif event == '-MAIN_COMBO-BANK-':
+        #     printdebug(sys._getframe().f_lineno, "Combo for:"+str(values['-MAIN_COMBO-BANK-']))
+        #     control_change(testingch,'Bank Select',int(values['-MAIN_COMBO-BANK-']))
         elif event == '-MAIN_COMBO-instrument-':
             printdebug(sys._getframe().f_lineno, str(values['-MAIN_COMBO-instrument-']))
 #     control_change(testingch,'Bank Select',int(values['-MAIN_COMBO-instrument-']['No']-1))
             control_change(testingch,'Bank Select',int(values['-MAIN_COMBO-instrument-'][0]-1))
+            #new 202311106
+            AnalogSynth.get_data()
+            if ret=='7OF9':
+                c_thread = threading.Thread(target=delayed_event, args=(main_window, 2.0,'-NO_DEVICE-','on'), daemon=True)
+                c_thread.start()
+            else:
+                main_window.write_event_value('-NO_DEVICE-','inactive')
+            analog_window.close()
+            analog_window=make_analog_synth_window(AnalogSynth,psg.theme(),(585,10),(940, 975))
         elif event=='Poly':
             tone_on(testingch, testingnote, testingvolume, testingduration)
             msg=mido.Message('polytouch', channel=testingch, note=testingnote, 
@@ -1704,6 +2067,25 @@ def main():
             print(AnalogSynth.attributes['Name'])
 #            send_sysex_DT1(AnalogSynth,AnalogSynth.attributes['LegatoSw'][1],[1,66])
             pass
+        elif event=='-NO_DEVICE-':
+            if values['-NO_DEVICE-']=='on' and AnalogSynth.devicestatus!='OK':
+                main_window['-MAIN-ALERT-'].update('JD-Xi not recognized',background_color='red')
+                main_window.refresh()
+                c_thread = threading.Thread(target=delayed_event, 
+                                            args=(main_window, 2.0,'-NO_DEVICE-','off'), daemon=True)
+                c_thread.start()
+
+            elif values['-NO_DEVICE-']=='off' and AnalogSynth.devicestatus!='OK':
+                main_window['-MAIN-ALERT-'].update('                              ', 
+                                                   background_color=psg.theme_element_background_color())
+                main_window.refresh()
+                c_thread = threading.Thread(target=delayed_event, 
+                                            args=(main_window, 2.0,'-NO_DEVICE-','on'), daemon=True)
+                c_thread.start()
+            elif values['-NO_DEVICE-']=='inactive':
+                main_window['-MAIN-ALERT-'].update('                              ', 
+                                                   background_color=psg.theme_element_background_color())
+             
         elif event=='Activate program':
             attr_value=program_window['-PROGRAM-LIST-'].widget.current()
 #            control_change(15,'Bank Select',int(values['-PROGRAM-LIST-']))
