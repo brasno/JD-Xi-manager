@@ -32,6 +32,7 @@ def printdebug(lineno, message):
     if (DEBUG==True):
         print("FILE="+__file__+", LINE="+str(lineno)+": "+message)
 
+
 # All configs are in config file: <CONFIG_FILE>
 # Put here default config file
 CONFIG_FILE='./jdxi_controller.json'
@@ -101,6 +102,7 @@ def start_logger():
     logFH.setLevel(logging.getLevelName(loglevel))
     logger.setLevel(logging.getLevelName(loglevel))
 
+
 def stop_logger():
     global loglevel, logger
     # evidence for stap program
@@ -113,6 +115,7 @@ def stop_logger():
     for handler in logger.handlers:
         handler.setLevel(logging.getLevelName(loglevel))
 
+
 def change_log_level(level):
     global loglevel, logger
     logger.info("Change log level from "+loglevel+" to "+level.upper())
@@ -121,7 +124,8 @@ def change_log_level(level):
     logger.setLevel(logging.getLevelName(level.upper()))
     for handler in logger.handlers:
         handler.setLevel(logging.getLevelName(level.upper()))
-    
+
+
 def delayed_event(window, delay, event, value):
     i=0.001
     delta=.1
@@ -130,6 +134,7 @@ def delayed_event(window, delay, event, value):
         i+=delta
 #        print(i)
     window.write_event_value(event, value)
+
 
 def get_manufacturer_name(ManufacturerTupleINT):
   global ManufacturerSysExIDsFile, ManufacturerIDs
@@ -145,8 +150,9 @@ def get_manufacturer_name(ManufacturerTupleINT):
     else:
       return "Unknown Manufacturer"
 
+
 def identify_device():
-    global ManufacturerID, Manufacturer, devicename,ManufacturerSysExIDsFile
+    global ManufacturerID, Manufacturer, devicename, ManufacturerSysExIDsFile
     global outport, inport
     """
     This is how to use Universal Non-realtime System Exclusive Messages with Identity Request Message
@@ -205,6 +211,8 @@ def identify_device():
     else:
         return 'unknown'
     
+
+
 def tone(func, channel, pitch, velocity, duration):
     """
     Parameters
@@ -222,29 +230,36 @@ def tone(func, channel, pitch, velocity, duration):
                  velocity=velocity, time=duration)
     printdebug(sys._getframe().f_lineno, str(msg))
     outport.send(msg)
-    
+
+
 def tone_on(channel, pitch, velocity, duration):
     global outport, inport
     tone('note_on', channel, pitch, velocity, duration)
     time.sleep(duration/64)
     
+
+
 def tone_off(channel, pitch, velocity, duration):
     global outport, inport
     tone('note_off', channel, pitch, velocity, duration)
+
 
 def test_tone(pitch):
     global outport, inport, testingnote, testingch, testingvolume, testingduration
     tone_on(testingch, pitch, testingvolume, testingduration)
     time.sleep(.2)
     tone_off(testingch, pitch, testingvolume, testingduration)
-    
+
+
 def test_tone_on(pitch):
     global outport, inport, testingnote, testingch, testingvolume, testingduration
     tone_on(testingch, pitch, testingvolume, testingduration)
 
+
 def test_tone_off(pitch):
     global outport, inport, testingnote, testingch, testingvolume, testingduration
     tone_off(testingch, pitch, testingvolume, testingduration)
+
 
 def get_io_ports():
     global outport, inport, current_inport, current_outport, output_ports, input_ports
@@ -252,6 +267,7 @@ def get_io_ports():
     input_ports=mido.get_input_names()
     printdebug(sys._getframe().f_lineno, str(output_ports)) # To list the output ports
     printdebug(sys._getframe().f_lineno, str(input_ports)) # To list the input ports
+
 
 def get_ports():
     global outport, inport, current_inport, current_outport, output_ports, input_ports
@@ -277,6 +293,8 @@ def get_ports():
     else:
         return('7OF9')
     
+
+
 def port_open():
     global outport, inport, current_inport, current_outport
     outport=mido.open_output(current_outport)
@@ -284,6 +302,8 @@ def port_open():
     outport.reset()
     logger.info("Open port "+current_outport+" "+str(outport))
     
+
+
 def port_close():
     global outport,inport, current_inport, current_outport
     outport.close()
@@ -301,16 +321,18 @@ def port_close():
     inport.close()
     logger.warning("Closing i)n port "+ str(inport))
     
+
+
 def port_panic():
     global outport, inport, current_inport, current_outport
     outport.panic()
     logger.warning("Sent panic to "+ str(outport))
 
+
 def port_reset():
     global outport, inport, current_inport, current_outport
     outport.reset()
     logger.warning("Sent reset to "+ str(outport))
-
 
 def add_digital_synth(chid, desc):
   global digitalsynth
@@ -410,6 +432,7 @@ def make_effects_window(theme,loc,siz):
               [psg.Button('FAKE'), psg.Button('PopupEFFECTS'), psg.Button('Exit')]]
     return psg.Window('Effects', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
+
 def make_vocalFX_window(theme,loc,siz):
     prefix='-VOCAL_FX-'
     psg.theme(theme)
@@ -417,12 +440,14 @@ def make_vocalFX_window(theme,loc,siz):
               [psg.Button('FAKE'), psg.Button('PopupVOCAL_FX'), psg.Button('Exit')]]
     return psg.Window('Vocal FX', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
+
 def make_arpeggio_window(theme,loc,siz):
     prefix='-ARPEGGIO-'
     psg.theme(theme)
     layout = [[psg.Text('This is the Arpeggio window'), psg.Text('      ', k=prefix+'OUTPUT-')],
               [psg.Button('FAKE'), psg.Button('PopupARPEGGIO'), psg.Button('Exit')]]
     return psg.Window('Arpeggio', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
+
 
 def make_program_window(theme,loc,siz):
     global presetprogramlist, presetprogramall
@@ -473,6 +498,7 @@ and size indicate the type and amount of data that is requested.
     msg=mido.Message('sysex', data=sysexdata) 
     outport.send(msg)
 
+
 def send_sysex_RQ1(deviceID, address, size):
     """
     This message requests the other device to transmit data. The address
@@ -516,6 +542,7 @@ and size indicate the type and amount of data that is requested.
     else:
         return 'unknown'
 
+
 class System_Setup():
     def __init__(self, *args, **kwargs):
         self.attributes={}
@@ -526,15 +553,16 @@ class System_Setup():
         self.baseaddress=[0x01,0x00,0x00]
         self.offset=[0x00,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x3B]
+        self.datalength=[0x00,0x00,0x00,0x3B]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
 # required for SysEx Data set 1 (DT1=0x12). Last byte must be added at the end
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
         self.devicestatus='unknown'
     
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -544,6 +572,7 @@ class System_Setup():
                 self.attributes[attr][0]=data[self.attributes[attr][1]]
         print(data)
         return
+
 
 class System_Common():
     def __init__(self, *args, **kwargs):
@@ -557,15 +586,16 @@ class System_Common():
         self.baseaddress=[0x02,0x00,0x00]
         self.offset=[0x00,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x2B]
+        self.datalength=[0x00,0x00,0x00,0x2B]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
 # required for SysEx Data set 1 (DT1=0x12) 
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
         self.devicestatus='unknown'
     
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
             self.devicestatus='unknown'
@@ -593,15 +623,16 @@ class System_Controller():
         self.baseaddress=[0x02,0x00,0x00]
         self.offset=[0x00,0x03]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x11]
+        self.datalength=[0x00,0x00,0x00,0x11]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
 # required for SysEx Data set 1 (DT1=0x12) 
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
         self.devicestatus='unknown'
     
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -626,13 +657,14 @@ class Program_Common():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x1f]
+        self.datalength=[0x00,0x00,0x00,0x1f]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -650,6 +682,7 @@ class Program_Common():
                 self.attributes[attr][0]=data[self.attributes[attr][1]]
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Vocal_Effect():
     def __init__(self, *args, **kwargs):
@@ -678,13 +711,14 @@ class Program_Vocal_Effect():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x01]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x18]
+        self.datalength=[0x00,0x00,0x00,0x18]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -694,6 +728,7 @@ class Program_Vocal_Effect():
             self.attributes[attr][0]=data[self.attributes[attr][1]]
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Effect1():
     def __init__(self, *args, **kwargs):
@@ -739,13 +774,14 @@ class Program_Effect1():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x02]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x01,0x11]
+        self.datalength=[0x00,0x00,0x01,0x11]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -760,6 +796,7 @@ class Program_Effect1():
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
 
+
 class Program_Effect2():
     def __init__(self, *args, **kwargs):
         self.attributes={}
@@ -773,13 +810,14 @@ class Program_Effect2():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x04]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x01,0x11]
+        self.datalength=[0x00,0x00,0x01,0x11]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -798,6 +836,7 @@ class Program_Effect2():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Delay():
     
@@ -814,18 +853,20 @@ class Program_Delay():
     attributes['DelayFeedback']=[[8,0,0,0],24,4]
     attributes['DelayHFDamp']=[[8,0,0,0],28,4]
     attributes['DelayLevel']=[[8,0,0,0],32,4]
+
     def __init__(self, *args, **kwargs):
 #        self.attributes={}
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x06]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x64]
+        self.datalength=[0x00,0x00,0x00,0x64]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -845,6 +886,7 @@ class Program_Delay():
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
 
+
 class Program_Reverb():
     def __init__(self, *args, **kwargs):
         self.attributes={}
@@ -858,13 +900,14 @@ class Program_Reverb():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x08]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x63]
+        self.datalength=[0x00,0x00,0x00,0x63]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -883,6 +926,7 @@ class Program_Reverb():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Part_DS1():
     def __init__(self, *args, **kwargs):
@@ -897,13 +941,14 @@ class Program_Part_DS1():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x20]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -922,6 +967,7 @@ class Program_Part_DS1():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Part_DS2():
     def __init__(self, *args, **kwargs):
@@ -936,13 +982,14 @@ class Program_Part_DS2():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x21]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -961,6 +1008,7 @@ class Program_Part_DS2():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Part_AS():
     def __init__(self, *args, **kwargs):
@@ -975,13 +1023,14 @@ class Program_Part_AS():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x22]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1000,6 +1049,7 @@ class Program_Part_AS():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Part_DR():
     def __init__(self, *args, **kwargs):
@@ -1014,13 +1064,14 @@ class Program_Part_DR():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x23]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1039,6 +1090,7 @@ class Program_Part_DR():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Zone_DS1():
     def __init__(self, *args, **kwargs):
@@ -1053,13 +1105,14 @@ class Program_Zone_DS1():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x30]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1078,6 +1131,7 @@ class Program_Zone_DS1():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Zone_DS2():
     def __init__(self, *args, **kwargs):
@@ -1092,13 +1146,14 @@ class Program_Zone_DS2():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x31]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1117,6 +1172,7 @@ class Program_Zone_DS2():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
     
 class Program_Zone_AS():
     def __init__(self, *args, **kwargs):
@@ -1131,13 +1187,14 @@ class Program_Zone_AS():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x32]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1156,6 +1213,7 @@ class Program_Zone_AS():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Zone_DR():
     def __init__(self, *args, **kwargs):
@@ -1170,13 +1228,14 @@ class Program_Zone_DR():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x33]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x24]
+        self.datalength=[0x00,0x00,0x00,0x24]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1195,6 +1254,7 @@ class Program_Zone_DR():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Program_Controller():
     def __init__(self, *args, **kwargs):
@@ -1209,13 +1269,14 @@ class Program_Controller():
         self.baseaddress=[0x18,0x00,0x00]
         self.offset=[0x00,0x40]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x0c]
+        self.datalength=[0x00,0x00,0x00,0x0c]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         if data=='unknown':
             self.devicestatus='unknown'
             return('7OF9')
@@ -1234,6 +1295,7 @@ class Program_Controller():
 
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         return
+
 
 class Digital_Synth():
     def __init__(self, *args, **kwargs):
@@ -1265,11 +1327,12 @@ class Digital_Synth():
         self.baseaddress=[0x19,0x00,0x00]
         self.offset=[0x01,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x40]
+        self.datalength=[0x00,0x00,0x00,0x40]
         self.devicestatus='unknown'
  
+
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
             self.devicestatus='unknown'
@@ -1285,6 +1348,7 @@ class Digital_Synth():
                     name+=chr(c)
                 self.attributes[attr][0]=name
         return('OK')
+
     def push_data(self):
         return
 
@@ -1301,14 +1365,15 @@ class Digital_Synth_Modify():
     dsm_baseaddress=[0x19,0x00,0x00]
     dsm_offset=[0x00,0x50]
     dsm_address=[dsm_baseaddress[0],dsm_baseaddress[1]+dsm_offset[0],dsm_baseaddress[2]+dsm_offset[1]]
-    dsm_datelength=[0x00,0x00,0x00,0x25]
+    dsm_datalength=[0x00,0x00,0x00,0x25]
     devicestatus='unknown'
  
+
     def __init__(self, *args, **kwargs):
         pass
 
     def get__modify_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.dsm_address+[0x00], self.dsm_datelength)
+        data=send_sysex_RQ1(self.deviceID, self.dsm_address+[0x00], self.dsm_datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
             self.devicestatus='unknown'
@@ -1324,8 +1389,10 @@ class Digital_Synth_Modify():
                     name+=chr(c)
                 self. dsm_attributes[attr][0]=name
         return('OK')
+
     def push_modify_data(self):
         return
+
 
 class Digital_Synth_Partial():
     attributes={}
@@ -1333,12 +1400,13 @@ class Digital_Synth_Partial():
     baseaddress=[0x19,0x00,0x00]
     offset=[0x00,0x20]
     address=[baseaddress[0],baseaddress[1]+offset[0],baseaddress[2]+offset[1]]
-    datelength=[0x00,0x00,0x00,0x3D]
+    datalength=[0x00,0x00,0x00,0x3D]
     sysexsetlist=deviceID+[0x12]+address
-    sysexgetlist=deviceID+[0x11]+address+datelength
+    sysexgetlist=deviceID+[0x11]+address+datalength
 
     def __init__(self, *args, **kwargs):
         pass
+
 
 class Digital_Synth1(Digital_Synth, Digital_Synth_Modify):
     def __init__(self, *args, **kwargs):
@@ -1351,9 +1419,10 @@ class Digital_Synth1(Digital_Synth, Digital_Synth_Modify):
         self.offset=[0x01,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.dsm_address=[self.address[0],self.address[1]+self.dsm_offset[0],self.address[2]+self.dsm_offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x40]
+        self.datalength=[0x00,0x00,0x00,0x40]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
+
 
 class Digital_Synth2(Digital_Synth, Digital_Synth_Modify):
     def __init__(self, *args, **kwargs):
@@ -1366,10 +1435,9 @@ class Digital_Synth2(Digital_Synth, Digital_Synth_Modify):
         self.offset=[0x01,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.dsm_address=[self.address[0],self.address[1]+self.dsm_offset[0],self.address[2]+self.dsm_offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x40]
+        self.datalength=[0x00,0x00,0x00,0x40]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
-
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
     
 class Analog_Synth():
     def __init__(self, *args, **kwargs):
@@ -1424,7 +1492,7 @@ class Analog_Synth():
         self.baseaddress=[0x19,0x40,0x00]
         self.offset=[0x02,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x40]
+        self.datalength=[0x00,0x00,0x00,0x40]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
 # required for SysEx Data set 1 (DT1=0x12) 
         self.sysexsetlist=self.deviceID+[0x12]+self.address
@@ -1432,7 +1500,7 @@ class Analog_Synth():
         self.devicestatus='unknown'
 
     def get_data(self):
-        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datelength)
+        data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
             self.devicestatus='unknown'
@@ -1448,7 +1516,20 @@ class Analog_Synth():
                     name+=chr(c)
                 self.attributes[attr][0]=name
         return('OK')
-    def push_data():
+
+    def push_data(self):
+        length=((self.datalength[0]*256+self.datalength[1])*256+self.datalength[2])*256+self.datalength[3]
+        data=[0]*length
+        for attr in self.attributes:
+            if attr != "Name":
+                data[self.attributes[attr][1]] = self.attributes[attr][0]
+            else:
+                name=self.attributes[attr][0]
+                name=name+' '*(self.attributes[attr][2] - len(name))
+                nameascii=[ord(c) for c in name]
+                data[self.attributes[attr][1] : self.attributes[attr][1]+self.attributes[attr][2]] = nameascii
+                self.attributes[attr][0] = name
+        send_sysex_DT1(self, 0, data)  # 0 because of all chunk
         return
 
 class Drum_Kit_Common():
@@ -1458,15 +1539,18 @@ class Drum_Kit_Common():
         self.baseaddress=[0x19,0x60,0x00]
         self.offset=[0x10,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
-        self.datelength=[0x00,0x00,0x00,0x12]
+        self.datalength=[0x00,0x00,0x00,0x12]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
         return
+
     def push_data(self):
         return
+
 
 class Drum_Kit_Partial():
     def __init__(self, *args, **kwargs):
@@ -1476,13 +1560,15 @@ class Drum_Kit_Partial():
         self.baseaddress=[0x19,0x60]
         self.offset=[0x10]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
-        self.datelength=[0x00,0x00,0x01,0x43]
+        self.datalength=[0x00,0x00,0x01,0x43]
         self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
         self.sysexsetlist=self.deviceID+[0x12]+self.address
-        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datelength
+        self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
+
     def get_data(self):
         return
+
     def push_data(self):
         return
 
@@ -1528,6 +1614,7 @@ images['RND']=[RND0,RND1]
 
 IMAGE_SUBSAMPLE=4
 TEXT_SIZE=26
+
 
 def make_analog_synth_window(AS,theme,loc,siz):
     prefix='-ANALOG_SYNTH-'
@@ -1629,6 +1716,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
                             if row[verticalgroup_index]=='END':
                                 group[row[group_index]]+=[[psg.Frame(row[frame_index],[ADSR_Frame[-1]],k='-AS_FRAME-'+row[frame_index]+'vert')]]
                                 ADSR_Frame.append([])
+
   
                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
                 elif row[type_index]=='TEXT':
@@ -1676,6 +1764,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
     layout+=[[psg.Frame('',col[0],border_width=0),psg.VerticalSeparator(),psg.Frame('',col[1],border_width=0,vertical_alignment='top')]]
     return psg.Window('Analog Synth', layout, location=loc, resizable=True, size=siz, finalize=True, 
                       icon= music,return_keyboard_events=True)
+
 
 def make_digital_synth_window(DS,theme,loc,siz):
     prefix='-DIGITAL_SYNTH_'+str(DS.id)+'-'
@@ -1778,6 +1867,7 @@ def make_digital_synth_window(DS,theme,loc,siz):
                             if row[verticalgroup_index]=='END':
                                 group[row[group_index]]+=[[psg.Frame(row[frame_index],[ADSR_Frame[-1]],k=short_prefix+'_FRAME-'+row[frame_index]+'vert')]]
                                 ADSR_Frame.append([])
+
   
                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
                 elif row[type_index]=='TEXT':
@@ -1825,7 +1915,6 @@ def make_digital_synth_window(DS,theme,loc,siz):
     layout+=[[psg.Frame('',col[0],border_width=0),psg.VerticalSeparator(),psg.Frame('',col[1],border_width=0,vertical_alignment='top')]]
     return psg.Window('Digital Synth '+str(DS.id), layout, location=loc, resizable=True, size=siz, finalize=True, 
                       icon= music,return_keyboard_events=True)
-
 
 
 def make_main_window(theme, loc, siz):
@@ -1932,6 +2021,7 @@ def make_main_window(theme, loc, siz):
   playbutton.bind('<ButtonRelease>', " Release", propagate=False)
   return window
 
+
 def main():
     global DEBUG, CONFIG_FILE, ManufacturerSysExIDsFile
     global notesstring, testingnote, testingch, testingvolume, testingduration
@@ -1939,7 +2029,7 @@ def main():
     global tonelistDS, tonelistAS, drumkitDR, presetprogramlist,presetprogramall
     global defaultinstrument, instrumentlist
     global Manufacturer, devicename
-    
+
     # start time
     timestart=time.time()
     # first, try to get config file form arguments
@@ -2005,6 +2095,7 @@ def main():
             logger.error("Don't know how to use "+  devicename+" device.")
             stop_logger()
             sys.exit(5)
+
     
     if 'devicefamiliycode' in data:
       devicefamiliycode=data['DeviceFamilyCode']
@@ -2054,6 +2145,7 @@ def main():
                 else:
                     presetprogram=[dict(No=i,Name='Name_'+str(i)) for i in range(128)]
      
+
     # prepare lists, leave only 'No' and 'Name'
     # old one: drumkitDR=[dict(No=i['No'],Name=i['Name']) for i in drumkitDR]
     drumkitDR=[[i['No'],i['Name']] for i in drumkitDR]
@@ -2100,8 +2192,6 @@ def main():
     print("dsm_addr",DigitalSynth2.dsm_address)
     
 
-
-
     SystemSetup=System_Setup()
     SystemSetup.get_data()
     print(SystemSetup.attributes)
@@ -2123,6 +2213,7 @@ def main():
     ProgramDelay=Program_Delay()
     ProgramDelay.get_data()
     print(ProgramDelay.attributes)
+
     
     analog_window=make_analog_synth_window(AnalogSynth,psg.theme(),(585,10),(940, 975))
     digital1_window=make_digital_synth_window(DigitalSynth1,psg.theme(),(595,10),(940, 975))
@@ -2133,6 +2224,7 @@ def main():
     arpeggio_window= make_arpeggio_window(psg.theme(),(1535,320),(350, 120))
     program_window=make_program_window(psg.theme(),(1535,475),(350, 280))
     
+
     for element in analog_window.element_list():
         if str(element.key).startswith('-AS_ONOFF-'):
             element.bind('<Enter>', ' Enter')
@@ -2141,6 +2233,7 @@ def main():
             element.bind('<Enter>', ' Enter')
             element.bind('<Leave>', ' Leave')
                 
+
     while True:
         win, event, values = psg.read_all_windows(timeout=50)
 #        event, values = main_window.read(timeout=50)
@@ -2271,6 +2364,7 @@ def main():
                 main_window['-MAIN_COMBO-instrument-'].update(values=drumkitDR, value=drumkitDR[0])
             printdebug(sys._getframe().f_lineno, "Instrument type:"+instrumenttype)
     
+
         # elif event == '-MAIN_COMBO-BANK-':
         #     printdebug(sys._getframe().f_lineno, "Combo for:"+str(values['-MAIN_COMBO-BANK-']))
         #     control_change(testingch,'Bank Select',int(values['-MAIN_COMBO-BANK-']))
@@ -2310,10 +2404,11 @@ def main():
             program_window['-PROGRAM-'+'PC'].update(presetprogramall[attr_value][9])
             program_window['-PROGRAM-'+'Tempo'].update(presetprogramall[attr_value][11])
             pass
-        elif event=='PopupARPEGGIO':
-            AnalogSynth.get_data()
-            print(AnalogSynth.attributes['Name'])
-#            send_sysex_DT1(AnalogSynth,AnalogSynth.attributes['LegatoSw'][1],[1,66])
+        elif event=="PopupARPEGGIO":
+            AnalogSynth.push_data()
+            #            print(AnalogSynth.attributes['Name'])
+            print(AnalogSynth.attributes)
+            #            send_sysex_DT1(AnalogSynth,AnalogSynth.attributes['LegatoSw'][1],[1,66])
             pass
         elif event=='-NO_DEVICE-':
             if values['-NO_DEVICE-']=='on' and AnalogSynth.devicestatus!='OK':
@@ -2373,6 +2468,7 @@ def main():
             program_window.hide()
             program_window.un_hide()
             continue
+
         
         elif event == '-DEBUG-':
             DEBUG=True if values['-DEBUG-']==True else False
@@ -2390,4 +2486,5 @@ if __name__ == '__main__':
     main()
 
 
-    
+if __name__ == "__main__":
+    main()
