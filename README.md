@@ -3,8 +3,10 @@ Managing Roland JD-Xi Interactive Analog/Digital Crossover Synthesizer on the Li
 
 After many years, I am trying to pull more beautiful sounds from this small, but powerfull machine. I'll do it through USB MIDI interface.
 Pakages into consideration are:
+
 I'll rewrite code eliminating it because it becomes comertial:
 -  PySimpleGUI - https://www.pysimplegui.org/
+
 Still using:
 -  mido - https://mido.readthedocs.io/en/stable/
 
