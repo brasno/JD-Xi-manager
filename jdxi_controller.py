@@ -16,8 +16,8 @@ import logging
 import sys
 import argparse
 import collections
-import pandas as pd
-import PySimpleGUI as psg
+#import pandas as pd
+import tkinter as tk
 import mido
 from collections import deque
 
@@ -76,7 +76,7 @@ tonelistAS=[]
 drumkitDR=[]
 instrumentlist=[]
 defaultinstrument=[]
-
+JDXi_device=[0x41,0x10,0x00,0x00,0x00,0x0e]
 
 music = b'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'
 s_and_h = b'iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAYAAADSm7GJAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5woTFS0BgklqqAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAABjklEQVR42u3dMUrDYACG4U8bFcFCHVy8i15B0MXN+7i7indx8AI6OqiDkyCCg5WqQzppLLY2bdI+D2QJkib/m/ylJY0JAAAwH/dJPmtcDhp2vIc1H+/DtHZ0dUrb6TvHm2lagTcN5WIHRmAERmAERmCB63CcZD3JSsVyNeE2L2r+wuH8H8d7m2S/4liLJEcTbnP7D/v8Pq/AN99ffME9JrmsWD9IcrdsU/RgyWbON+/BCIzAAhsCgRG40U6TdCo+j24lORO4/Z6SfFSsf015J4rACIzAzDtwL8lLRn+R3TNk7Q38HDfPmaIRGIERGIERWGBDIDACIzCtCNytWNdxotTSpahYvzPuhoox//7e2M/Ebqb0IwFXnikagREYgREYgRn5OXitofvZ++Xk7LZ03K9T/rrCFTx0kZ93eA5SPjMSU7TACIzACIzACMxfFQ3Zjz0pXMEIjMACIzACI3AbDARebL/dANGapw0VGo50kvJ/TfRTPtsymdGdGALPzsZwMUUjMAIjMAIjMAAATOYLfr13Aq+RR30AAAAASUVORK5CYII='
@@ -430,71 +430,71 @@ def jdxi_test():
 
 def make_effects_window(theme,loc,siz):
     prefix='-EFFECTS-'
-    psg.theme(theme)
-    layout = [[psg.Text('This is the Effects window'), psg.Text('      ', k=prefix+'OUTPUT-')],
-              [psg.Button('FAKE'), psg.Button('PopupEFFECTS'), psg.Button('Exit')]]
-    return psg.Window('Effects', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
+    tk.theme(theme)
+    layout = [[tk.Text('This is the Effects window'), tk.Text('      ', k=prefix+'OUTPUT-')],
+              [tk.Button('FAKE'), tk.Button('PopupEFFECTS'), tk.Button('Exit')]]
+    return tk.Window('Effects', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 
 def make_vocalFX_window(theme,loc,siz):
     prefix='-VOCAL_FX-'
-    psg.theme(theme)
-    layout = [[psg.Text('This is the VocalFX window'), psg.Text('      ', k=prefix+'OUTPUT-')],
-              [psg.Button('FAKE'), psg.Button('PopupVOCAL_FX'), psg.Button('Exit')]]
-    return psg.Window('Vocal FX', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
+    tk.theme(theme)
+    layout = [[tk.Text('This is the VocalFX window'), tk.Text('      ', k=prefix+'OUTPUT-')],
+              [tk.Button('FAKE'), tk.Button('PopupVOCAL_FX'), tk.Button('Exit')]]
+    return tk.Window('Vocal FX', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 
 def make_arpeggio_window(theme,loc,siz):
     prefix='-ARPEGGIO-'
-    psg.theme(theme)
-    layout = [[psg.Text('This is the Arpeggio window'), psg.Text('      ', k=prefix+'OUTPUT-')],
-              [psg.Button('FAKE'), psg.Button('PopupARPEGGIO'), psg.Button('Exit')]]
-    return psg.Window('Arpeggio', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
+    tk.theme(theme)
+    layout = [[tk.Text('This is the Arpeggio window'), tk.Text('      ', k=prefix+'OUTPUT-')],
+              [tk.Button('FAKE'), tk.Button('PopupARPEGGIO'), tk.Button('Exit')]]
+    return tk.Window('Arpeggio', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 def make_drums_window(theme,loc,siz):
     prefix='-DRUMS-'
-    psg.theme(theme)
-    layout = [[psg.Text('This is the Drums window'), psg.Text('      ', k=prefix+'OUTPUT-')],
-              [psg.Button('FAKE'), psg.Button('PopupDrums'), psg.Button('Exit')]]
-    return psg.Window('Drums', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
+    tk.theme(theme)
+    layout = [[tk.Text('This is the Drums window'), tk.Text('      ', k=prefix+'OUTPUT-')],
+              [tk.Button('FAKE'), tk.Button('PopupDrums'), tk.Button('Exit')]]
+    return tk.Window('Drums', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 def make_program_window(theme,loc,siz):
     global presetprogramlist, presetprogramall
     prefix='-PROGRAM-'
     key_value=prefix
     key_value.replace(' ','_')
-    psg.theme(theme)
+    tk.theme(theme)
     layout = [
-              [[psg.Text('User Program',size=TEXT_SIZE),
-                  psg.Button(image_data=onoff_data[0],metadata=[0,0],auto_size_button=True,border_width=0,
-                             button_color=(psg.theme_element_background_color(),psg.theme_element_background_color() ),
+              [[tk.Text('User Program',size=TEXT_SIZE),
+                  tk.Button(image_data=onoff_data[0],metadata=[0,0,0,1],auto_size_button=True,border_width=0,
+                             button_color=(tk.theme_element_background_color(),tk.theme_element_background_color() ),
                              key=key_value+'ONOFF-user-', image_subsample=IMAGE_SUBSAMPLE),
-                  psg.Button('Exit')]],
-              [psg.Combo(presetprogramlist, default_value=presetprogramlist[0], key=key_value+'LIST-',
+                  tk.Button('Exit')]],
+              [tk.Combo(presetprogramlist, default_value=presetprogramlist[0], key=key_value+'LIST-',
                                   readonly=True,enable_events=True,size=20),
-               psg.Button('Activate program')],
-              [psg.Frame('',[[psg.Text('Program:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
-               psg.Text(presetprogramall[0][1],k=key_value+'Program',text_color='black',background_color='yellow'),
-              psg.Text('Name:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
-              psg.Text(presetprogramall[0][2],k=key_value+'Name',text_color='black',background_color='yellow')]],
+               tk.Button('Activate program')],
+              [tk.Frame('',[[tk.Text('Program:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
+               tk.Text(presetprogramall[0][1],k=key_value+'Program',text_color='black',background_color='yellow'),
+              tk.Text('Name:',size=(8),font=('Arial',10,'bold'),text_color='black',background_color='yellow'),
+              tk.Text(presetprogramall[0][2],k=key_value+'Name',text_color='black',background_color='yellow')]],
                          background_color='yellow',border_width=0,expand_x=True)],
-              [psg.Text('Genre:',size=(8),font=('Arial',10,'bold')),
-               psg.Text(presetprogramall[0][10],k=key_value+'Genre')],
-              [psg.Column(
+              [tk.Text('Genre:',size=(8),font=('Arial',10,'bold')),
+               tk.Text(presetprogramall[0][10],k=key_value+'Genre')],
+              [tk.Column(
               [
                
-               [psg.Text('D1:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][3],k=key_value+'D1')],
-               [psg.Text('D2:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][4],k=key_value+'D2')],
-               [psg.Text('DR:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][5],k=key_value+'DR')],
-               [psg.Text('AN:',size=(4),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][6],k=key_value+'AN')]]),
-               psg.Column(
-               [[psg.Text('MSB:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][7],k=key_value+'MSB')],
-                [psg.Text('LSB:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][8],k=key_value+'LSB')],
-                [psg.Text('PC:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][9],k=key_value+'PC')],
-                [psg.Text('Tempo:',size=(7),font=('Arial',10,'bold')),psg.Text(presetprogramall[0][11],k=key_value+'Tempo')]])],
-              [psg.Button('Program start'),psg.Button('Program stop')]
+               [tk.Text('D1:',size=(4),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][3],k=key_value+'D1')],
+               [tk.Text('D2:',size=(4),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][4],k=key_value+'D2')],
+               [tk.Text('DR:',size=(4),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][5],k=key_value+'DR')],
+               [tk.Text('AN:',size=(4),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][6],k=key_value+'AN')]]),
+               tk.Column(
+               [[tk.Text('MSB:',size=(7),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][7],k=key_value+'MSB')],
+                [tk.Text('LSB:',size=(7),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][8],k=key_value+'LSB')],
+                [tk.Text('PC:',size=(7),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][9],k=key_value+'PC')],
+                [tk.Text('Tempo:',size=(7),font=('Arial',10,'bold')),tk.Text(presetprogramall[0][11],k=key_value+'Tempo')]])],
+              [tk.Button('Program start'),tk.Button('Program stop')]
               ]
-    return psg.Window('Program', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
+    return tk.Window('Program', layout, location=loc, resizable=True, size=siz, finalize=True, icon= music)
 
 
 def send_sysex_DT1(sysexsetlist, address, values):
@@ -565,7 +565,7 @@ class System_Setup():
         self.offset=[0x00,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x3B]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
 # required for SysEx Data set 1 (DT1=0x12). Last byte must be added at the end
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
@@ -598,7 +598,7 @@ class System_Common():
         self.offset=[0x00,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x2B]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
 # required for SysEx Data set 1 (DT1=0x12) 
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
@@ -635,12 +635,11 @@ class System_Controller():
         self.offset=[0x00,0x03]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x11]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
 # required for SysEx Data set 1 (DT1=0x12) 
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
         self.devicestatus='unknown'
-    
 
     def get_data(self):
         data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
@@ -653,7 +652,6 @@ class System_Controller():
             self.attributes[attr][0]=data[self.attributes[attr][1]]
         print(data)
         return
-
 
 class Program_Common():
     def __init__(self, *args, **kwargs):
@@ -669,7 +667,7 @@ class Program_Common():
         self.offset=[0x00,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x1f]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -723,7 +721,7 @@ class Program_Vocal_Effect():
         self.offset=[0x00,0x01]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x18]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -786,7 +784,7 @@ class Program_Effect1():
         self.offset=[0x00,0x02]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x01,0x11]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -822,7 +820,7 @@ class Program_Effect2():
         self.offset=[0x00,0x04]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x01,0x11]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -871,7 +869,7 @@ class Program_Delay():
         self.offset=[0x00,0x06]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x64]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -912,7 +910,7 @@ class Program_Reverb():
         self.offset=[0x00,0x08]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x63]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -953,7 +951,7 @@ class Program_Part_DS1():
         self.offset=[0x00,0x20]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -994,7 +992,7 @@ class Program_Part_DS2():
         self.offset=[0x00,0x21]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1035,7 +1033,7 @@ class Program_Part_AS():
         self.offset=[0x00,0x22]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1076,7 +1074,7 @@ class Program_Part_DR():
         self.offset=[0x00,0x23]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1117,7 +1115,7 @@ class Program_Zone_DS1():
         self.offset=[0x00,0x30]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1158,7 +1156,7 @@ class Program_Zone_DS2():
         self.offset=[0x00,0x31]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1199,7 +1197,7 @@ class Program_Zone_AS():
         self.offset=[0x00,0x32]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1240,7 +1238,7 @@ class Program_Zone_DR():
         self.offset=[0x00,0x33]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x24]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1281,7 +1279,7 @@ class Program_Controller():
         self.offset=[0x00,0x40]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x0c]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1336,13 +1334,14 @@ class Digital_Synth_Base():
         self.attributes['WaveShape']=[20,53,1]
         self.attributes['ToneCategory']=[20,54,1]
         self.attributes['UnisonSize']=[0,60,1]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.id=0
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x40]
         self.devicestatus='unknown'
 
     def get_base_data(self):
+        printdebug(sys._getframe().f_lineno, "DS base, get_basse_data")
         data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
@@ -1372,7 +1371,7 @@ class Digital_Synth_Modify(Digital_Synth_Base):
     dsm_attributes['EnvLooSynNot']=[11,5,1]
     dsm_attributes['ChrPort']=[0,6,1]
 
-    deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+    deviceID=JDXi_device
     dsm_baseaddress=[0x19,0x00,0x00]
     dsm_offset=[0x00,0x50]
     dsm_address=[dsm_baseaddress[0],dsm_baseaddress[1]+dsm_offset[0],dsm_baseaddress[2]+dsm_offset[1]]
@@ -1386,7 +1385,8 @@ class Digital_Synth_Modify(Digital_Synth_Base):
         self.dsm_sysexgetlist=self.deviceID+[0x11]+self.dsm_address+self.dsm_datalength
         pass
 
-    def get__modify_data(self):
+    def get_modify_data(self):
+        printdebug(sys._getframe().f_lineno, "DS modify, get_modify_data")
         data=send_sysex_RQ1(self.deviceID, self.dsm_address+[0x00], self.dsm_datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
@@ -1415,7 +1415,7 @@ class Digital_Synth_Modify(Digital_Synth_Base):
 
 class Digital_Synth_Partial():
     attributes={}
-    deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+    deviceID=JDXi_device
     baseaddress=[0x19,0x00,0x00]
     offset=[0x00,0x20]
     address=[baseaddress[0],baseaddress[1]+offset[0],baseaddress[2]+offset[1]]
@@ -1424,7 +1424,111 @@ class Digital_Synth_Partial():
     sysexgetlist=deviceID+[0x11]+address+part_datalength
 
     def __init__(self, *args, **kwargs):
+        self.attributes['OSCWave']=[0,0,1]
+        self.attributes['OSCWaveVariation']=[0,1,1]
+        self.attributes['reserve']=[0,2,1]
+        self.attributes['OSCPitch']=[64,3,1]
+        self.attributes['OSCDetune']=[74,4,1]
+        self.attributes['OSCPulseWidthModDepth']=[1,5,1]
+        self.attributes['OSCPulseWidth']=[0,6,1]
+        self.attributes['OSCPitchEnvAttackTime']=[0,7,1]
+        self.attributes['OSCPitchEnvDecay']=[0,8,1]
+        self.attributes['OSCPitchEnvDepth']=[64,9,1]
+        self.attributes['FILTERMode']=[0,10,1]
+        self.attributes['FILTERSlope']=[0,11,1]
+        self.attributes['FILTERCutoff']=[127,12,1]
+        self.attributes['FILTERCutoffKeyfollow']=[64,13,1]
+        self.attributes['FILTEREnvVelocitySens']=[64,14,1]
+        self.attributes['FILTERResonance']=[0,15,1]
+        self.attributes['FILTEREnvAttackTime']=[0,16,1]
+        self.attributes['FILTEREnvDecayTime']=[0,17,1]
+        self.attributes['FILTEREnvSustainLevel']=[127,18,1]
+        self.attributes['FILTEREnvReleaseTime']=[0,19,1]
+        self.attributes['FILTEREnvDepth']=[64,20,1]
+        self.attributes['AMPLevel']=[100,21,1]
+        self.attributes['AMPLevelVelocitySens']=[64,22,1]
+        self.attributes['AMPEnvAttackTime']=[0,23,1]
+        self.attributes['AMPEnvDecayTime']=[36,24,1]
+        self.attributes['AMPEnvSustainLevel']=[0,25,1]
+        self.attributes['AMPEnvReleaseTime']=[0,26,1]
+        self.attributes['AMPPan']=[64,27,1]
+        self.attributes['LFOShape']=[0,28,1]
+        self.attributes['LFORate']=[81,29,1]
+        self.attributes['LFOTempoSyncSwitch']=[0,30,1]
+        self.attributes['LFOTempoSyncNote']=[17,31,1]
+        self.attributes['LFOFadeTime']=[0,32,1]
+        self.attributes['LFOKeyTrigger']=[0,33,1]
+        self.attributes['LFOPitchDepth']=[64,34,1]
+        self.attributes['LFOFilterDepth']=[64,35,1]
+        self.attributes['LFOAmpDepth']=[64,36,1]
+        self.attributes['LFOPanDepth']=[64,37,1]
+        self.attributes['ModulationLFOShape']=[0,38,1]
+        self.attributes['ModulationLFORate']=[88,39,1]
+        self.attributes['ModulationLFOTempoSyncSwitch']=[0,40,1]
+        self.attributes['ModulationLFOTempoSyncNote']=[17,41,1]
+        self.attributes['OSCPulseWidthShift']=[127,42,1]
+        self.attributes['reserve']=[0,43,1]
+        self.attributes['ModulationLFOPitchDepth']=[80,44,1]
+        self.attributes['ModulationLFOFilterDepth']=[64,45,1]
+        self.attributes['ModulationLFOAmpDepth']=[64,46,1]
+        self.attributes['ModulationLFOPanDepth']=[64,47,1]
+        self.attributes['CutoffAftertouchSens']=[64,48,1]
+        self.attributes['LevelAftertouchSens']=[74,49,1]
+        self.attributes['reserve']=[0,50,1]
+        self.attributes['reserve']=[0,51,1]
+        self.attributes['WaveGain']=[1,52,1]
+        self.attributes['WaveNumber']=[14,53,4]
+        self.attributes['HPFCutoff']=[0,57,1]
+        self.attributes['SuperSawDetune']=[1,58,1]
+        self.attributes['ModulationLFORateControl']=[84,59,1]
+        self.attributes['AMPLevelKeyfollow']=[64,60,1]
+
+        
         pass
+
+class Digital_Synth_Partial1(Digital_Synth_Partial):
+    attributes={}
+    deviceID=JDXi_device
+    baseaddress=[0x19,0x00,0x00]
+    offset=[0x00,0x20]
+    address=[baseaddress[0],baseaddress[1]+offset[0],baseaddress[2]+offset[1]]
+    part_datalength=[0x00,0x00,0x00,0x3D]
+    sysexsetlist=deviceID+[0x12]+address
+    sysexgetlist=deviceID+[0x11]+address+part_datalength
+
+    def __init__(self, *args, **kwargs):
+        self.dsp_id=1
+        pass
+
+class Digital_Synth_Partial2(Digital_Synth_Partial):
+    attributes={}
+    deviceID=JDXi_device
+    baseaddress=[0x19,0x00,0x00]
+    offset=[0x00,0x21]
+    address=[baseaddress[0],baseaddress[1]+offset[0],baseaddress[2]+offset[1]]
+    part_datalength=[0x00,0x00,0x00,0x3D]
+    sysexsetlist=deviceID+[0x12]+address
+    sysexgetlist=deviceID+[0x11]+address+part_datalength
+
+    def __init__(self, *args, **kwargs):
+        self.dsp_id=2
+        pass
+
+class Digital_Synth_Partial3(Digital_Synth_Partial):
+    attributes={}
+    deviceID=JDXi_device
+    baseaddress=[0x19,0x00,0x00]
+    offset=[0x00,0x22]
+    address=[baseaddress[0],baseaddress[1]+offset[0],baseaddress[2]+offset[1]]
+    part_datalength=[0x00,0x00,0x00,0x3D]
+    sysexsetlist=deviceID+[0x12]+address
+    sysexgetlist=deviceID+[0x11]+address+part_datalength
+
+    def __init__(self, *args, **kwargs):
+        self.dsp_id=3
+        pass
+
+
 
 class Digital_Synth(Digital_Synth_Modify):
 
@@ -1433,7 +1537,7 @@ class Digital_Synth(Digital_Synth_Modify):
     def __init__(self, *args, **kwargs):
         #self.attributes={}
         self.attributes={}
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.id=0
         self.offset=[0x01,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
@@ -1447,6 +1551,7 @@ class Digital_Synth(Digital_Synth_Modify):
         self.devicestatus='unknown'
 
     def get_data(self):
+        printdebug(sys._getframe().f_lineno, "DS, get_data")
         data=send_sysex_RQ1(self.deviceID, self.address+[0x00], self.datalength)
         printdebug(sys._getframe().f_lineno, "Data received: "+ str(data))
         if data=='unknown':
@@ -1462,6 +1567,8 @@ class Digital_Synth(Digital_Synth_Modify):
                 for c in data[self.attributes[attr][1]:self.attributes[attr][1]+12]:
                     name+=chr(c)
                 self.attributes[attr][0]=name
+                
+        self.get_modify_data()
         return('OK')
 
     def set_attr(self,attribute,value):
@@ -1554,7 +1661,7 @@ class Analog_Synth():
         self.offset=[0x02,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x40]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
 # required for SysEx Data set 1 (DT1=0x12) 
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]
@@ -1601,7 +1708,7 @@ class Drum_Kit_Common():
         self.offset=[0x10,0x00]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0],self.baseaddress[2]+self.offset[1]]
         self.datalength=[0x00,0x00,0x00,0x12]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1622,7 +1729,7 @@ class Drum_Kit_Partial():
         self.offset=[0x10]
         self.address=[self.baseaddress[0],self.baseaddress[1]+self.offset[0]]
         self.datalength=[0x00,0x00,0x01,0x43]
-        self.deviceID=[0x41,0x10,0x00,0x00,0x00,0x0e]
+        self.deviceID=JDXi_device
         self.sysexsetlist=self.deviceID+[0x12]+self.address
         self.sysexgetlist=self.deviceID+[0x11]+self.address+self.datalength
         self.devicestatus='unknown'
@@ -1704,7 +1811,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
     frames={}
     ADSR_Frame_number=0
     ADSR_Frame=[[]]
-    psg.theme(theme)
+    tk.theme(theme)
     ANALOG_JSON_FILE='analog.json'
     with open(ANALOG_JSON_FILE) as json_file:
         analog_parameters = json.load(json_file)
@@ -1712,7 +1819,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
             column_names=analog_parameters['Skeleton']
             layout=[]
         else:
-            layout=[[psg.Text('Cannot create layout for'+prefix)]]
+            layout=[[tk.Text('Cannot create layout for'+prefix)]]
             column_names=None
         if 'data' in analog_parameters and column_names:
             
@@ -1739,7 +1846,7 @@ def make_analog_synth_window(AS,theme,loc,siz):
                 
                 if row[group_index] not in group and row[group_index] !='N/A':
                     if row[label_index]!='N/A':
-                        group[row[group_index]]=[[psg.Text(row[label_index],expand_x=True,justification='center',
+                        group[row[group_index]]=[[tk.Text(row[label_index],expand_x=True,justification='center',
                                                            background_color='yellow',relief='raised',text_color='black',
                                                            font=('Arial',12,'bold'))]]
                         column[row[group_index]]=row[column_index]
@@ -1749,8 +1856,8 @@ def make_analog_synth_window(AS,theme,loc,siz):
                     if row[frame_index]=='':
                         tempframe=None
                     if row[frame_index]!='' and row[frame_index] not in frames:
-                        tempframe=psg.Frame(row[frame_index],[],key=short_prefix+'FRAME-'+row[frame_index]+'-')
-                        frames[row[frame_index]]=[psg.Frame(row[frame_index],[],key=short_prefix+'_FRAME-'+row[frame_index]+'-')]
+                        tempframe=tk.Frame(row[frame_index],[],key=short_prefix+'FRAME-'+row[frame_index]+'-')
+                        frames[row[frame_index]]=[tk.Frame(row[frame_index],[],key=short_prefix+'_FRAME-'+row[frame_index]+'-')]
                         group[row[group_index]]+=[[tempframe]]
 
                 if row[short_name_index] in AS.attributes:
@@ -1770,40 +1877,40 @@ def make_analog_synth_window(AS,theme,loc,siz):
                     orient='horizontal' if row[orientation_index]=='horizontal' else 'vertical'
                     if orient=='horizontal':
                         if tempframe:
-                            tempframe.add_row(psg.Text(row[name_index],size=TEXT_SIZE))
-                            tempframe.Rows[-1].append(psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            tempframe.add_row(tk.Text(row[name_index],size=TEXT_SIZE))
+                            tempframe.Rows[-1].append(tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                        default_value=default_val, orientation='horizontal',
                                        size=(20,10),enable_events=True,key=key_value,disable_number_display=True))
-                            tempframe.Rows[-1].append(psg.Text(int(row[default_index]), enable_events=True, key=text_key_value))
-                            # tempframe.add_row([psg.Text(row[name_index],size=28),
-                            # psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            tempframe.Rows[-1].append(tk.Text(int(row[default_index]), enable_events=True, key=text_key_value))
+                            # tempframe.add_row([tk.Text(row[name_index],size=28),
+                            # tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                             #            default_value=int(row[default_index]), orientation='horizontal',
                             #            size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
-                            # psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)])
+                            # tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)])
                         else:
-                            group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                            psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                            tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                        default_value=default_val, orientation='horizontal',
                                        size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
-                            psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
+                            tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
                     else:
                         if row[verticalgroup_index]=='':
-                            group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                                psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                                tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                            default_value=default_val, orientation='vertical',
                                            size=(5,None),enable_events=True,key=key_value,disable_number_display=True),
-                                psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
+                                tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
                         else:
-                            ADSR_Frame[-1].extend([psg.Column(
-                                [[psg.Text(row[label_index],k=text_key_value+'top')],
-                                 [psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            ADSR_Frame[-1].extend([tk.Column(
+                                [[tk.Text(row[label_index],k=text_key_value+'top')],
+                                 [tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                            default_value=default_val, orientation='vertical',
                                            size=(5,10),enable_events=True,key=key_value,disable_number_display=True)],
-                                 [psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]
+                                 [tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)]
                                 ]
                                  )])
                             if row[verticalgroup_index]=='END':
-                                group[row[group_index]]+=[[psg.Frame(row[frame_index],[ADSR_Frame[-1]],k=short_prefix+'_FRAME-'+row[frame_index]+'vert')]]
+                                group[row[group_index]]+=[[tk.Frame(row[frame_index],[ADSR_Frame[-1]],k=short_prefix+'_FRAME-'+row[frame_index]+'vert')]]
                                 ADSR_Frame.append([])
 
   
@@ -1811,25 +1918,25 @@ def make_analog_synth_window(AS,theme,loc,siz):
                 elif row[type_index]=='TEXT':
                     key_value=short_prefix+'_NAME-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
-                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                                               psg.Text(default_val,size=TEXT_SIZE)]]
+                    group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                                               tk.Text(default_val,size=TEXT_SIZE)]]
                 elif row[type_index]=='ONOFF':
                     key_value=short_prefix+'_ONOFF-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
-                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                              psg.Button(image_data=onoff_data[0],metadata=[0,0],auto_size_button=True,border_width=0,
-                                         button_color=(psg.theme_element_background_color(),psg.theme_element_background_color() ),
+                    group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                              tk.Button(image_data=onoff_data[0],metadata=[0,0,int(row[valuefrom_index]),int(row[valueto_index])],auto_size_button=True,border_width=0,
+                                         button_color=(tk.theme_element_background_color(),tk.theme_element_background_color() ),
                                          key=key_value, image_subsample=IMAGE_SUBSAMPLE)]]
                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
                 elif row[type_index]=='LISTBUTTON':
                      key_value=short_prefix+'_LISTBUTTON-'+row[short_name_index]+'-'
                      key_value.replace(' ','_')
-                     tmp_layout=[psg.Text(row[name_index],size=TEXT_SIZE)]
+                     tmp_layout=[tk.Text(row[name_index],size=TEXT_SIZE)]
                      for part in range(int(row[valuefrom_index]),int(row[valueto_index])+1):
-                         tmp_layout+=[psg.Button('',auto_size_button=True,border_width=0,
+                         tmp_layout+=[tk.Button('',auto_size_button=True,border_width=0,
                                     image_data=images[row[list_index][part]][1 if int(row[default_index])==part else 0], 
-                                    image_subsample=IMAGE_SUBSAMPLE, mouseover_colors=(psg.YELLOWS[0],psg.YELLOWS[0]),
-                                    button_color=(psg.theme_element_background_color(),psg.theme_element_background_color()),
+                                    image_subsample=IMAGE_SUBSAMPLE, mouseover_colors=(tk.YELLOWS[0],tk.YELLOWS[0]),
+                                    button_color=(tk.theme_element_background_color(),tk.theme_element_background_color()),
                                     metadata=[1 if int(row[default_index])==part else 0,
                                               [ i for i in range(int(row[valuefrom_index]),int(row[valueto_index])+1) if i!=part ],
                                               row[list_index][part]], key=key_value+' '+str(part))]
@@ -1839,21 +1946,53 @@ def make_analog_synth_window(AS,theme,loc,siz):
                     key_value=short_prefix+'_LIST-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
                     group[row[group_index]]+=[[
-                        psg.Text(row[name_index],size=TEXT_SIZE),
-                        psg.Combo(row[list_index], default_value=row[list_index][default_val], key=key_value,
+                        tk.Text(row[name_index],size=TEXT_SIZE),
+                        tk.Combo(row[list_index], default_value=row[list_index][default_val], key=key_value,
                                   readonly=True,enable_events=True,size=10)]]
                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
-    layout = [[psg.Button('Fake buttton'), psg.Button('Popup'), psg.Button('Exit')]]
+    layout = [[tk.Button('Fake buttton'), tk.Button('Popup'), tk.Button('Exit')]]
     current_column=0
     col=[[],[]]
     for line in group:
 #        if column[line]!=current_column:
         col[int(column[line])]+=group[line]
 #    for ccc in col:
-    layout+=[[psg.Frame('',col[0],border_width=0),psg.VerticalSeparator(),psg.Frame('',col[1],border_width=0,vertical_alignment='top')]]
-    return psg.Window('Analog Synth', layout, location=loc, resizable=True, size=siz, finalize=True, 
+    layout+=[[tk.Frame('',col[0],border_width=0),tk.VerticalSeparator(),tk.Frame('',col[1],border_width=0,vertical_alignment='top')]]
+    return tk.Window('Analog Synth', layout, location=loc, resizable=True, size=siz, finalize=True, 
                       icon= music,return_keyboard_events=True)
 
+def update_analog_synth_window(AS, AW):
+    prefix='-ANALOG_SYNTH-'
+    short_prefix='-AS'
+    ADSR_Frame_number=0
+    ADSR_Frame=[[]]
+    ANALOG_JSON_FILE='analog.json'
+    for element in AW.element_list():
+        key=str(element.key)
+        if key.startswith('-AS_ONOFF-'):
+            attr=key[len('-AS_ONOFF-'):-1]
+            AW[key].metadata[1]=AS.attributes[attr][0]
+            AW[key].update(image_data=onoff_data[0+2*AW[key].metadata[1]],image_subsample=IMAGE_SUBSAMPLE)
+#            print(key,str(AS.attributes[attr][0]))
+        elif key.startswith('-AS_LISTBUTTON-'):
+            splited=key.split()
+            attr=splited[0][len('-AS_LISTBUTTON-'):-1]
+            attr_value=int(AS.attributes[attr][0])
+            current_button=AW['-AS_LISTBUTTON-'+attr+'- '+str(attr_value)]
+            if current_button.metadata[0]!=0:
+                continue
+            for others in current_button.metadata[1]:
+                tmp_button=AW['-AS_LISTBUTTON-'+attr+'- '+str(others)]
+                tmp_button.update(image_data=images[tmp_button.metadata[2]][0],image_subsample=IMAGE_SUBSAMPLE)
+                tmp_button.metadata[0]=0
+            current_button.update(image_data=images[current_button.metadata[2]][1],image_subsample=IMAGE_SUBSAMPLE)
+            current_button.metadata[0]=1
+#            print(key,str(AS.attributes[attr][0]))
+        elif key.startswith('-AS_SLIDER-'):
+            attr=key[len('-AS_SLIDER-'):-1]
+            AW[key].update(int(AS.attributes[attr][0]))
+            AW[key.replace('-AS_SLIDER-','-AS_TEXT_SLIDER-')+'value'].update(int(AS.attributes[attr][0]))
+#            print(key,str(AS.attributes[attr][0]))
 
 def make_digital_synth_window(DS,theme,loc,siz):
     prefix='-DIGITAL_SYNTH_'+str(DS.id)+'-'
@@ -1863,7 +2002,7 @@ def make_digital_synth_window(DS,theme,loc,siz):
     frames={}
     ADSR_Frame_number=0
     ADSR_Frame=[[]]
-    psg.theme(theme)
+    tk.theme(theme)
     DIGITAL_JSON_FILE='digital.json'
     with open(DIGITAL_JSON_FILE) as json_file:
         digital_parameters = json.load(json_file)
@@ -1871,7 +2010,7 @@ def make_digital_synth_window(DS,theme,loc,siz):
             column_names=digital_parameters['Skeleton']
             layout=[]
         else:
-            layout=[[psg.Text('Cannot create layout for'+prefix)]]
+            layout=[[tk.Text('Cannot create layout for'+prefix)]]
             column_names=None
         if 'data' in digital_parameters and column_names:
             name_index=0 if 'Name' not in column_names else column_names.index('Name')
@@ -1897,7 +2036,7 @@ def make_digital_synth_window(DS,theme,loc,siz):
                 
                 if row[group_index] not in group and row[group_index] !='N/A':
                     if row[label_index]!='N/A':
-                        group[row[group_index]]=[[psg.Text(row[label_index],expand_x=True,justification='center',
+                        group[row[group_index]]=[[tk.Text(row[label_index],expand_x=True,justification='center',
                                                            background_color='yellow',relief='raised',text_color='black',
                                                            font=('Arial',12,'bold'))]]
                         column[row[group_index]]=row[column_index]
@@ -1907,8 +2046,8 @@ def make_digital_synth_window(DS,theme,loc,siz):
                     if row[frame_index]=='':
                         tempframe=None
                     if row[frame_index]!='' and row[frame_index] not in frames:
-                        tempframe=psg.Frame(row[frame_index],[],key=short_prefix+'_FRAME-'+row[frame_index]+'-')
-                        frames[row[frame_index]]=[psg.Frame(row[frame_index],[],key=short_prefix+'_FRAME-'+row[frame_index]+'-')]
+                        tempframe=tk.Frame(row[frame_index],[],key=short_prefix+'_FRAME-'+row[frame_index]+'-')
+                        frames[row[frame_index]]=[tk.Frame(row[frame_index],[],key=short_prefix+'_FRAME-'+row[frame_index]+'-')]
                         group[row[group_index]]+=[[tempframe]]
 #                if row[verticalgroup_index]!=''and ADSR_Frame[-1]==None:
 #                    ADSR_Frame[-1]=[]
@@ -1927,40 +2066,40 @@ def make_digital_synth_window(DS,theme,loc,siz):
                     orient='horizontal' if row[orientation_index]=='horizontal' else 'vertical'
                     if orient=='horizontal':
                         if tempframe:
-                            tempframe.add_row(psg.Text(row[name_index],size=TEXT_SIZE))
-                            tempframe.Rows[-1].append(psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            tempframe.add_row(tk.Text(row[name_index],size=TEXT_SIZE))
+                            tempframe.Rows[-1].append(tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                        default_value=default_val, orientation='horizontal',
                                        size=(20,10),enable_events=True,key=key_value,disable_number_display=True))
-                            tempframe.Rows[-1].append(psg.Text(int(row[default_index]), enable_events=True, key=text_key_value))
-                            # tempframe.add_row([psg.Text(row[name_index],size=28),
-                            # psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            tempframe.Rows[-1].append(tk.Text(int(row[default_index]), enable_events=True, key=text_key_value))
+                            # tempframe.add_row([tk.Text(row[name_index],size=28),
+                            # tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                             #            default_value=int(row[default_index]), orientation='horizontal',
                             #            size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
-                            # psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)])
+                            # tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)])
                         else:
-                            group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                            psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                            tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                        default_value=default_val, orientation='horizontal',
                                        size=(20,10),enable_events=True,key=key_value,disable_number_display=True),
-                            psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
+                            tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
                     else:
                         if row[verticalgroup_index]=='':
-                            group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                                psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                                tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                            default_value=default_val, orientation='vertical',
                                            size=(5,None),enable_events=True,key=key_value,disable_number_display=True),
-                                psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
+                                tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)]]
                         else:
-                            ADSR_Frame[-1].extend([psg.Column(
-                                [[psg.Text(row[label_index],k=text_key_value+'top')],
-                                 [psg.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
+                            ADSR_Frame[-1].extend([tk.Column(
+                                [[tk.Text(row[label_index],k=text_key_value+'top')],
+                                 [tk.Slider(range=(int(row[valuefrom_index]),int(row[valueto_index])),
                                            default_value=default_val, orientation='vertical',
                                            size=(5,10),enable_events=True,key=key_value,disable_number_display=True)],
-                                 [psg.Text(int(row[default_index]), enable_events=True, key=text_key_value)]
+                                 [tk.Text(int(row[default_index]), enable_events=True, key=text_key_value)]
                                 ]
                                  )])
                             if row[verticalgroup_index]=='END':
-                                group[row[group_index]]+=[[psg.Frame(row[frame_index],[ADSR_Frame[-1]],k=short_prefix+'_FRAME-'+row[frame_index]+'vert')]]
+                                group[row[group_index]]+=[[tk.Frame(row[frame_index],[ADSR_Frame[-1]],k=short_prefix+'_FRAME-'+row[frame_index]+'vert')]]
                                 ADSR_Frame.append([])
 
   
@@ -1968,25 +2107,25 @@ def make_digital_synth_window(DS,theme,loc,siz):
                 elif row[type_index]=='TEXT':
                     key_value=short_prefix+'_NAME-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
-                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                                               psg.Text(default_val,size=TEXT_SIZE)]]
+                    group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                                               tk.Text(default_val,size=TEXT_SIZE)]]
                 elif row[type_index]=='ONOFF':
                     key_value=short_prefix+'_ONOFF-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
-                    group[row[group_index]]+=[[psg.Text(row[name_index],size=TEXT_SIZE),
-                              psg.Button(image_data=onoff_data[0],metadata=[0,0],auto_size_button=True,border_width=0,
-                                         button_color=(psg.theme_element_background_color(),psg.theme_element_background_color() ),
+                    group[row[group_index]]+=[[tk.Text(row[name_index],size=TEXT_SIZE),
+                              tk.Button(image_data=onoff_data[0],metadata=[0,0,int(row[valuefrom_index]),int(row[valueto_index])],auto_size_button=True,border_width=0,
+                                         button_color=(tk.theme_element_background_color(),tk.theme_element_background_color() ),
                                          key=key_value, image_subsample=IMAGE_SUBSAMPLE)]]
                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
                 elif row[type_index]=='LISTBUTTON':
                      key_value=short_prefix+'_LISTBUTTON-'+row[short_name_index]+'-'
                      key_value.replace(' ','_')
-                     tmp_layout=[psg.Text(row[name_index],size=TEXT_SIZE)]
+                     tmp_layout=[tk.Text(row[name_index],size=TEXT_SIZE)]
                      for part in range(int(row[valuefrom_index]),int(row[valueto_index])+1):
-                         tmp_layout+=[psg.Button('',auto_size_button=True,border_width=0,
+                         tmp_layout+=[tk.Button('',auto_size_button=True,border_width=0,
                                     image_data=images[row[list_index][part]][1 if int(row[default_index])==part else 0], 
-                                    image_subsample=IMAGE_SUBSAMPLE, mouseover_colors=(psg.YELLOWS[0],psg.YELLOWS[0]),
-                                    button_color=(psg.theme_element_background_color(),psg.theme_element_background_color()),
+                                    image_subsample=IMAGE_SUBSAMPLE, mouseover_colors=(tk.YELLOWS[0],tk.YELLOWS[0]),
+                                    button_color=(tk.theme_element_background_color(),tk.theme_element_background_color()),
                                     metadata=[1 if int(row[default_index])==part else 0,
                                               [ i for i in range(int(row[valuefrom_index]),int(row[valueto_index])+1) if i!=part ],
                                               row[list_index][part]], key=key_value+' '+str(part))]
@@ -1996,93 +2135,92 @@ def make_digital_synth_window(DS,theme,loc,siz):
                     key_value=short_prefix+'_LIST-'+row[short_name_index]+'-'
                     key_value.replace(' ','_')
                     group[row[group_index]]+=[[
-                        psg.Text(row[name_index],size=TEXT_SIZE),
-                        psg.Combo(row[list_index], default_value=row[list_index][default_val], key=key_value,
+                        tk.Text(row[name_index],size=TEXT_SIZE),
+                        tk.Combo(row[list_index], default_value=row[list_index][default_val], key=key_value,
                                   readonly=True,enable_events=True,size=10)]]
                     #AS.attributes[row[short_name_index]][0]=int(row[default_index])
-    layout = [[psg.Button('DS'+str(DS.id)+' Fake buttton'), psg.Button('DS'+str(DS.id)+' Popup'), psg.Button('Exit')]]
+    layout = [[tk.Button('DS'+str(DS.id)+' Fake buttton'), tk.Button('DS'+str(DS.id)+' Popup'), tk.Button('Exit')]]
     current_column=0
     col=[[],[]]
     for line in group:
 #        if column[line]!=current_column:
         col[int(column[line])]+=group[line]
 #    for ccc in col:
-    layout+=[[psg.Frame('',col[0],border_width=0),psg.VerticalSeparator(),psg.Frame('',col[1],border_width=0,vertical_alignment='top')]]
-    return psg.Window('Digital Synth '+str(DS.id), layout, location=loc, resizable=True, size=siz, finalize=True, 
+    layout+=[[tk.Frame('',col[0],border_width=0),tk.VerticalSeparator(),tk.Frame('',col[1],border_width=0,vertical_alignment='top')]]
+    return tk.Window('Digital Synth '+str(DS.id), layout, location=loc, resizable=True, size=siz, finalize=True, 
                       icon= music,return_keyboard_events=True)
 
 
 def make_main_window(theme, loc, siz):
   global notesstring, defaultinstrument, instrumentlist
-  psg.theme(theme)
+  # TODO!!! tk.theme(theme)
   menu_def = [['&Application', ['&Properties','E&xit']], ['&Help', ['&About']] ]
   right_click_menu_def = [[], ['Version', 'Nothing','Exit']]
   graph_right_click_menu_def = [[], ['Erase','Draw Line', 'Draw',['Circle', 'Rectangle', 'Image'], 'Exit']]
   l_list_column = [[
-  psg.Image(filename='jd-xi-small.png', tooltip='JD-Xi Keyboard'),
-             psg.Push(),
-            
-   psg.Text('Prog Rx/Tx Ch',size=14, tooltip='Specifies the channel used to\ntransmit and receive MIDI messages for the program.'),
-   psg.Combo(list(i for i in range(1,17)), default_value=16, key='-MAIN_COMBO-PC-', 
+   tk.Image('png',filename='jd-xi-small.png', tooltip='JD-Xi Keyboard'),
+             tk.Pusgh(),
+   tk.Text('Prog Rx/Tx Ch',size=14, tooltip='Specifies the channel used to\ntransmit and receive MIDI messages for the program.'),
+   tk.Combo(list(i for i in range(1,17)), default_value=16, key='-MAIN_COMBO-PC-', 
              readonly=True,enable_events=True,
              tooltip='Specifies the channel used to\ntransmit and receive MIDI messages for the program.'),
-   psg.Text('                              ',key='-MAIN-ALERT-'),
-   psg.Button('Exit', button_color=( 'red2','green2'),s=(8,1),font=('Arial',14,'bold'))
+   tk.Text('                              ',key='-MAIN-ALERT-'),
+   tk.Button('Exit', button_color=( 'red2','green2'),s=(8,1),font=('Arial',14,'bold'))
    ]]
 
-  settings_layout= [[psg.Checkbox('Debug', default=True,enable_events=True, k='-DEBUG-')]]
+  settings_layout= [[tk.Checkbox('Debug', default=True,enable_events=True, k='-DEBUG-')]]
 
-  theme_layout = [[psg.Text("Choose theme")], [psg.Listbox(values = psg.theme_list(), size =(20, 12), 
-                      key ='-THEME LISTBOX-',enable_events = True)], [psg.Button("Set Theme")]]
+  theme_layout = [[tk.Text("Choose theme")], [tk.Listbox(values = tk.theme_list(), size =(20, 12), 
+                      key ='-THEME LISTBOX-',enable_events = True)], [tk.Button("Set Theme")]]
     
-  log_layout =  [[psg.Text("All messages printed will go here.")],
-              [psg.Multiline(size=(60,15), font='Courier 8', expand_x=True, expand_y=True, 
+  log_layout =  [[tk.Text("All messages printed will go here.")],
+              [tk.Multiline(size=(60,15), font='Courier 8', expand_x=True, expand_y=True, 
                write_only=True, 
                reroute_stdout=True, reroute_stderr=True, echo_stdout_stderr=True, 
                autoscroll=True, auto_refresh=True,key='-LOGMultiLine-')]
                       # [sg.Output(size=(60,15), font='Courier 8', expand_x=True, expand_y=True)]
                       ]
-  tabs=[[psg.TabGroup(
-       [[ psg.Tab('Settings', settings_layout),
-          psg.Tab('Theme', theme_layout),
-          psg.Tab('Output', log_layout,)]], key='-TAB GROUP-', expand_x=True, expand_y=True,enable_events=True),
+  tabs=[[tk.TabGroup(
+       [[ tk.Tab('Settings', settings_layout),
+          tk.Tab('Theme', theme_layout),
+          tk.Tab('Output', log_layout,)]], key='-TAB GROUP-', expand_x=True, expand_y=True,enable_events=True),
      ]]
 
   layout = [
-    [psg.MenubarCustom(menu_def, key='-MENU-',tearoff=True)],
-    [psg.Column(l_list_column)],
-    [psg.Text('MIDI in ',size=7), 
-     psg.Combo(input_ports, default_value=input_ports[0], key='-MAIN_COMBO-INPUT-', 
+    [tk.MenubarCustom(menu_def, key='-MENU-',tearoff=True)],
+    [tk.Column(l_list_column)],
+    [tk.Text('MIDI in ',size=7), 
+     tk.Combo(input_ports, default_value=input_ports[0], key='-MAIN_COMBO-INPUT-', 
              readonly=True,enable_events=True,size=30), 
-     psg.Button('Reload',size=(0,2)),# button_color=(psg.YELLOWS[0], psg.BLUES[0])),
-     psg.Button('Panic',size=(0,2)), #button_color=(psg.YELLOWS[0], psg.BLUES[0])),
-     psg.Button('Open',size=(0,2)), #button_color=(psg.YELLOWS[0], psg.BLUES[0])),
-     psg.Button('Close',size=(0,2)) #button_color=(psg.YELLOWS[0], psg.BLUES[0]))
+     tk.Button('Reload',size=(0,2)),# button_color=(tk.YELLOWS[0], tk.BLUES[0])),
+     tk.Button('Panic',size=(0,2)), #button_color=(tk.YELLOWS[0], tk.BLUES[0])),
+     tk.Button('Open',size=(0,2)), #button_color=(tk.YELLOWS[0], tk.BLUES[0])),
+     tk.Button('Close',size=(0,2)) #button_color=(tk.YELLOWS[0], tk.BLUES[0]))
     ],
-    [psg.Text('MIDI out',size=7),psg.Combo(output_ports, default_value=output_ports[0], key='-MAIN_COMBO-OUTPUT-', 
+    [tk.Text('MIDI out',size=7),tk.Combo(output_ports, default_value=output_ports[0], key='-MAIN_COMBO-OUTPUT-', 
             readonly=True,enable_events=True,size=30)],
-    [psg.Text('Channel',size=7), 
-     psg.Combo(digitalsynth+analogsynth+drums,default_value=drums[0], key='-MAIN_COMBO-channel-',  
+    [tk.Text('Channel',size=7), 
+     tk.Combo(digitalsynth+analogsynth+drums,default_value=drums[0], key='-MAIN_COMBO-channel-',  
              readonly=True,enable_events=True,size=20),
-     psg.Text('Instrument',size=9),
-     psg.Combo(instrumentlist, default_value=defaultinstrument, key='-MAIN_COMBO-instrument-', 
+     tk.Text('Instrument',size=9),
+     tk.Combo(instrumentlist, default_value=defaultinstrument, key='-MAIN_COMBO-instrument-', 
              readonly=True,enable_events=True,size=29)],
-#  [psg.Combo([i for i in range(0,256)], default_value=1, key='-MAIN_COMBO-BANK-', readonly=True,enable_events=True)],
+#  [tk.Combo([i for i in range(0,256)], default_value=1, key='-MAIN_COMBO-BANK-', readonly=True,enable_events=True)],
 
-    [psg.Button('Play', size=(10,2), key='Play'),
-     psg.B('Polytouch',size=(8,2),key='Poly'),
-     psg.Slider(range=(36, 72), default_value=40, expand_x=True, enable_events=True, #param_tooltip=defaultinstrument,
+    [tk.Button('Play', size=(10,2), key='Play'),
+     tk.B('Polytouch',size=(8,2),key='Poly'),
+     tk.Slider(range=(36, 72), default_value=40, expand_x=True, enable_events=True, #param_tooltip=defaultinstrument,
      orientation='horizontal', key='-MAIN_SLpitch-',size=(20,8)),
-     psg.Button('Test Sound',size=(10,2))],
+     tk.Button('Test Sound',size=(10,2))],
     
     
-    [psg.Button('Digital 1'),psg.Button('Digital 2'),psg.Button('Drums'),psg.Button('Analog'),
-     psg.Button('Voice'),psg.Button('Effects'), psg.Button('Arpeggio'),psg.Button('Program')]
+    [tk.Button('Digital 1'),tk.Button('Digital 2'),tk.Button('Drums'),tk.Button('Analog'),
+     tk.Button('Voice'),tk.Button('Effects'), tk.Button('Arpeggio'),tk.Button('Program')]
   ]
   
   layout +=tabs
  
-  window = psg.Window(Manufacturer+' '+ devicename+" - "+PROCESS_NAME, layout, icon= music, #"jdxi.png", 
+  window = tk.Window(Manufacturer+' '+ devicename+" - "+PROCESS_NAME, layout, icon= music, #"jdxi.png", 
                     scaling=.5, resizable=True, size=siz,# (715, 850), 
                     finalize=True,
                     location=loc, #(10, 10), 
@@ -2255,20 +2393,16 @@ def main():
     # get MIDI ports
     ret=get_ports()
     
-    psg.theme('DarkBlue12')
-    main_window=make_main_window(psg.theme(),(10,1),(565, 575))
+    # TODO!!! tk.theme('DarkBlue12')
+    # TODO!!! 
+    #main_window=make_main_window(tk.theme(),(10,1),(565, 575))
+    main_window=make_main_window('default',(10,1),(565, 575))
     AnalogSynth=Analog_Synth()
     ret=AnalogSynth.get_data()
     if ret=='7OF9':
         c_thread = threading.Thread(target=delayed_event, args=(main_window, 2.0,'-NO_DEVICE-','on'), daemon=True)
         c_thread.start()
     DigitalSynth1=Digital_Synth1()
-    print("DS1 attr",DigitalSynth1.attributes)
-    print("DS1 dsm_attr",DigitalSynth1.dsm_attributes)
-    print("addr",DigitalSynth1.address)
-    print("dsm_addr",DigitalSynth1.dsm_address)
-    
-    DigitalSynth1.get_addresses()
     
     ret=DigitalSynth1.get_data()
     if ret=='7OF9':
@@ -2280,56 +2414,47 @@ def main():
     ret=DigitalSynth2.get_data()
     if ret=='7OF9':
         printdebug(sys._getframe().f_lineno, str("Cannot create digital synth 2 window."))
-    # else:
-    #     print(ret)
-    print("DS2 attr",DigitalSynth2.attributes)
-    print("DS2 dsm_attr",DigitalSynth2.dsm_attributes)
-    print("addr",DigitalSynth2.address)
-    print("dsm_addr",DigitalSynth2.dsm_address)
-
-    DigitalSynth2.get_addresses()
-    
 
     SystemSetup=System_Setup()
     SystemSetup.get_data()
-    print(SystemSetup.attributes)
+    printdebug(sys._getframe().f_lineno, str(SystemSetup.attributes))
     SystemCommon=System_Common()
     SystemCommon.get_data()
-    print(SystemCommon.attributes)
+    printdebug(sys._getframe().f_lineno, str(SystemCommon.attributes))
     SystemController=System_Controller()
     SystemController.get_data()
-    print(SystemController.attributes)
+    printdebug(sys._getframe().f_lineno, str(SystemController.attributes))
     ProgramCommon=Program_Common()
     ProgramCommon.get_data()
-    print(ProgramCommon.attributes)
+    printdebug(sys._getframe().f_lineno, str(ProgramCommon.attributes))
     ProgramVocalEffect=Program_Vocal_Effect()
     ProgramVocalEffect.get_data()
-    print(ProgramVocalEffect.attributes)
+    printdebug(sys._getframe().f_lineno, str(ProgramVocalEffect.attributes))
     ProgramEffect1=Program_Effect1()
     ProgramEffect1.get_data()
-    print(ProgramEffect1.attributes)
+    printdebug(sys._getframe().f_lineno, str(ProgramEffect1.attributes))
     ProgramDelay=Program_Delay()
     ProgramDelay.get_data()
-    print(ProgramDelay.attributes)
+    printdebug(sys._getframe().f_lineno, str(ProgramDelay.attributes))
 
     windows=[] #without main_window
 
-    analog_window=make_analog_synth_window(AnalogSynth,psg.theme(),(585,10),(940, 975))
+    analog_window=make_analog_synth_window(AnalogSynth,tk.theme(),(585,10),(940, 975))
     windows.append(analog_window)
-    digital1_window=make_digital_synth_window(DigitalSynth1,psg.theme(),(595,10),(940, 975))
+    digital1_window=make_digital_synth_window(DigitalSynth1,tk.theme(),(595,10),(940, 975))
     windows.append(digital1_window)
-    digital2_window=make_digital_synth_window(DigitalSynth2,psg.theme(),(595,10),(940, 975))
+    digital2_window=make_digital_synth_window(DigitalSynth2,tk.theme(),(595,10),(940, 975))
     windows.append(digital2_window)
     
-    effects_window=make_effects_window(psg.theme(),(1535,10),(350, 120))
+    effects_window=make_effects_window(tk.theme(),(1535,10),(350, 120))
     windows.append(effects_window)
-    vocalFX_window=make_vocalFX_window(psg.theme(),(1535,165),(350, 120))
+    vocalFX_window=make_vocalFX_window(tk.theme(),(1535,165),(350, 120))
     windows.append(vocalFX_window)
-    arpeggio_window= make_arpeggio_window(psg.theme(),(1535,320),(350, 120))
+    arpeggio_window= make_arpeggio_window(tk.theme(),(1535,320),(350, 120))
     windows.append(arpeggio_window)
-    program_window=make_program_window(psg.theme(),(1535,475),(350, 280))
+    program_window=make_program_window(tk.theme(),(1535,475),(350, 280))
     windows.append(program_window)
-    drums_window=make_drums_window(psg.theme(),(1535,765),(350, 280))
+    drums_window=make_drums_window(tk.theme(),(1535,765),(350, 280))
     windows.append(drums_window)
 
     for element in analog_window.element_list():
@@ -2340,16 +2465,25 @@ def main():
             element.bind('<Enter>', ' Enter')
             element.bind('<Leave>', ' Leave')
 
+    for element in digital1_window.element_list():
+        if str(element.key).startswith('-DS_1_ONOFF-'):
+            element.bind('<Enter>', ' Enter')
+            element.bind('<Leave>', ' Leave')
+
+    for element in digital2_window.element_list():
+        if str(element.key).startswith('-DS_2_ONOFF-'):
+            element.bind('<Enter>', ' Enter')
+            element.bind('<Leave>', ' Leave')
+
     for element in program_window.element_list():
         if str(element.key).startswith('-PROGRAM-ONOFF-'):
             element.bind('<Enter>', ' Enter')
             element.bind('<Leave>', ' Leave')
-                
 
     while True:
-        win, event, values = psg.read_all_windows(timeout=50)
+        win, event, values = tk.read_all_windows(timeout=50)
 #        event, values = main_window.read(timeout=50)
-        if event == psg.WIN_CLOSED or event == 'Exit':
+        if event == tk.WIN_CLOSED or event == 'Exit':
             if win in windows:
                        win.hide()
             else:
@@ -2357,7 +2491,7 @@ def main():
                     w.close()
                 break
             continue
-        if event is psg.TIMEOUT_KEY:
+        if event is tk.TIMEOUT_KEY:
           continue
         printdebug(sys._getframe().f_lineno, str(win)+str(event)+str(values))
         if event[1:] == 'KeyPressed':
@@ -2420,11 +2554,49 @@ def main():
                 index=analog_window[action[0]].metadata[0]
                 if analog_window[action[0]].metadata[1]:
                     analog_window[action[0]].metadata[1]=0
+                    value=analog_window[action[0]].metadata[2]
                 else:
                     analog_window[action[0]].metadata[1]=1
+                    value=analog_window[action[0]].metadata[3]
                 send_sysex_DT1(AnalogSynth.sysexsetlist,int(AnalogSynth.attributes[attr][1]),[int(analog_window[action[0]].metadata[1])])
                 AnalogSynth.attributes[attr][0]=analog_window[action[0]].metadata[1]
             analog_window[action[0]].update(image_data=onoff_data[index+2*analog_window[action[0]].metadata[1]],image_subsample=IMAGE_SUBSAMPLE)
+        elif event.startswith('-DS_1_ONOFF-'):
+            action = event.split(' ')
+            attr=action[0][len('-DS_1_ONOFF-'):-1]
+            if len(action)>1:
+                index = 0 if action[1] == 'Leave' else 1
+                digital1_window[action[0]].metadata[0] = index
+            else:
+                index=digital1_window[action[0]].metadata[0]
+                if digital1_window[action[0]].metadata[1]:
+                    digital1_window[action[0]].metadata[1]=0
+                    value=digital1_window[action[0]].metadata[2]
+                else:
+                    digital1_window[action[0]].metadata[1]=1
+                    value=digital1_window[action[0]].metadata[3]
+                DigitalSynth1.set_attr(attr,[value])
+#                send_sysex_DT1(AnalogSynth.sysexsetlist,int(AnalogSynth.attributes[attr][1]),[int(digital1_window[action[0]].metadata[1])])
+#                DigitalSynth1.attributes[attr][0]=digital1_window[action[0]].metadata[1]
+            digital1_window[action[0]].update(image_data=onoff_data[index+2*digital1_window[action[0]].metadata[1]],image_subsample=IMAGE_SUBSAMPLE)
+        elif event.startswith('-DS_2_ONOFF-'):
+            action = event.split(' ')
+            attr=action[0][len('-DS_2_ONOFF-'):-1]
+            if len(action)>1:
+                index = 0 if action[1] == 'Leave' else 1
+                digital2_window[action[0]].metadata[0] = index
+            else:
+                index=digital2_window[action[0]].metadata[0]
+                if digital2_window[action[0]].metadata[1]:
+                    digital2_window[action[0]].metadata[1]=0
+                    value=digital2_window[action[0]].metadata[2]
+                else:
+                    digital2_window[action[0]].metadata[1]=1
+                    value=digital2_window[action[0]].metadata[3]
+                DigitalSynth2.set_attr(attr,[value])
+#                send_sysex_DT1(AnalogSynth.sysexsetlist,int(AnalogSynth.attributes[attr][1]),[int(digital2_window[action[0]].metadata[1])])
+#                DigitalSynth2.attributes[attr][0]=analog_window[action[0]].metadata[1]
+            digital2_window[action[0]].update(image_data=onoff_data[index+2*digital2_window[action[0]].metadata[1]],image_subsample=IMAGE_SUBSAMPLE)
         elif event.startswith('-PROGRAM-ONOFF-'):
             action = event.split(' ')
             attr=action[0][len('-PROGRAM-ONOFF-'):-1]
@@ -2437,6 +2609,7 @@ def main():
                     program_window[action[0]].metadata[1]=0
                 else:
                     program_window[action[0]].metadata[1]=1
+                    value=program_window[action[0]].metadata[3] #check this
             program_window[action[0]].update(image_data=onoff_data[index+2*program_window[action[0]].metadata[1]],image_subsample=IMAGE_SUBSAMPLE)
         elif event.startswith('-AS_LISTBUTTON-'):
             splited=event.split(' ')
@@ -2503,7 +2676,7 @@ def main():
             else:
                 main_window.write_event_value('-NO_DEVICE-','inactive')
             analog_window.close()
-            analog_window=make_analog_synth_window(AnalogSynth,psg.theme(),(585,10),(940, 975))
+            analog_window=make_analog_synth_window(AnalogSynth,tk.theme(),(585,10),(940, 975))
         elif event=='Poly':
             tone_on(testingch, testingnote, testingvolume, testingduration)
             msg=mido.Message('polytouch', channel=testingch, note=testingnote, 
@@ -2528,7 +2701,7 @@ def main():
             program_window['-PROGRAM-'+'Tempo'].update(presetprogramall[attr_value][11])
             pass
         elif event=="PopupARPEGGIO":
-            AnalogSynth.push_data()
+#            AnalogSynth.push_data()
             #            print(AnalogSynth.attributes['Name'])
             print(AnalogSynth.attributes)
             print('AnalogSynthV portamento:',int(AnalogSynth.attributes['PortamentoTime'][0]))
@@ -2536,6 +2709,8 @@ def main():
             print(values)
             analog_window['-AS_TEXT_SLIDER-PortamentoTime-value'].update(
                 int(AnalogSynth.attributes['PortamentoTime'][0]))
+            AnalogSynth.get_data()
+            update_analog_synth_window(AnalogSynth, analog_window)
             pass
         elif event=='-NO_DEVICE-':
             if values['-NO_DEVICE-']=='on' and AnalogSynth.devicestatus!='OK':
@@ -2547,14 +2722,14 @@ def main():
 
             elif values['-NO_DEVICE-']=='off' and AnalogSynth.devicestatus!='OK':
                 main_window['-MAIN-ALERT-'].update('                              ', 
-                                                   background_color=psg.theme_element_background_color())
+                                                   background_color=tk.theme_element_background_color())
                 main_window.refresh()
                 c_thread = threading.Thread(target=delayed_event, 
                                             args=(main_window, 2.0,'-NO_DEVICE-','on'), daemon=True)
                 c_thread.start()
             elif values['-NO_DEVICE-']=='inactive':
                 main_window['-MAIN-ALERT-'].update('                              ', 
-                                                   background_color=psg.theme_element_background_color())
+                                                   background_color=tk.theme_element_background_color())
              
         elif event=='Activate program':
             attr_value=program_window['-PROGRAM-LIST-'].widget.current()
@@ -2608,7 +2783,6 @@ def main():
             program_window.hide()
             program_window.un_hide()
             continue
-
         
         elif event == '-DEBUG-':
             DEBUG=True if values['-DEBUG-']==True else False
