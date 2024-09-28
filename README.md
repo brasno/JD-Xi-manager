@@ -6,6 +6,7 @@ Pakages into consideration are:
 
 I'll use tkinter, standard python interface to Tcl/Tk GUI toolkit:
 - GUI - https://docs.python.org/3/library/tkinter.html
+
 Idea is to use spreadsheet with defined widgets (labels, sliders, combo boxes, buttons, radio buttons, frames...) for each individual attribute or function, with positions for grid geometry manager inside tkinter,
 export data to JSON and programmatically create a layout (with all necessary classes) for all components. That is done using utility.
 
