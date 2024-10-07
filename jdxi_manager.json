@@ -1,6 +1,6 @@
-{"Desc":"This is the config file for controller program and definitions of all JD-Xi parameters.", 
+{"Desc":"This is the config file for manager program and definitions of all JD-Xi parameters.", 
 "logpath":"./log",
-"logfile":"jdxi-controller",
+"logfile":"jdxi-manager",
 "loglevel":"Debug",
 "ManufacturerSysExIDsFile":"ManufacturerSysExIDs.json",
 "DummyDesc1":"This is the placeholder to separate program parameters from JD-Xi parameters.", 
@@ -9,33 +9,12 @@
 "DeviceFamilyNumberCode":"0x0,0x0",
 "Manufacturer":"Roland",
 "ManufacturerID":"0x41",
-"TONES_FILE":"./jdxi-tones.json",
+"TONES_FILE":"./tonovi.json",
 "MIDIch":[
 {"ID":0,"Type":"DS","Desc":"Digital_Synth_1"}, 
 {"ID":1,"Type":"DS","Desc":"Digital_Synth_2"}, 
 {"ID":2,"Type":"AS","Desc":"Analog_Synth"}, 
 {"ID":9,"Type":"DR","Desc":"Drums"}, 
-{"ID":16,"Type":"PC","Desc":"Program Control Channel" }],
-"AnalogTone":[
-{"Name":"Tone Name", "Short":"Name", "Address":0, "Length":12, "Type":"TEXT", "RangeFrom":32, "RangeTo":127 },
-{"Name":"Reserved", "Short":"R", "Address":13, "Length":1, "Type":"Reserved", "RangeFrom":0, "RangeTo":127 },
-{"Name":"LFO Shape", "Short":"Shape","Address":14, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name", "Address":15, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":16, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":17, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":18, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":19, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":20, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":21, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":22, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 },
-{"Name":"", "Short":"Name","Address":0, "Length":1, "Type":"", "RangeFrom":0, "RangeTo":127 }
-],
-"Effect1":
-[{"TypeID":0,"Desc":"00: Thru"},{"TypeID":1,"Desc":"01: Distortion"},{"TypeID":2,"Desc":"02: Fuzz"},
-{"TypeID":3,"Desc":"03: Compressor"},{"TypeID":4,"Desc":"04: Bit Crusher"}],
-"Effect2":
-[{"TypeID":0,"Desc":"00: Thru"},{"TypeID":1,"Desc":"01: Flanger"},{"TypeID":2,"Desc":"02: Phaser"},
-{"TypeID":3,"Desc":"03: Ring Mod"},{"TypeID":4,"Desc":"04: Slicer"}]
+{"ID":16,"Type":"PC","Desc":"Program Control Channel" }]
 }
-
 

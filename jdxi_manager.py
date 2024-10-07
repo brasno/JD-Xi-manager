@@ -38,7 +38,7 @@ def printdebug(lineno, message):
 
 # All configs are in config file: <CONFIG_FILE>
 # Put here default config file
-CONFIG_FILE='./jdxi_controller.json'
+CONFIG_FILE='./jdxi_manager.json'
 TONES_FILE=''
 
 # get script name without extension
@@ -130,6 +130,17 @@ def delayed_event(window, delay, event, value):
         i+=delta
 #        print(i)
     window.write_event_value(event, value)
+
+def delay_event(widget, delay, event):
+    i=0.001
+    delta=.1
+    print("delay",delay)
+    while i<=delay:
+        time.sleep(delta)
+        i+=delta
+    print("delay",i)
+    print("widget",widget)
+    widget.event_generate(event, when="tail")
 
 def get_manufacturer_name(ManufacturerTupleINT):
   global ManufacturerSysExIDsFile, ManufacturerIDs
@@ -2373,11 +2384,11 @@ def do_exit(*args):
         for arg in args:
             print ('arg:', arg)
         sys.stdout.flush()
-    if messagebox.askokcancel("Quit JD-Xi controller", "Are you sure you want to quit JD-Xi controller?"):
+    if messagebox.askokcancel("Quit JD-Xi manager", "Are you sure you want to quit JD-Xi manager?"):
         root.destroy()
 
 
-class JDXi_controller():
+class JDXi_manager():
     def __init__(self, top=None,loc=None,siz=None ):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -2388,7 +2399,7 @@ class JDXi_controller():
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
-        top.title("JD-Xi Controller")
+        top.title("JD-Xi manager")
         # top.configure(background="#304f83")
         # top.configure(highlightbackground="#304f83")
         # top.configure(highlightcolor="#f0f0f0")
@@ -2719,7 +2730,7 @@ def close_or_hide(*args, **kwargs):
     if window!=root:
         window.withdraw()
     else:
-        if messagebox.askokcancel("Quit JD-Xi controller", "Are you sure you want to quit JD-Xi controller?"):
+        if messagebox.askokcancel("Quit JD-Xi manager", "Are you sure you want to quit JD-Xi manager?"):
             window.destroy()
 
 
@@ -2732,7 +2743,7 @@ def make_root_windows():
   top = root
   root.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=root))
 
-  w1 = JDXi_controller(top=root,loc=(10,1),siz=(740, 350))
+  w1 = JDXi_manager(top=root,loc=(10,1),siz=(740, 350))
   # Creates a toplevel widget.
   top_Analog = tk.Toplevel(root)
   w2 = Analog(top_Analog)
@@ -3036,7 +3047,7 @@ def main(*args):
     ret=AnalogSynth.get_data()
     ret=1
     if ret=='7OF9':
-        c_thread = threading.Thread(target=delayed_event, args=(main_window, 2.0,'-NO_DEVICE-','on'), daemon=True)
+        c_thread = threading.Thread(target=delay_event, args=(w1.Top_Digital2, 15.0,'<ButtonPress>'), daemon=True)
         c_thread.start()
 #    DigitalSynth1=Digital_Synth1()
     DigitalSynth1=Digital_Synth(baseaddress=[0x19,0x01,0x00],id='1')
@@ -3075,6 +3086,18 @@ def main(*args):
     ProgramDelay.get_data()
     printdebug(sys._getframe().f_lineno, str(ProgramDelay.attributes))
 
+
+    c_thread = threading.Thread(target=delay_event, args=(w1.Top_Digital2, 2.0,'<Button-1>'), daemon=True)
+    c_thread.start()
+    c_thread = threading.Thread(target=delay_event, args=(w1.Top_Digital2, 5.0,'<ButtonRelease-1>'), daemon=True)
+    c_thread.start()
+
+
+    c_thread = threading.Thread(target=delay_event, args=(w1.Top_Digital2, 10.0,'<Button-1>'), daemon=True)
+    c_thread.start()
+    c_thread = threading.Thread(target=delay_event, args=(w1.Top_Digital2, 15.0,'<ButtonRelease-1>'), daemon=True)
+    c_thread.start()
+    
     root.mainloop()
     port_panic()
 #    port_close()
