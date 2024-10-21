@@ -20,7 +20,9 @@ import collections
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
+import tkinter.font as tkFont
 from tkinter import messagebox
+from PIL import Image, ImageTk, ImageFilter, ImageDraw, ImageFont
 
 import mido
 from collections import deque
@@ -43,6 +45,7 @@ TONES_FILE=''
 
 # get script name without extension
 scriptname=os.path.split(os.path.splitext(__file__)[0])[-1]
+file_location = os.path.dirname(__file__)
 
 PROCESS_TEXT=scriptname
 PROCESS_NAME=scriptname.replace('_',' ').replace('-',' ')
@@ -2210,15 +2213,104 @@ def make_digital_synth_window(DS,theme,loc,siz):
 
 style_set = 0
 
+global _img0, _img1, _img2, _img3
+
+def prepare_images():
+    global _img0, _img1, _img2, _img3, photo_location
+    photo_location = os.path.join(file_location,"./images/onoff3.png")
+    _img0 = tk.PhotoImage(file=photo_location)
+    photo_location = os.path.join(file_location,"./images/onoff1.png")
+    _img1 = tk.PhotoImage(file=photo_location)
+    photo_location = os.path.join(file_location,"./images/onoff4.png")
+    _img2 = tk.PhotoImage(file=photo_location)
+    photo_location = os.path.join(file_location,"./images/onoff2.png")
+    _img3 = tk.PhotoImage(file=photo_location)
+
+
+class Create_Tooltip(object):
+    def __init__(self, widget, text='widget tooltip'):
+        self.waittime = 500     #miliseconds
+        self.wraplength = 500   #pixels
+        self.widget = widget
+        self.text = text
+        self.widget.bind("<Enter>", self.enter)
+        self.widget.bind("<Leave>", self.leave)
+        self.widget.bind("<ButtonPress>", self.leave)
+        self.id = None
+        self.tw = None
+    def enter(self, event=None):
+        self.schedule()
+    def leave(self, event=None):
+        self.unschedule()
+        self.hidetip()
+    def schedule(self):
+        self.unschedule()
+        self.id = self.widget.after(self.waittime, self.show_tooltip)
+    def unschedule(self):
+        id = self.id
+        self.id = None
+        if id:
+            self.widget.after_cancel(id)
+    def show_tooltip(self, event=None):
+        x = y = 0
+        mouse_x, mouse_y = self.widget.winfo_pointerxy()
+        x = mouse_x + 10
+        y = mouse_y + 25
+        # creates a toplevel window
+        screen_width = self.widget.winfo_screenwidth()
+        screen_height = self.widget.winfo_screenheight()
+        self.tw = tk.Toplevel(self.widget)
+        self.tw.wm_overrideredirect(True)
+        label = tk.Label(self.tw, text=self.text, justify='left',
+                background="#FEFF42", relief='raised', borderwidth=3,
+                wraplength = self.wraplength)
+        label.pack(ipadx=1)
+        self.tw.wm_geometry(f"+{x}+{y}")
+        self.tw.update() 
+        tooltip_width = self.tw.winfo_width()
+        tooltip_height = self.tw.winfo_height()
+        change=False
+        if x + tooltip_width > screen_width:
+            x = mouse_x - tooltip_width -5   # back to screen
+            change= True
+        if y + tooltip_height > screen_height:
+            y = mouse_y - tooltip_height - 5  # back to screen
+            change= True
+        if change:
+            self.tw.wm_geometry(f"+{x}+{y}")
+            self.tw.update() 
+    def hidetip(self):
+        tw = self.tw
+        self.tw= None
+        if tw:
+            tw.destroy()
+
+
+global default_bg, BGIMG_FILE
+BGIMG_FILE='images/main_background.png'
+
+default_bg='#304f83'
+default_bg='#287bd0'
+
+
 def set_style():
     global style
     global style_set
     if style_set: return        
-    try: root.tk.call('source',
-                os.path.join(_location, 'themes', 'default.tcl'))
-    except: pass
     style = ttk.Style()
-    style.theme_use('default')
+    #try: 
+    root.tk.call('source', os.path.join(file_location, 'jdxi.tcl'))
+#    style.theme_use('clam')
+#    style.theme_use('default')
+    style.theme_use('jdxi')
+    printdebug(sys._getframe().f_lineno, "THEME Used jdxi.tcl")
+
+    # except: 
+    #     style.theme_use('default')
+    #     printdebug(sys._getframe().f_lineno, "THEME Used default")
+
+    printdebug(sys._getframe().f_lineno, "THEME Used: "+ str("path:"+os.path.join(file_location, 'jdxi.tcl')))
+
     style.configure('.', font = "TkDefaultFont")
     style.configure('TRadioButton', indicatoron=False)
     if sys.platform == "win32":
@@ -2228,6 +2320,10 @@ def set_style():
                  [('Radiobutton.label', {'sticky': ''})]})]})] )
     style.configure("ListButton.TRadiobutton", background='yellow',foreground="red",
                     activeforeground="green",highlightbackground="white")
+    style.configure("GroupLabel.TLabel", background='#FEFF00',foreground="#0100FF",justify='center',anchor="n")
+    style.configure("Default.TLabel", background=default_bg,foreground="white",justify='center',anchor="w",padding=0)
+    style.layout("Default.TLabel",[('Label.label', {'sticky': 'nswe'})])
+
     style.map("ListButton.TRadiobutton",
               background=[#('disabled', 'magenta'),
                 ('active', "yellow"),
@@ -2244,10 +2340,34 @@ def set_style():
                 highlightcolor=[('focus', 'pink'),
                                 ('!focus', 'red')],
             )
+    style.layout("OnOff.TCheckbutton",[('Checkbutton.padding', {'sticky': 'nswe', 'children': 
+                  [ ('Checkbutton.focus', {'side': 'left', 'sticky': 'w', 'children': 
+                  [('Checkbutton.label', {'sticky': 'nswe'})]})]})])
+
+    
+    style.configure("ONOFF.TCheckbutton", background='yellow',foreground="red",activeforeground="green", highlightbackground="white")
+    style.map("ONOFF.TCheckbutton",image=[(('!selected','!active'),_img0), (('selected','!active'), _img1),(('active','!selected'),_img2),(('active','selected'),_img3)])
+    style.layout("ONOFF.TCheckbutton",[('Checkbutton.padding', {'sticky': 'nswe', 'children': 
+                  [ ('Checkbutton.focus', {'side': 'left', 'sticky': 'w', 'children': 
+                  [('Checkbutton.label', {'sticky': 'nswe'})]})]})])
+    
+
+    style.configure("Default.TButton", relief='flat', padding='3 3', anchor='center', width= '-9', shiftrelief= 1, takefocus=False, cursor='diamond_cross')
+    style.layout("Default.TButton",[('Button.border', {'sticky': 'nswe', 'border': '1', 'children': [('Button.focus', 
+                {'sticky': 'nswe', 'children': [('Button.padding', {'sticky': 'nswe', 'children': [('Button.label', {'sticky': 'nswe'})]})]})]})])
+    style.map('Default.TButton', foreground=[('disabled', default_bg), ('pressed', default_bg),('active', default_bg)],
+                                 background=[('disabled', default_bg), ('pressed', '!focus', default_bg), ('active', default_bg), ('!active', default_bg)],
+                                 highlightcolor=[('focus', default_bg), ('!focus', default_bg)],
+                                 relief=[('pressed', 'flat'), ('!pressed', 'flat')])
+   
+    style.configure("Default.TButton", relief='flat', cursor='diamond_cross',borderwidth=0,padding=0,highlightthickness=0,shiftrelief=0,takefocus=False)
+    style.layout('Default.TButton',[('Button.label', {'sticky': 'nswe'})])
+    
+    style.layout("JDXIFrame.Frame", [('Frame.border', {'sticky': 'nswe'})])
 
     style_set = 1
 
-global  w1, w2, w3, w4, w5, w6, w7, w8, w9, top, top_Analog, top_Digital1, top_Digital2, top_Voice, top_Effects, top_Arpeggio, top_Program, top_Drums
+global w1, w2, w3, w4, w5, w6, w7, w8, w9, top, top_Analog, top_Digital1, top_Digital2, top_Voice, top_Effects, top_ProgramController, top_Program, top_Drums
 
 def on_AnalogClick(*args):
     if DEBUG:
@@ -2259,7 +2379,7 @@ def on_AnalogClick(*args):
     else:
         top_Analog.deiconify()
 
-def on_Digital1Click(*args):
+def on_Digital_1Click(*args):
     if DEBUG:
         print('on_Digital1Click')
         print(top_Digital1.state())
@@ -2269,7 +2389,7 @@ def on_Digital1Click(*args):
     else:
         top_Digital1.deiconify()
    
-def on_Digital2Click(*args):
+def on_Digital_2Click(*args):
     if DEBUG:
         print('on_Digital2Click')
         print(top_Digital2.state())
@@ -2307,7 +2427,7 @@ def on_ArpeggioClick(*args):
     if 'normal' == top_ProgramController.state():
         top_ProgramController.withdraw() 
     else:
-        top_Arpeggio.deiconify()
+        top_ProgramController.deiconify()
 
 def on_DrumsClick(*args):
     if DEBUG:
@@ -2335,8 +2455,8 @@ def on_OpenClick(*args):
         for arg in args:
             print ('arg:', arg)
         sys.stdout.flush()
-
-def on_TestSoundClick(*args):   
+        
+def on_Test_SoundClick(*args):   
     if DEBUG:
         print('on_TestSoundClick')
         for arg in args:
@@ -2371,38 +2491,86 @@ def on_PolytouchClick(*args):
             print ('arg:', arg)
 
 def on_CloseClick(*args):
+    global w1
     if DEBUG:
         print('on_CloseClick')
         for arg in args:
             print ('arg:', arg)
         sys.stdout.flush()
+    w1.update_labels()
+    
+global yeim0, yeim1, noim0, noim1,msgbox
+msgbox=None
 
+def kill_win():
+    global yeim0, yeim1, noim0, noim1, msgbox
+    
+    if isinstance(msgbox, tk.Toplevel):
+        if msgbox.winfo_exists():
+            print("running!")
+            msgbox.focus_force()
+            msgbox.lift()
+            return
+    msgbox = tk.Toplevel(root)
+
+    msgbox.title("Quit JD-Xi manager")
+    msgbox.configure(background=default_bg)
+    mouse_x, mouse_y = root.winfo_pointerxy()
+    msgbox.geometry(f"350x90+{mouse_x-350}+{mouse_y+7}")
+    l1=tk.Label(msgbox, image="::tk::icons::question",fg='white',bg=default_bg)
+    l1.grid(row=0, column=0)
+    l2=tk.Label(msgbox,text="Are you sure you want to Quit JD-Xi manager?",fg='white', bg=default_bg)
+    l2.grid(row=0, column=1, columnspan=3)
+  
+    b1=ttk.Button(msgbox,style='Default.TButton',text="Yes",command=root.destroy)
+    im0 = Image.open('./images/def_btns/Yesy0.png')
+    im1 = Image.open('./images/def_btns/Yesy1.png')
+    yeim0 = ImageTk.PhotoImage(im0)
+    yeim1 = ImageTk.PhotoImage(im1)
+    b1.configure(image=[yeim0,'pressed',yeim1])
+    b1.grid(row=1, column=1)
    
-def do_exit(*args):
+    b2=ttk.Button(msgbox,style='Default.TButton',text="No",command=msgbox.destroy)
+    im0 = Image.open('./images/def_btns/Nob0.png')
+    im1 = Image.open('./images/def_btns/Nob1.png')
+    noim0 = ImageTk.PhotoImage(im0)
+    noim1 = ImageTk.PhotoImage(im1)
+    b2.configure(image=[noim0,'pressed',noim1])
+    b2.grid(row=1, column=2)
+
+       
+def on_ExitClick(*args):
     if DEBUG:
         print('on_VoiceClick')
         for arg in args:
             print ('arg:', arg)
         sys.stdout.flush()
-    if messagebox.askokcancel("Quit JD-Xi manager", "Are you sure you want to quit JD-Xi manager?"):
-        root.destroy()
+    kill_win()
+    # if messagebox.askokcancel("Quit JD-Xi manager", "Are you sure you want to quit JD-Xi manager?",geometry="+100+100"):
+    #     root.destroy()
 
 
 class JDXi_manager():
-    def __init__(self, top=None,loc=None,siz=None ):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
         set_style()
-        top.geometry("762x300+187+88")
+        #top.geometry("820x300+187+88")
         top.geometry(f"{siz[0]}x{siz[1]}+{loc[0]}+{loc[1]}")
 
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi manager")
-        # top.configure(background="#304f83")
-        # top.configure(highlightbackground="#304f83")
+        top.configure(background=default_bg)
         # top.configure(highlightcolor="#f0f0f0")
+        self.backGround = tk.Canvas(top, height=siz[1], width=siz[0],borderwidth=0)
+        self.backGround.configure(borderwidth=0, highlightthickness=0)
+        self.bgimg = Image.open(BGIMG_FILE)
+        self.tkbgimg=ImageTk.PhotoImage(self.bgimg)
+        self.backGround.create_image(0,0,anchor="nw",image=self.tkbgimg)
+        self.backGround.grid(row=0,column=0,rowspan=10, columnspan=10,sticky="w")
+
 
         self.top = top
         self.ProgRxTxCh = tk.StringVar()
@@ -2412,312 +2580,1049 @@ class JDXi_manager():
         self.MIDIin = tk.StringVar()
         self.TestNote = tk.DoubleVar()
 
-        self.Top_Digital2 = ttk.Button(self.top)
-        self.Top_Digital2.place(relx=0.136, rely=0.587, height=28, width=83)
-        self.Top_Digital2.configure(command=on_Digital2Click)
-        self.Top_Digital2.configure(text='''Digital 2''')
-        self.Top_Digital2.configure(compound='left')
 
-        self.Top_TestSound = ttk.Button(self.top)
-        self.Top_TestSound.place(relx=0.642, rely=0.423, height=28, width=83)
-        self.Top_TestSound.configure(command=on_TestSoundClick)
-        self.Top_TestSound.configure(text='''Test Sound''')
-        self.Top_TestSound.configure(compound='left')
+        # self.Top_Digital1 = ttk.Button(self.top,style='Default.TButton')
+        # self.Top_Digital1.place(relx=0.014, rely=0.587)
+        # self.Top_Digital1.configure(command=on_Digital1Click)
+        # self.Top_Digital1.configure(text='''Digital 1''')
+        
+        # im0 = Image.open('./images/def_btns/Digital_1b0.png')
+        # im1 = Image.open('./images/def_btns/Digital_1b1.png')
+        # self.d1im0 = ImageTk.PhotoImage(im0)
+        # self.d1im1 = ImageTk.PhotoImage(im1)
+        # self.Top_Digital1.configure(image=[self.d1im0,'pressed',self.d1im1])
+        
+        self.Main_MIDIin=ttk.Label(top,style='Default.TLabel', text='MIDI in')
+        self.Main_MIDIin.grid(padx=1, pady=1,sticky='w', row=0,column=0)
+        self.Main_MIDIin.image=tk.Image
+        self.Main_MIDIintooltip=Create_Tooltip(self.Main_MIDIin,'''Midi IN device ''')
+        self.Main_MIDIout=ttk.Label(top,style='Default.TLabel', text='MIDI out')
+        self.Main_MIDIout.grid(padx=1, pady=1,sticky='w', row=1,column=0)
+        self.Main_MIDIouttooltip=Create_Tooltip(self.Main_MIDIout,'''Midi OUT device ''')
+        self.Main_Channel=ttk.Label(top,style='Default.TLabel', text='Channel')
+        self.Main_Channel.grid(padx=1, pady=1,sticky='w', row=2,column=0)
+        self.Main_Channeltooltip=Create_Tooltip(self.Main_Channel,'''MIDI channel  for instrument''')
+        self.Main_Instrument=ttk.Label(top,style='Default.TLabel', text='Instrument')
+        self.Main_Instrument.grid(padx=1, pady=1,sticky='w', row=3,column=0)
+        self.Main_Instrumenttooltip=Create_Tooltip(self.Main_Instrument,'''Specific instrument''')
+        self.Main_ProgRxTxCh=ttk.Label(top,style='Default.TLabel', text='Prog Rx/Tx Ch')
+        self.Main_ProgRxTxCh.grid(padx=1, pady=1,sticky='w', row=0,column=3)
+        self.Main_ProgRxTxChtooltip=Create_Tooltip(self.Main_ProgRxTxCh,'''Channel for transmission of control messages''')
+        self.CmbMain_MIDIinValsVar=tk.IntVar()
+        self.CmbMain_MIDIinValsvalue_list =tk.IntVar()
+        self.CmbMain_MIDIinValsvalue_list =[]
+        self.CmbMain_MIDIinVals=ttk.Combobox(top, textvariable='CmbMain_MIDIinValsVar', values=self.CmbMain_MIDIinValsvalue_list) 
+        self.CmbMain_MIDIinVals.grid(padx=1, pady=1,sticky='w', row=0,column=1,rowspan=1,columnspan=2)
+        self.CmbMain_MIDIoutValsVar=tk.IntVar()
+        self.CmbMain_MIDIoutValsvalue_list =tk.IntVar()
+        self.CmbMain_MIDIoutValsvalue_list =[]
+        self.CmbMain_MIDIoutVals=ttk.Combobox(top, textvariable='CmbMain_MIDIoutValsVar', values=self.CmbMain_MIDIoutValsvalue_list) 
+        self.CmbMain_MIDIoutVals.grid(padx=1, pady=1,sticky='w', row=1,column=1,rowspan=1,columnspan=2)
+        self.CmbMain_ChannelValsVar=tk.IntVar()
+        self.CmbMain_ChannelValsvalue_list =tk.IntVar()
+        self.CmbMain_ChannelValsvalue_list =[]
+        self.CmbMain_ChannelVals=ttk.Combobox(top, textvariable='CmbMain_ChannelValsVar', values=self.CmbMain_ChannelValsvalue_list) 
+        self.CmbMain_ChannelVals.grid(padx=1, pady=1,sticky='w', row=2,column=1,rowspan=1,columnspan=2)
+        self.CmbMain_InstrumentValsVar=tk.IntVar()
+        self.CmbMain_InstrumentValsvalue_list =tk.IntVar()
+        self.CmbMain_InstrumentValsvalue_list =[]
+        self.CmbMain_InstrumentVals=ttk.Combobox(top, textvariable='CmbMain_InstrumentValsVar', values=self.CmbMain_InstrumentValsvalue_list) 
+        self.CmbMain_InstrumentVals.grid(padx=1, pady=1,sticky='w', row=3,column=1,rowspan=1,columnspan=2)
+        self.CmbMain_ProgRxTxChValsVar=tk.IntVar()
+        self.CmbMain_ProgRxTxChValsvalue_list =tk.IntVar()
+        self.CmbMain_ProgRxTxChValsvalue_list =['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
+        self.CmbMain_ProgRxTxChVals=ttk.Combobox(top, textvariable='CmbMain_ProgRxTxChValsVar', values=self.CmbMain_ProgRxTxChValsvalue_list) 
+        self.CmbMain_ProgRxTxChVals.grid(padx=1, pady=1,sticky='w', row=0,column=4,rowspan=1,columnspan=2)
+        self.BtnMain_Reload=ttk.Button(top, text='Reload', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Reloadb0.png')
+        im1 = Image.open('./images/def_btns/Reloadb2.png')
+        im2 = Image.open('./images/def_btns/Reloadb1.png')
+        self.Reloadim0 = ImageTk.PhotoImage(im0)
+        self.Reloadim1 = ImageTk.PhotoImage(im1)
+        self.Reloadim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Reload.configure(command=on_ReloadClick)
+        self.BtnMain_Reload.configure(image=[self.Reloadim0,'pressed',self.Reloadim1,'active',self.Reloadim2])
+        self.BtnMain_Reload.image=[self.Reloadim0,'pressed',self.Reloadim1,'active',self.Reloadim2]
+        self.BtnMain_Reload.grid(padx=1, pady=1,sticky='w', row=2,column=3,rowspan=2,columnspan=1)
+        self.BtnMain_Panic=ttk.Button(top, text='Panic', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Panicb0.png')
+        im1 = Image.open('./images/def_btns/Panicb2.png')
+        im2 = Image.open('./images/def_btns/Panicb1.png')
+        self.Panicim0 = ImageTk.PhotoImage(im0)
+        self.Panicim1 = ImageTk.PhotoImage(im1)
+        self.Panicim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Panic.configure(command=on_PanicClick)
+        self.BtnMain_Panic.configure(image=[self.Panicim0,'pressed',self.Panicim1,'active',self.Panicim2])
+        self.BtnMain_Panic.image=[self.Panicim0,'pressed',self.Panicim1,'active',self.Panicim2]
+        self.BtnMain_Panic.grid(padx=1, pady=1,sticky='w', row=2,column=4,rowspan=2,columnspan=1)
+        self.BtnMain_Open=ttk.Button(top, text='Open', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Openb0.png')
+        im1 = Image.open('./images/def_btns/Openb2.png')
+        im2 = Image.open('./images/def_btns/Openb1.png')
+        self.Openim0 = ImageTk.PhotoImage(im0)
+        self.Openim1 = ImageTk.PhotoImage(im1)
+        self.Openim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Open.configure(command=on_OpenClick)
+        self.BtnMain_Open.configure(image=[self.Openim0,'pressed',self.Openim1,'active',self.Openim2])
+        self.BtnMain_Open.image=[self.Openim0,'pressed',self.Openim1,'active',self.Openim2]
+        self.BtnMain_Open.grid(padx=1, pady=1,sticky='w', row=2,column=5,rowspan=2,columnspan=1)
+        self.BtnMain_Close=ttk.Button(top, text='Close', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Closeb0.png')
+        im1 = Image.open('./images/def_btns/Closeb2.png')
+        im2 = Image.open('./images/def_btns/Closeb1.png')
+        self.Closeim0 = ImageTk.PhotoImage(im0)
+        self.Closeim1 = ImageTk.PhotoImage(im1)
+        self.Closeim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Close.configure(command=on_CloseClick)
+        self.BtnMain_Close.configure(image=[self.Closeim0,'pressed',self.Closeim1,'active',self.Closeim2])
+        self.BtnMain_Close.image=[self.Closeim0,'pressed',self.Closeim1,'active',self.Closeim2]
+        self.BtnMain_Close.grid(padx=1, pady=1,sticky='w', row=2,column=6,rowspan=2,columnspan=1)
+        self.BtnMain_Play=ttk.Button(top, text='Play', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Playb0.png')
+        im1 = Image.open('./images/def_btns/Playb2.png')
+        im2 = Image.open('./images/def_btns/Playb1.png')
+        self.Playim0 = ImageTk.PhotoImage(im0)
+        self.Playim1 = ImageTk.PhotoImage(im1)
+        self.Playim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Play.configure(command=on_PlayClick)
+        self.BtnMain_Play.configure(image=[self.Playim0,'pressed',self.Playim1,'active',self.Playim2])
+        self.BtnMain_Play.image=[self.Playim0,'pressed',self.Playim1,'active',self.Playim2]
+        self.BtnMain_Play.grid(padx=1, pady=1,sticky='w', row=6,column=0,rowspan=1,columnspan=1)
+        self.BtnMain_Polytouch=ttk.Button(top, text='Polytouch', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Polytouchb0.png')
+        im1 = Image.open('./images/def_btns/Polytouchb2.png')
+        im2 = Image.open('./images/def_btns/Polytouchb1.png')
+        self.Polytouchim0 = ImageTk.PhotoImage(im0)
+        self.Polytouchim1 = ImageTk.PhotoImage(im1)
+        self.Polytouchim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Polytouch.configure(command=on_PolytouchClick)
+        self.BtnMain_Polytouch.configure(image=[self.Polytouchim0,'pressed',self.Polytouchim1,'active',self.Polytouchim2])
+        self.BtnMain_Polytouch.image=[self.Polytouchim0,'pressed',self.Polytouchim1,'active',self.Polytouchim2]
+        self.BtnMain_Polytouch.grid(padx=1, pady=1,sticky='w', row=6,column=1,rowspan=1,columnspan=1)
+        self.Main_ToneChooser=ttk.Label(top,style='Default.TLabel', text='Tone Chooser')
+        self.SclMain_ToneChooserVar=tk.IntVar()
+        self.SclMain_ToneChooser=ttk.Scale(top, variable=self.SclMain_ToneChooserVar, from_=40, to=127)
+        self.SclMain_ToneChooserVar.set(0)
+        self.SclMain_ToneChooser.configure(command=lambda x: self.SclMain_ToneChooserVar.set(round(float(x))))
+        self.Main_ToneChooserValue=ttk.Label(top,  textvariable=self.SclMain_ToneChooserVar)
+        self.Main_ToneChooser.grid(padx=1, pady=1,sticky='w', row=6,column=2)
+        self.SclMain_ToneChooser.grid(padx=1, pady=1,sticky='w', row=6,column=3)
+        self.Main_ToneChooserValue.grid(padx=1, pady=1,sticky='w', row=6,column=4)
+        self.BtnMain_TestSound=ttk.Button(top, text='Test Sound', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Test_Soundb0.png')
+        im1 = Image.open('./images/def_btns/Test_Soundb2.png')
+        im2 = Image.open('./images/def_btns/Test_Soundb1.png')
+        self.Test_Soundim0 = ImageTk.PhotoImage(im0)
+        self.Test_Soundim1 = ImageTk.PhotoImage(im1)
+        self.Test_Soundim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_TestSound.configure(command=on_Test_SoundClick)
+        self.BtnMain_TestSound.configure(image=[self.Test_Soundim0,'pressed',self.Test_Soundim1,'active',self.Test_Soundim2])
+        self.BtnMain_TestSound.image=[self.Test_Soundim0,'pressed',self.Test_Soundim1,'active',self.Test_Soundim2]
+        self.BtnMain_TestSound.grid(padx=1, pady=1,sticky='w', row=6,column=5,rowspan=1,columnspan=1)
+        self.BtnMain_Digital1=ttk.Button(top, text='Digital 1', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Digital_1b0.png')
+        im1 = Image.open('./images/def_btns/Digital_1b2.png')
+        im2 = Image.open('./images/def_btns/Digital_1b1.png')
+        self.Digital_1im0 = ImageTk.PhotoImage(im0)
+        self.Digital_1im1 = ImageTk.PhotoImage(im1)
+        self.Digital_1im2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Digital1.configure(command=on_Digital_1Click)
+        self.BtnMain_Digital1.configure(image=[self.Digital_1im0,'pressed',self.Digital_1im1,'active',self.Digital_1im2])
+        self.BtnMain_Digital1.image=[self.Digital_1im0,'pressed',self.Digital_1im1,'active',self.Digital_1im2]
+        self.BtnMain_Digital1.grid(padx=1, pady=1,sticky='w', row=7,column=0,rowspan=1,columnspan=1)
+        self.BtnMain_Digital2=ttk.Button(top, text='Digital 2', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Digital_2b0.png')
+        im1 = Image.open('./images/def_btns/Digital_2b2.png')
+        im2 = Image.open('./images/def_btns/Digital_2b1.png')
+        self.Digital_2im0 = ImageTk.PhotoImage(im0)
+        self.Digital_2im1 = ImageTk.PhotoImage(im1)
+        self.Digital_2im2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Digital2.configure(command=on_Digital_2Click)
+        self.BtnMain_Digital2.configure(image=[self.Digital_2im0,'pressed',self.Digital_2im1,'active',self.Digital_2im2])
+        self.BtnMain_Digital2.image=[self.Digital_2im0,'pressed',self.Digital_2im1,'active',self.Digital_2im2]
+        self.BtnMain_Digital2.grid(padx=1, pady=1,sticky='w', row=7,column=1,rowspan=1,columnspan=1)
+        self.BtnMain_Analog=ttk.Button(top, text='Analog', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Analogb0.png')
+        im1 = Image.open('./images/def_btns/Analogb2.png')
+        im2 = Image.open('./images/def_btns/Analogb1.png')
+        self.Analogim0 = ImageTk.PhotoImage(im0)
+        self.Analogim1 = ImageTk.PhotoImage(im1)
+        self.Analogim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Analog.configure(command=on_AnalogClick)
+        self.BtnMain_Analog.configure(image=[self.Analogim0,'pressed',self.Analogim1,'active',self.Analogim2])
+        self.BtnMain_Analog.image=[self.Analogim0,'pressed',self.Analogim1,'active',self.Analogim2]
+        self.BtnMain_Analog.grid(padx=1, pady=1,sticky='w', row=7,column=2,rowspan=1,columnspan=1)
+        self.BtnMain_Drums=ttk.Button(top, text='Drums', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Drumsb0.png')
+        im1 = Image.open('./images/def_btns/Drumsb2.png')
+        im2 = Image.open('./images/def_btns/Drumsb1.png')
+        self.Drumsim0 = ImageTk.PhotoImage(im0)
+        self.Drumsim1 = ImageTk.PhotoImage(im1)
+        self.Drumsim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Drums.configure(command=on_DrumsClick)
+        self.BtnMain_Drums.configure(image=[self.Drumsim0,'pressed',self.Drumsim1,'active',self.Drumsim2])
+        self.BtnMain_Drums.image=[self.Drumsim0,'pressed',self.Drumsim1,'active',self.Drumsim2]
+        self.BtnMain_Drums.grid(padx=1, pady=1,sticky='w', row=7,column=3,rowspan=1,columnspan=1)
+        self.BtnMain_Voice=ttk.Button(top, text='Voice', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Voiceb0.png')
+        im1 = Image.open('./images/def_btns/Voiceb2.png')
+        im2 = Image.open('./images/def_btns/Voiceb1.png')
+        self.Voiceim0 = ImageTk.PhotoImage(im0)
+        self.Voiceim1 = ImageTk.PhotoImage(im1)
+        self.Voiceim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Voice.configure(command=on_VoiceClick)
+        self.BtnMain_Voice.configure(image=[self.Voiceim0,'pressed',self.Voiceim1,'active',self.Voiceim2])
+        self.BtnMain_Voice.image=[self.Voiceim0,'pressed',self.Voiceim1,'active',self.Voiceim2]
+        self.BtnMain_Voice.grid(padx=1, pady=1,sticky='w', row=7,column=4,rowspan=1,columnspan=1)
+        self.BtnMain_Effects=ttk.Button(top, text='Effects', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Effectsb0.png')
+        im1 = Image.open('./images/def_btns/Effectsb2.png')
+        im2 = Image.open('./images/def_btns/Effectsb1.png')
+        self.Effectsim0 = ImageTk.PhotoImage(im0)
+        self.Effectsim1 = ImageTk.PhotoImage(im1)
+        self.Effectsim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Effects.configure(command=on_EffectsClick)
+        self.BtnMain_Effects.configure(image=[self.Effectsim0,'pressed',self.Effectsim1,'active',self.Effectsim2])
+        self.BtnMain_Effects.image=[self.Effectsim0,'pressed',self.Effectsim1,'active',self.Effectsim2]
+        self.BtnMain_Effects.grid(padx=1, pady=1,sticky='w', row=7,column=5,rowspan=1,columnspan=1)
+        self.BtnMain_Arpeggio=ttk.Button(top, text='Arpeggio', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Arpeggiob0.png')
+        im1 = Image.open('./images/def_btns/Arpeggiob2.png')
+        im2 = Image.open('./images/def_btns/Arpeggiob1.png')
+        self.Arpeggioim0 = ImageTk.PhotoImage(im0)
+        self.Arpeggioim1 = ImageTk.PhotoImage(im1)
+        self.Arpeggioim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Arpeggio.configure(command=on_ArpeggioClick)
+        self.BtnMain_Arpeggio.configure(image=[self.Arpeggioim0,'pressed',self.Arpeggioim1,'active',self.Arpeggioim2])
+        self.BtnMain_Arpeggio.image=[self.Arpeggioim0,'pressed',self.Arpeggioim1,'active',self.Arpeggioim2]
+        self.BtnMain_Arpeggio.grid(padx=1, pady=1,sticky='w', row=7,column=6,rowspan=1,columnspan=1)
+        self.BtnMain_Program=ttk.Button(top, text='Program', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Programb0.png')
+        im1 = Image.open('./images/def_btns/Programb2.png')
+        im2 = Image.open('./images/def_btns/Programb1.png')
+        self.Programim0 = ImageTk.PhotoImage(im0)
+        self.Programim1 = ImageTk.PhotoImage(im1)
+        self.Programim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Program.configure(command=on_ProgramClick)
+        self.BtnMain_Program.configure(image=[self.Programim0,'pressed',self.Programim1,'active',self.Programim2])
+        self.BtnMain_Program.image=[self.Programim0,'pressed',self.Programim1,'active',self.Programim2]
+        self.BtnMain_Program.grid(padx=1, pady=1,sticky='w', row=7,column=7,rowspan=1,columnspan=1)
+        self.BtnMain_Exit=ttk.Button(top, text='Exit', style='Default.TButton',cursor='diamond_cross')
+        im0 = Image.open('./images/def_btns/Exitb0.png')
+        im1 = Image.open('./images/def_btns/Exitb2.png')
+        im2 = Image.open('./images/def_btns/Exitb1.png')
+        self.Exitim0 = ImageTk.PhotoImage(im0)
+        self.Exitim1 = ImageTk.PhotoImage(im1)
+        self.Exitim2 = ImageTk.PhotoImage(im2)
+        self.BtnMain_Exit.configure(command=on_ExitClick)
+        self.BtnMain_Exit.configure(image=[self.Exitim0,'pressed',self.Exitim1,'active',self.Exitim2])
+        self.BtnMain_Exit.image=[self.Exitim0,'pressed',self.Exitim1,'active',self.Exitim2]
+        self.BtnMain_Exit.grid(padx=1, pady=1,sticky='w', row=0,column=7,rowspan=2,columnspan=1)
 
-        self.Top_MIDIout = ttk.Label(self.top)
-        self.Top_MIDIout.place(relx=0.014, rely=0.13, height=23, width=74)
-        self.Top_MIDIout.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_MIDIout.configure(relief="flat")
-        self.Top_MIDIout.configure(anchor='w')
-        self.Top_MIDIout.configure(justify='left')
-        self.Top_MIDIout.configure(text='''MIDI out''')
-        self.Top_MIDIout.configure(compound='left')
+    def update_labels(self):
+        for widget in self.top.winfo_children():
+            if isinstance(widget, ttk.Label):
+                text=widget['text']
+                if text=='' or text.isdigit():
+                    continue 
+                transparent = (0,0,0,0)
+                white = (255,255,255)
+                x,y,w,h=widget.winfo_x(),widget.winfo_y(),widget.winfo_width(),widget.winfo_height()
+                txtimg = Image.open('images/labels/'+text.replace('/','_').replace(' ','_')+'00.png')
+                w,h=txtimg.width, txtimg.height
+                labimg=self.bgimg.crop((x+0,y+0,w+x+0-0,h+y+0-0))
+                textimg = Image.new("RGBA", (w,h),transparent)
+                draw = ImageDraw.Draw(textimg)
+                #font = ImageFont.load_default()
+                font = ImageFont.truetype('CreteRound-Regular.otf',18)
+                tw, th = draw.textsize(''+text+'')
+                tw+=10
+                th+=0
+                print("DIM:",x,y,w,h,tw,th)
+                #draw.text(((w-tw)/2,(h-th)/2-2),text,white,font=font)
+                draw = ImageDraw.Draw(labimg)
+                #draw.text(((w-tw)/2-2,(h-th)/2-5),text,white,font=font)
+                txtimg = Image.open('images/labels/'+text.replace('/','_').replace(' ','_')+'00.png')
+#                labimg.paste(txtimg, (3,3),mask=txtimg)
+                labimg.paste(txtimg,mask=txtimg)
+                widget.image=ImageTk.PhotoImage(labimg)
+                widget.configure(image=widget.image)
+                print("txt:",text)
+            elif isinstance(widget, ttk.Button):
+                print("Button:",widget['text'])
+                x,y,w,h=widget.winfo_x(),widget.winfo_y(),widget.winfo_width(),widget.winfo_height()
+                btnimg=self.bgimg.crop((x+0,y+0,w+x+0-0,h+y+0-0))
+                #im0=ImageTk.getimage(widget['image'][0])
+#                if widget['text']=='Close':
+                btnimg.paste(ImageTk.getimage(widget.image[0]),mask=ImageTk.getimage(widget.image[0]))
+                bt0=ImageTk.PhotoImage(btnimg)
+                btnimg.paste(ImageTk.getimage(widget.image[2]),mask=ImageTk.getimage(widget.image[2]))
+                bt1=ImageTk.PhotoImage(btnimg)
+                btnimg.paste(ImageTk.getimage(widget.image[4]),mask=ImageTk.getimage(widget.image[4]))
+                bt2=ImageTk.PhotoImage(btnimg)
+                
+                widget.image=[bt0,'pressed',bt1,'active',bt2]
+                widget.configure(image=[bt0,'pressed',bt1,'active',bt2])
 
-        self.Top_Channel = ttk.Label(self.top)
-        self.Top_Channel.place(relx=0.014, rely=0.227, height=24, width=74)
-        self.Top_Channel.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_Channel.configure(relief="flat")
-        self.Top_Channel.configure(anchor='w')
-        self.Top_Channel.configure(justify='left')
-        self.Top_Channel.configure(text='''Channel''')
-        self.Top_Channel.configure(compound='left')
+    
 
-        self.Top_RxTxVals = ttk.Combobox(self.top)
-        self.Top_RxTxVals.place(relx=0.601, rely=0.033, relheight=0.067
-                , relwidth=0.064)
-        self.value_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16',]
-        self.Top_RxTxVals.configure(values=self.value_list)
-        self.Top_RxTxVals.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_RxTxVals.configure(textvariable=self.ProgRxTxCh)
-
-        self.Top_MIDIoutVals = ttk.Combobox(self.top)
-        self.Top_MIDIoutVals.place(relx=0.136, rely=0.13, relheight=0.067
-                , relwidth=0.243)
-        self.Top_MIDIoutVals.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_MIDIoutVals.configure(textvariable=self.MIDIout)
-
-        self.Top_ChannelVals = ttk.Combobox(self.top)
-        self.Top_ChannelVals.place(relx=0.136, rely=0.227, relheight=0.07
-                , relwidth=0.243)
-        self.Top_ChannelVals.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_ChannelVals.configure(textvariable=self.Channel)
-
-        self.Top_Instrument = ttk.Label(self.top)
-        self.Top_Instrument.place(relx=0.014, rely=0.327, height=23, width=85)
-        self.Top_Instrument.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_Instrument.configure(relief="flat")
-        self.Top_Instrument.configure(anchor='w')
-        self.Top_Instrument.configure(justify='left')
-        self.Top_Instrument.configure(text='''Instrument''')
-        self.Top_Instrument.configure(compound='left')
-
-        self.Top_InstrumentVals = ttk.Combobox(self.top)
-        self.Top_InstrumentVals.place(relx=0.136, rely=0.327, relheight=0.067
-                , relwidth=0.243)
-        self.Top_InstrumentVals.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_InstrumentVals.configure(textvariable=self.Instrument)
-
-        self.Top_ProgRxTxCh = ttk.Label(self.top)
-        self.Top_ProgRxTxCh.place(relx=0.437, rely=0.033, height=23, width=105)
-        self.Top_ProgRxTxCh.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_ProgRxTxCh.configure(relief="flat")
-        self.Top_ProgRxTxCh.configure(anchor='w')
-        self.Top_ProgRxTxCh.configure(justify='left')
-        self.Top_ProgRxTxCh.configure(text='''Prog Rx/Tx Ch''')
-        self.Top_ProgRxTxCh.configure(compound='left')
-
-        self.Top_Reload = ttk.Button(self.top)
-        self.Top_Reload.place(relx=0.437, rely=0.13, height=28, width=63)
-        self.Top_Reload.configure(command=on_ReloadClick)
-        self.Top_Reload.configure(text='''Reload''')
-        self.Top_Reload.configure(compound='left')
-
-        self.Top_Panic = ttk.Button(self.top)
-        self.Top_Panic.place(relx=0.533, rely=0.13, height=28, width=63)
-        self.Top_Panic.configure(command=on_PanicClick)
-        self.Top_Panic.configure(text='''Panic''')
-        self.Top_Panic.configure(compound='left')
-
-        self.Top_Open = ttk.Button(self.top)
-        self.Top_Open.place(relx=0.629, rely=0.13, height=28, width=63)
-        self.Top_Open.configure(command=on_OpenClick)
-        self.Top_Open.configure(text='''Open''')
-        self.Top_Open.configure(compound='left')
-
-        self.Top_Digital1 = ttk.Button(self.top)
-        self.Top_Digital1.place(relx=0.014, rely=0.587, height=28, width=83)
-        self.Top_Digital1.configure(command=on_Digital1Click)
-        self.Top_Digital1.configure(text='''Digital 1''')
-        self.Top_Digital1.configure(compound='left')
-
-        self.Top_MIDIin = ttk.Label(self.top)
-        self.Top_MIDIin.place(relx=0.014, rely=0.033, height=23, width=64)
-        self.Top_MIDIin.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_MIDIin.configure(relief="flat")
-        self.Top_MIDIin.configure(anchor='w')
-        self.Top_MIDIin.configure(justify='left')
-        self.Top_MIDIin.configure(text='''MIDI in''')
-        self.Top_MIDIin.configure(compound='left')
-
-        self.Top_Play = ttk.Button(self.top)
-        self.Top_Play.place(relx=0.014, rely=0.457, height=28, width=83)
-        self.Top_Play.configure(command=on_PlayClick)
-        self.Top_Play.configure(text='''Play''')
-        self.Top_Play.configure(compound='left')
-
-        self.Top_Polytouch = ttk.Button(self.top)
-        self.Top_Polytouch.place(relx=0.136, rely=0.457, height=28, width=83)
-        self.Top_Polytouch.configure(command=on_PolytouchClick)
-        self.Top_Polytouch.configure(text='''Polytouch''')
-        self.Top_Polytouch.configure(compound='left')
-
-        self.Top_Drums = ttk.Button(self.top)
-        self.Top_Drums.place(relx=0.26, rely=0.587, height=28, width=85)
-        self.Top_Drums.configure(command=on_DrumsClick)
-        self.Top_Drums.configure(text='''Drums''')
-        self.Top_Drums.configure(compound='left')
-
-        self.Top_Analog = ttk.Button(self.top)
-        self.Top_Analog.place(relx=0.383, rely=0.587, height=28, width=83)
-        self.Top_Analog.configure(command=on_AnalogClick)
-        self.Top_Analog.configure(text='''Analog''')
-        self.Top_Analog.configure(compound='left')
-
-        self.Top_Effects = ttk.Button(self.top)
-        self.Top_Effects.place(relx=0.629, rely=0.587, height=28, width=83)
-        self.Top_Effects.configure(command=on_EffectsClick)
-        self.Top_Effects.configure(text='''Effects''')
-        self.Top_Effects.configure(compound='left')
-
-        self.Top_Arpeggio = ttk.Button(self.top)
-        self.Top_Arpeggio.place(relx=0.751, rely=0.587, height=28, width=83)
-        self.Top_Arpeggio.configure(command=on_ArpeggioClick)
-        self.Top_Arpeggio.configure(text='''Arpeggio''')
-        self.Top_Arpeggio.configure(compound='left')
-
-        self.Top_Program = ttk.Button(self.top)
-        self.Top_Program.place(relx=0.874, rely=0.587, height=28, width=83)
-        self.Top_Program.configure(command=on_ProgramClick)
-        self.Top_Program.configure(text='''Program''')
-        self.Top_Program.configure(compound='left')
-
-        self.Top_TExit = ttk.Button(self.top)
-        self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
-        self.Top_TExit.configure(text='''Exit''')
-        self.Top_TExit.configure(compound='left')
-        self.Top_TExit.configure(cursor="cross")
-
-        self.Top_Close = ttk.Button(self.top)
-        self.Top_Close.place(relx=0.724, rely=0.13, height=28, width=63)
-        self.Top_Close.configure(command=on_CloseClick)
-        self.Top_Close.configure(text='''Close''')
-        self.Top_Close.configure(compound='left')
-
-        self.Top_MIDIinVals = ttk.Combobox(self.top)
-        self.Top_MIDIinVals.place(relx=0.136, rely=0.033, relheight=0.067
-                , relwidth=0.243)
-        self.Top_MIDIinVals.configure(font="-family {DejaVu Sans} -size 10")
-        self.Top_MIDIinVals.configure(textvariable=self.MIDIin)
-        self.Top_MIDIinVals.configure(cursor="xterm")
-
-        self.mainSNote = ttk.Scale(self.top, from_=1, to=100)
-        self.mainSNote.place(relx=0.262, rely=0.467, relheight=0.053
-                , relwidth=0.357)
-        self.mainSNote.configure(variable=self.TestNote)
-        self.TestNote.set(40)
-        self.mainSNote.configure(length="261")
-
-        self.Top_Voice = ttk.Button(self.top)
-        self.Top_Voice.place(relx=0.505, rely=0.587, height=28, width=83)
-        self.Top_Voice.configure(command=on_VoiceClick)
-        self.Top_Voice.configure(text='''Voice''')
-        self.Top_Voice.configure(compound='left')
 
 class Analog():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
+        global _img0, _img1, _img2, _img3
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Analog")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.Name=ttk.Label(top, style='GroupLabel.TLabel', text='General')
+        self.Name.grid(padx=1, pady=1,sticky='nwse', row=0,columnspan=3)
+        self.PortamentoSw=ttk.Label(top, style="Default.TLabel", text='Portamento Switch')
+        self.BtnPortamentoSwVar=tk.IntVar()
+        self.BtnPortamentoSw=ttk.Checkbutton(top, text='Portamento Switch', style='ONOFF.TCheckbutton',cursor='diamond_cross',variable=self.BtnPortamentoSwVar)
+        self.PortamentoSw.grid(padx=1, pady=1,sticky='w', row=2,column=0)
+        self.BtnPortamentoSw.grid(padx=1, pady=1,sticky='w', row=2,column=1)
+        self.PortamentoTime=ttk.Label(top, style="Default.TLabel", text='Portamento Time')
+        self.SclPortamentoTimeVar=tk.IntVar()
+        self.SclPortamentoTime=ttk.Scale(top, variable=self.SclPortamentoTimeVar, from_=0, to=127)
+        self.SclPortamentoTimeVar.set(0)
+        self.SclPortamentoTime.configure(command=lambda x: self.SclPortamentoTimeVar.set(round(float(x))))
+        self.PortamentoTimeValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclPortamentoTimeVar)
+        self.PortamentoTime.grid(padx=1, pady=1,sticky='w', row=3,column=0)
+        self.SclPortamentoTime.grid(padx=1, pady=1,sticky='w', row=3,column=1)
+        self.PortamentoTimeValue.grid(padx=1, pady=1,sticky='w', row=3,column=2)
+        self.LegatoSw=ttk.Label(top, style="Default.TLabel", text='Legato Switch')
+        self.BtnLegatoSwVar=tk.IntVar()
+        self.BtnLegatoSw=ttk.Checkbutton(top, text='Legato Switch', style='ONOFF.TCheckbutton',cursor='diamond_cross',variable=self.BtnLegatoSwVar)
+        self.LegatoSw.grid(padx=1, pady=1,sticky='w', row=4,column=0)
+        self.BtnLegatoSw.grid(padx=1, pady=1,sticky='w', row=4,column=1)
+        self.OctaveShift=ttk.Label(top, style="Default.TLabel", text='Octave Shift')
+        self.SclOctaveShiftVar=tk.IntVar()
+        self.SclOctaveShift=ttk.Scale(top, variable=self.SclOctaveShiftVar, from_=61, to=67)
+        self.SclOctaveShiftVar.set(0)
+        self.SclOctaveShift.configure(command=lambda x: self.SclOctaveShiftVar.set(round(float(x))))
+        self.OctaveShiftValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclOctaveShiftVar)
+        self.OctaveShift.grid(padx=1, pady=1,sticky='w', row=5,column=0)
+        self.SclOctaveShift.grid(padx=1, pady=1,sticky='w', row=5,column=1)
+        self.OctaveShiftValue.grid(padx=1, pady=1,sticky='w', row=5,column=2)
+        self.PitchBendRangeUp=ttk.Label(top, style="Default.TLabel", text='Pitch Bend Range Up')
+        self.SclPitchBendRangeUpVar=tk.IntVar()
+        self.SclPitchBendRangeUp=ttk.Scale(top, variable=self.SclPitchBendRangeUpVar, from_=0, to=24)
+        self.SclPitchBendRangeUpVar.set(2)
+        self.SclPitchBendRangeUp.configure(command=lambda x: self.SclPitchBendRangeUpVar.set(round(float(x))))
+        self.PitchBendRangeUpValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclPitchBendRangeUpVar)
+        self.PitchBendRangeUp.grid(padx=1, pady=1,sticky='w', row=6,column=0)
+        self.SclPitchBendRangeUp.grid(padx=1, pady=1,sticky='w', row=6,column=1)
+        self.PitchBendRangeUpValue.grid(padx=1, pady=1,sticky='w', row=6,column=2)
+        self.PitchBendRangeDown=ttk.Label(top, style="Default.TLabel", text='Pitch Bend Range Down')
+        self.SclPitchBendRangeDownVar=tk.IntVar()
+        self.SclPitchBendRangeDown=ttk.Scale(top, variable=self.SclPitchBendRangeDownVar, from_=0, to=24)
+        self.SclPitchBendRangeDownVar.set(2)
+        self.SclPitchBendRangeDown.configure(command=lambda x: self.SclPitchBendRangeDownVar.set(round(float(x))))
+        self.PitchBendRangeDownValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclPitchBendRangeDownVar)
+        self.PitchBendRangeDown.grid(padx=1, pady=1,sticky='w', row=7,column=0)
+        self.SclPitchBendRangeDown.grid(padx=1, pady=1,sticky='w', row=7,column=1)
+        self.PitchBendRangeDownValue.grid(padx=1, pady=1,sticky='w', row=7,column=2)
+        self.OSCWaveform=ttk.Label(top, style='GroupLabel.TLabel', text='OSC')
+        self.OSCWaveform.grid(padx=1, pady=1,sticky='nwse', row=8,columnspan=3)
+        self.OSCPitchCoarse=ttk.Label(top, style="Default.TLabel", text='OSC Pitch Coarse')
+        self.SclOSCPitchCoarseVar=tk.IntVar()
+        self.SclOSCPitchCoarse=ttk.Scale(top, variable=self.SclOSCPitchCoarseVar, from_=40, to=88)
+        self.SclOSCPitchCoarseVar.set(0)
+        self.SclOSCPitchCoarse.configure(command=lambda x: self.SclOSCPitchCoarseVar.set(round(float(x))))
+        self.OSCPitchCoarseValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclOSCPitchCoarseVar)
+        self.OSCPitchCoarse.grid(padx=1, pady=1,sticky='w', row=10,column=0)
+        self.SclOSCPitchCoarse.grid(padx=1, pady=1,sticky='w', row=10,column=1)
+        self.OSCPitchCoarseValue.grid(padx=1, pady=1,sticky='w', row=10,column=2)
+        self.OSCPitchFine=ttk.Label(top, style="Default.TLabel", text='OSC Pitch Fine')
+        self.SclOSCPitchFineVar=tk.IntVar()
+        self.SclOSCPitchFine=ttk.Scale(top, variable=self.SclOSCPitchFineVar, from_=14, to=114)
+        self.SclOSCPitchFineVar.set(0)
+        self.SclOSCPitchFine.configure(command=lambda x: self.SclOSCPitchFineVar.set(round(float(x))))
+        self.OSCPitchFineValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclOSCPitchFineVar)
+        self.OSCPitchFine.grid(padx=1, pady=1,sticky='w', row=11,column=0)
+        self.SclOSCPitchFine.grid(padx=1, pady=1,sticky='w', row=11,column=1)
+        self.OSCPitchFineValue.grid(padx=1, pady=1,sticky='w', row=11,column=2)
+        self.OSCPulseWidth=ttk.Label(top, style="Default.TLabel", text='OSC Pulse Width')
+        self.SclOSCPulseWidthVar=tk.IntVar()
+        self.SclOSCPulseWidth=ttk.Scale(top, variable=self.SclOSCPulseWidthVar, from_=0, to=127)
+        self.SclOSCPulseWidthVar.set(0)
+        self.SclOSCPulseWidth.configure(command=lambda x: self.SclOSCPulseWidthVar.set(round(float(x))))
+        self.OSCPulseWidthValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclOSCPulseWidthVar)
+        self.OSCPulseWidth.grid(padx=1, pady=1,sticky='w', row=12,column=0)
+        self.SclOSCPulseWidth.grid(padx=1, pady=1,sticky='w', row=12,column=1)
+        self.OSCPulseWidthValue.grid(padx=1, pady=1,sticky='w', row=12,column=2)
+        self.OSCPulseWidthModDepth=ttk.Label(top, style="Default.TLabel", text='OSC Pulse Width Mod Depth')
+        self.SclOSCPulseWidthModDepthVar=tk.IntVar()
+        self.SclOSCPulseWidthModDepth=ttk.Scale(top, variable=self.SclOSCPulseWidthModDepthVar, from_=0, to=127)
+        self.SclOSCPulseWidthModDepthVar.set(0)
+        self.SclOSCPulseWidthModDepth.configure(command=lambda x: self.SclOSCPulseWidthModDepthVar.set(round(float(x))))
+        self.OSCPulseWidthModDepthValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclOSCPulseWidthModDepthVar)
+        self.OSCPulseWidthModDepth.grid(padx=1, pady=1,sticky='w', row=13,column=0)
+        self.SclOSCPulseWidthModDepth.grid(padx=1, pady=1,sticky='w', row=13,column=1)
+        self.OSCPulseWidthModDepthValue.grid(padx=1, pady=1,sticky='w', row=13,column=2)
+        self.OSCPEVelocitySensFrame=ttk.Frame(top, style='JDXIFrame.Frame')
+        self.OSCPEVelocitySensFrame.grid(padx=1, pady=1,sticky='nwse', row=14)
+        self.OSCPEVelocitySens=ttk.Label(self.OSCPEVelocitySensFrame, text='OSC Pitch Env Velocity Sens')
+        self.SclOSCPEVelocitySensVar=tk.IntVar()
+        self.SclOSCPEVelocitySens=ttk.Scale(self.OSCPEVelocitySensFrame, variable=self.SclOSCPEVelocitySensVar, from_=1, to=127)
+        self.SclOSCPEVelocitySensVar.set(0)
+        self.SclOSCPEVelocitySens.configure(command=lambda x: self.SclOSCPEVelocitySensVar.set(round(float(x))))
+        self.OSCPEVelocitySensValue=ttk.Label(self.OSCPEVelocitySensFrame,  textvariable=self.SclOSCPEVelocitySensVar)
+        self.OSCPEVelocitySens.grid(padx=1, pady=1,sticky='w', row=15,column=0)
+        self.SclOSCPEVelocitySens.grid(padx=1, pady=1,sticky='w', row=15,column=1)
+        self.OSCPEVelocitySensValue.grid(padx=1, pady=1,sticky='w', row=15,column=2)
+        self.OSCPEAttackTime=ttk.Label(self.OSCPEVelocitySensFrame, text='OSC Pitch Env Attack Time')
+        self.SclOSCPEAttackTimeVar=tk.IntVar()
+        self.SclOSCPEAttackTime=ttk.Scale(self.OSCPEVelocitySensFrame, variable=self.SclOSCPEAttackTimeVar, from_=0, to=127)
+        self.SclOSCPEAttackTimeVar.set(0)
+        self.SclOSCPEAttackTime.configure(command=lambda x: self.SclOSCPEAttackTimeVar.set(round(float(x))))
+        self.OSCPEAttackTimeValue=ttk.Label(self.OSCPEVelocitySensFrame,  textvariable=self.SclOSCPEAttackTimeVar)
+        self.OSCPEAttackTime.grid(padx=1, pady=1,sticky='w', row=16,column=0)
+        self.SclOSCPEAttackTime.grid(padx=1, pady=1,sticky='w', row=16,column=1)
+        self.OSCPEAttackTimeValue.grid(padx=1, pady=1,sticky='w', row=16,column=2)
+        self.OSCPEDecay=ttk.Label(self.OSCPEVelocitySensFrame, text='OSC Pitch Env Decay')
+        self.SclOSCPEDecayVar=tk.IntVar()
+        self.SclOSCPEDecay=ttk.Scale(self.OSCPEVelocitySensFrame, variable=self.SclOSCPEDecayVar, from_=0, to=127)
+        self.SclOSCPEDecayVar.set(0)
+        self.SclOSCPEDecay.configure(command=lambda x: self.SclOSCPEDecayVar.set(round(float(x))))
+        self.OSCPEDecayValue=ttk.Label(self.OSCPEVelocitySensFrame,  textvariable=self.SclOSCPEDecayVar)
+        self.OSCPEDecay.grid(padx=1, pady=1,sticky='w', row=17,column=0)
+        self.SclOSCPEDecay.grid(padx=1, pady=1,sticky='w', row=17,column=1)
+        self.OSCPEDecayValue.grid(padx=1, pady=1,sticky='w', row=17,column=2)
+        self.OSCPEDepth=ttk.Label(self.OSCPEVelocitySensFrame, text='OSC Pitch Env Depth')
+        self.SclOSCPEDepthVar=tk.IntVar()
+        self.SclOSCPEDepth=ttk.Scale(self.OSCPEVelocitySensFrame, variable=self.SclOSCPEDepthVar, from_=1, to=127)
+        self.SclOSCPEDepthVar.set(0)
+        self.SclOSCPEDepth.configure(command=lambda x: self.SclOSCPEDepthVar.set(round(float(x))))
+        self.OSCPEDepthValue=ttk.Label(self.OSCPEVelocitySensFrame,  textvariable=self.SclOSCPEDepthVar)
+        self.OSCPEDepth.grid(padx=1, pady=1,sticky='w', row=18,column=0)
+        self.SclOSCPEDepth.grid(padx=1, pady=1,sticky='w', row=18,column=1)
+        self.OSCPEDepthValue.grid(padx=1, pady=1,sticky='w', row=18,column=2)
+        self.FilterSwitch=ttk.Label(top, style='GroupLabel.TLabel', text='Filter')
+        self.FilterSwitch.grid(padx=1, pady=1,sticky='nwse', row=20,columnspan=3)
+        self.FilterSwitch=ttk.Label(top, style="Default.TLabel", text='Filter Switch')
+        self.BtnFilterSwitchVar=tk.IntVar()
+        self.BtnFilterSwitch=ttk.Checkbutton(top, text='Filter Switch', style='ONOFF.TCheckbutton',cursor='diamond_cross',variable=self.BtnFilterSwitchVar)
+        self.FilterSwitch.grid(padx=1, pady=1,sticky='w', row=21,column=0)
+        self.BtnFilterSwitch.grid(padx=1, pady=1,sticky='w', row=21,column=1)
+        self.FilterCutoff=ttk.Label(top, style="Default.TLabel", text='Filter Cutoff')
+        self.SclFilterCutoffVar=tk.IntVar()
+        self.SclFilterCutoff=ttk.Scale(top, variable=self.SclFilterCutoffVar, from_=0, to=127)
+        self.SclFilterCutoffVar.set(0)
+        self.SclFilterCutoff.configure(command=lambda x: self.SclFilterCutoffVar.set(round(float(x))))
+        self.FilterCutoffValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclFilterCutoffVar)
+        self.FilterCutoff.grid(padx=1, pady=1,sticky='w', row=22,column=0)
+        self.SclFilterCutoff.grid(padx=1, pady=1,sticky='w', row=22,column=1)
+        self.FilterCutoffValue.grid(padx=1, pady=1,sticky='w', row=22,column=2)
+        self.FilterCutoffKeyfollow=ttk.Label(top, style="Default.TLabel", text='Filter Cutoff Keyfollow')
+        self.SclFilterCutoffKeyfollowVar=tk.IntVar()
+        self.SclFilterCutoffKeyfollow=ttk.Scale(top, variable=self.SclFilterCutoffKeyfollowVar, from_=54, to=74)
+        self.SclFilterCutoffKeyfollowVar.set(0)
+        self.SclFilterCutoffKeyfollow.configure(command=lambda x: self.SclFilterCutoffKeyfollowVar.set(round(float(x))))
+        self.FilterCutoffKeyfollowValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclFilterCutoffKeyfollowVar)
+        self.FilterCutoffKeyfollow.grid(padx=1, pady=1,sticky='w', row=23,column=0)
+        self.SclFilterCutoffKeyfollow.grid(padx=1, pady=1,sticky='w', row=23,column=1)
+        self.FilterCutoffKeyfollowValue.grid(padx=1, pady=1,sticky='w', row=23,column=2)
+        self.FilterResonance=ttk.Label(top, style="Default.TLabel", text='Filter Resonance')
+        self.SclFilterResonanceVar=tk.IntVar()
+        self.SclFilterResonance=ttk.Scale(top, variable=self.SclFilterResonanceVar, from_=0, to=127)
+        self.SclFilterResonanceVar.set(0)
+        self.SclFilterResonance.configure(command=lambda x: self.SclFilterResonanceVar.set(round(float(x))))
+        self.FilterResonanceValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclFilterResonanceVar)
+        self.FilterResonance.grid(padx=1, pady=1,sticky='w', row=24,column=0)
+        self.SclFilterResonance.grid(padx=1, pady=1,sticky='w', row=24,column=1)
+        self.FilterResonanceValue.grid(padx=1, pady=1,sticky='w', row=24,column=2)
+        self.FilterEVelocitySensFrame=ttk.Frame(top, style='JDXIFrame.Frame')
+        self.FilterEVelocitySensFrame.grid(padx=1, pady=1,sticky='nwse', row=25)
+        self.FilterEVelocitySens=ttk.Label(self.FilterEVelocitySensFrame, text='Filter Env Velocity Sens')
+        self.SclFilterEVelocitySensVar=tk.IntVar()
+        self.SclFilterEVelocitySens=ttk.Scale(self.FilterEVelocitySensFrame, variable=self.SclFilterEVelocitySensVar, from_=1, to=127)
+        self.SclFilterEVelocitySensVar.set(0)
+        self.SclFilterEVelocitySens.configure(command=lambda x: self.SclFilterEVelocitySensVar.set(round(float(x))))
+        self.FilterEVelocitySensValue=ttk.Label(self.FilterEVelocitySensFrame,  textvariable=self.SclFilterEVelocitySensVar)
+        self.FilterEVelocitySens.grid(padx=1, pady=1,sticky='w', row=26,column=0)
+        self.SclFilterEVelocitySens.grid(padx=1, pady=1,sticky='w', row=26,column=1)
+        self.FilterEVelocitySensValue.grid(padx=1, pady=1,sticky='w', row=26,column=2)
+        self.FilterEDepth=ttk.Label(self.FilterEVelocitySensFrame, text='Filter Env Depth')
+        self.SclFilterEDepthVar=tk.IntVar()
+        self.SclFilterEDepth=ttk.Scale(self.FilterEVelocitySensFrame, variable=self.SclFilterEDepthVar, from_=1, to=127)
+        self.SclFilterEDepthVar.set(0)
+        self.SclFilterEDepth.configure(command=lambda x: self.SclFilterEDepthVar.set(round(float(x))))
+        self.FilterEDepthValue=ttk.Label(self.FilterEVelocitySensFrame,  textvariable=self.SclFilterEDepthVar)
+        self.FilterEDepth.grid(padx=1, pady=1,sticky='w', row=27,column=0)
+        self.SclFilterEDepth.grid(padx=1, pady=1,sticky='w', row=27,column=1)
+        self.FilterEDepthValue.grid(padx=1, pady=1,sticky='w', row=27,column=2)
+        self.FilterEAttackTime=ttk.Label(self.FilterEVelocitySensFrame, text='Filter Env Attack Time')
+        self.SclFilterEAttackTimeVar=tk.IntVar()
+        self.SclFilterEAttackTime=ttk.Scale(self.FilterEVelocitySensFrame, variable=self.SclFilterEAttackTimeVar, from_=0, to=127)
+        self.SclFilterEAttackTimeVar.set(0)
+        self.SclFilterEAttackTime.configure(command=lambda x: self.SclFilterEAttackTimeVar.set(round(float(x))))
+        self.FilterEAttackTimeValue=ttk.Label(self.FilterEVelocitySensFrame,  textvariable=self.SclFilterEAttackTimeVar)
+        self.FilterEAttackTime.grid(padx=1, pady=1,sticky='w', row=29,column=0)
+        self.SclFilterEAttackTime.grid(padx=1, pady=1,sticky='w', row=29,column=1)
+        self.FilterEAttackTimeValue.grid(padx=1, pady=1,sticky='w', row=29,column=2)
+        self.FilterEDecayTime=ttk.Label(self.FilterEVelocitySensFrame, text='Filter Env Decay Time')
+        self.SclFilterEDecayTimeVar=tk.IntVar()
+        self.SclFilterEDecayTime=ttk.Scale(self.FilterEVelocitySensFrame, variable=self.SclFilterEDecayTimeVar, from_=0, to=127)
+        self.SclFilterEDecayTimeVar.set(0)
+        self.SclFilterEDecayTime.configure(command=lambda x: self.SclFilterEDecayTimeVar.set(round(float(x))))
+        self.FilterEDecayTimeValue=ttk.Label(self.FilterEVelocitySensFrame,  textvariable=self.SclFilterEDecayTimeVar)
+        self.FilterEDecayTime.grid(padx=1, pady=1,sticky='w', row=30,column=0)
+        self.SclFilterEDecayTime.grid(padx=1, pady=1,sticky='w', row=30,column=1)
+        self.FilterEDecayTimeValue.grid(padx=1, pady=1,sticky='w', row=30,column=2)
+        self.FilterESustainLevel=ttk.Label(self.FilterEVelocitySensFrame, text='Filter Env Sustain Level')
+        self.SclFilterESustainLevelVar=tk.IntVar()
+        self.SclFilterESustainLevel=ttk.Scale(self.FilterEVelocitySensFrame, variable=self.SclFilterESustainLevelVar, from_=0, to=127)
+        self.SclFilterESustainLevelVar.set(0)
+        self.SclFilterESustainLevel.configure(command=lambda x: self.SclFilterESustainLevelVar.set(round(float(x))))
+        self.FilterESustainLevelValue=ttk.Label(self.FilterEVelocitySensFrame,  textvariable=self.SclFilterESustainLevelVar)
+        self.FilterESustainLevel.grid(padx=1, pady=1,sticky='w', row=31,column=0)
+        self.SclFilterESustainLevel.grid(padx=1, pady=1,sticky='w', row=31,column=1)
+        self.FilterESustainLevelValue.grid(padx=1, pady=1,sticky='w', row=31,column=2)
+        self.FilterEReleaseTime=ttk.Label(self.FilterEVelocitySensFrame, text='Filter Env Release Time')
+        self.SclFilterEReleaseTimeVar=tk.IntVar()
+        self.SclFilterEReleaseTime=ttk.Scale(self.FilterEVelocitySensFrame, variable=self.SclFilterEReleaseTimeVar, from_=0, to=127)
+        self.SclFilterEReleaseTimeVar.set(0)
+        self.SclFilterEReleaseTime.configure(command=lambda x: self.SclFilterEReleaseTimeVar.set(round(float(x))))
+        self.FilterEReleaseTimeValue=ttk.Label(self.FilterEVelocitySensFrame,  textvariable=self.SclFilterEReleaseTimeVar)
+        self.FilterEReleaseTime.grid(padx=1, pady=1,sticky='w', row=32,column=0)
+        self.SclFilterEReleaseTime.grid(padx=1, pady=1,sticky='w', row=32,column=1)
+        self.FilterEReleaseTimeValue.grid(padx=1, pady=1,sticky='w', row=32,column=2)
+        self.AMPLevel=ttk.Label(top, style='GroupLabel.TLabel', text='AMP')
+        self.AMPLevel.grid(padx=1, pady=1,sticky='nwse', row=33,columnspan=3)
+        self.AMPLevel=ttk.Label(top, style="Default.TLabel", text='AMP Level')
+        self.SclAMPLevelVar=tk.IntVar()
+        self.SclAMPLevel=ttk.Scale(top, variable=self.SclAMPLevelVar, from_=0, to=127)
+        self.SclAMPLevelVar.set(0)
+        self.SclAMPLevel.configure(command=lambda x: self.SclAMPLevelVar.set(round(float(x))))
+        self.AMPLevelValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPLevelVar)
+        self.AMPLevel.grid(padx=1, pady=1,sticky='w', row=34,column=0)
+        self.SclAMPLevel.grid(padx=1, pady=1,sticky='w', row=34,column=1)
+        self.AMPLevelValue.grid(padx=1, pady=1,sticky='w', row=34,column=2)
+        self.AMPLevelKeyfollow=ttk.Label(top, style="Default.TLabel", text='AMP Level Keyfollow')
+        self.SclAMPLevelKeyfollowVar=tk.IntVar()
+        self.SclAMPLevelKeyfollow=ttk.Scale(top, variable=self.SclAMPLevelKeyfollowVar, from_=54, to=74)
+        self.SclAMPLevelKeyfollowVar.set(0)
+        self.SclAMPLevelKeyfollow.configure(command=lambda x: self.SclAMPLevelKeyfollowVar.set(round(float(x))))
+        self.AMPLevelKeyfollowValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPLevelKeyfollowVar)
+        self.AMPLevelKeyfollow.grid(padx=1, pady=1,sticky='w', row=35,column=0)
+        self.SclAMPLevelKeyfollow.grid(padx=1, pady=1,sticky='w', row=35,column=1)
+        self.AMPLevelKeyfollowValue.grid(padx=1, pady=1,sticky='w', row=35,column=2)
+        self.AMPLevelVelocitySens=ttk.Label(top, style="Default.TLabel", text='AMP Level Velocity Sens')
+        self.SclAMPLevelVelocitySensVar=tk.IntVar()
+        self.SclAMPLevelVelocitySens=ttk.Scale(top, variable=self.SclAMPLevelVelocitySensVar, from_=1, to=127)
+        self.SclAMPLevelVelocitySensVar.set(0)
+        self.SclAMPLevelVelocitySens.configure(command=lambda x: self.SclAMPLevelVelocitySensVar.set(round(float(x))))
+        self.AMPLevelVelocitySensValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPLevelVelocitySensVar)
+        self.AMPLevelVelocitySens.grid(padx=1, pady=1,sticky='w', row=36,column=0)
+        self.SclAMPLevelVelocitySens.grid(padx=1, pady=1,sticky='w', row=36,column=1)
+        self.AMPLevelVelocitySensValue.grid(padx=1, pady=1,sticky='w', row=36,column=2)
+        self.AMPEAttackTime=ttk.Label(top, style="Default.TLabel", text='AMP Env Attack Time')
+        self.SclAMPEAttackTimeVar=tk.IntVar()
+        self.SclAMPEAttackTime=ttk.Scale(top, variable=self.SclAMPEAttackTimeVar, from_=0, to=127)
+        self.SclAMPEAttackTimeVar.set(0)
+        self.SclAMPEAttackTime.configure(command=lambda x: self.SclAMPEAttackTimeVar.set(round(float(x))))
+        self.AMPEAttackTimeValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPEAttackTimeVar)
+        self.AMPEAttackTime.grid(padx=1, pady=1,sticky='w', row=38,column=0)
+        self.SclAMPEAttackTime.grid(padx=1, pady=1,sticky='w', row=38,column=1)
+        self.AMPEAttackTimeValue.grid(padx=1, pady=1,sticky='w', row=38,column=2)
+        self.AMPEDecayTime=ttk.Label(top, style="Default.TLabel", text='AMP Env Decay Time')
+        self.SclAMPEDecayTimeVar=tk.IntVar()
+        self.SclAMPEDecayTime=ttk.Scale(top, variable=self.SclAMPEDecayTimeVar, from_=0, to=127)
+        self.SclAMPEDecayTimeVar.set(0)
+        self.SclAMPEDecayTime.configure(command=lambda x: self.SclAMPEDecayTimeVar.set(round(float(x))))
+        self.AMPEDecayTimeValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPEDecayTimeVar)
+        self.AMPEDecayTime.grid(padx=1, pady=1,sticky='w', row=39,column=0)
+        self.SclAMPEDecayTime.grid(padx=1, pady=1,sticky='w', row=39,column=1)
+        self.AMPEDecayTimeValue.grid(padx=1, pady=1,sticky='w', row=39,column=2)
+        self.AMPESustainLevel=ttk.Label(top, style="Default.TLabel", text='AMP Env Sustain Level')
+        self.SclAMPESustainLevelVar=tk.IntVar()
+        self.SclAMPESustainLevel=ttk.Scale(top, variable=self.SclAMPESustainLevelVar, from_=0, to=127)
+        self.SclAMPESustainLevelVar.set(0)
+        self.SclAMPESustainLevel.configure(command=lambda x: self.SclAMPESustainLevelVar.set(round(float(x))))
+        self.AMPESustainLevelValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPESustainLevelVar)
+        self.AMPESustainLevel.grid(padx=1, pady=1,sticky='w', row=40,column=0)
+        self.SclAMPESustainLevel.grid(padx=1, pady=1,sticky='w', row=40,column=1)
+        self.AMPESustainLevelValue.grid(padx=1, pady=1,sticky='w', row=40,column=2)
+        self.AMPEReleaseTime=ttk.Label(top, style="Default.TLabel", text='AMP Env Release Time')
+        self.SclAMPEReleaseTimeVar=tk.IntVar()
+        self.SclAMPEReleaseTime=ttk.Scale(top, variable=self.SclAMPEReleaseTimeVar, from_=0, to=127)
+        self.SclAMPEReleaseTimeVar.set(0)
+        self.SclAMPEReleaseTime.configure(command=lambda x: self.SclAMPEReleaseTimeVar.set(round(float(x))))
+        self.AMPEReleaseTimeValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclAMPEReleaseTimeVar)
+        self.AMPEReleaseTime.grid(padx=1, pady=1,sticky='w', row=41,column=0)
+        self.SclAMPEReleaseTime.grid(padx=1, pady=1,sticky='w', row=41,column=1)
+        self.AMPEReleaseTimeValue.grid(padx=1, pady=1,sticky='w', row=41,column=2)
+        self.LFOShape=ttk.Label(top, style='GroupLabel.TLabel', text='LFO')
+        self.LFOShape.grid(padx=1, pady=1,sticky='nwse', row=42,columnspan=3)
+        self.LFORate=ttk.Label(top, style="Default.TLabel", text='LFO Rate')
+        self.SclLFORateVar=tk.IntVar()
+        self.SclLFORate=ttk.Scale(top, variable=self.SclLFORateVar, from_=0, to=127)
+        self.SclLFORateVar.set(0)
+        self.SclLFORate.configure(command=lambda x: self.SclLFORateVar.set(round(float(x))))
+        self.LFORateValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclLFORateVar)
+        self.LFORate.grid(padx=1, pady=1,sticky='w', row=44,column=0)
+        self.SclLFORate.grid(padx=1, pady=1,sticky='w', row=44,column=1)
+        self.LFORateValue.grid(padx=1, pady=1,sticky='w', row=44,column=2)
+        self.LFOFade=ttk.Label(top, style="Default.TLabel", text='LFO Fade Time')
+        self.SclLFOFadeVar=tk.IntVar()
+        self.SclLFOFade=ttk.Scale(top, variable=self.SclLFOFadeVar, from_=0, to=127)
+        self.SclLFOFadeVar.set(0)
+        self.SclLFOFade.configure(command=lambda x: self.SclLFOFadeVar.set(round(float(x))))
+        self.LFOFadeValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclLFOFadeVar)
+        self.LFOFade.grid(padx=1, pady=1,sticky='w', row=45,column=0)
+        self.SclLFOFade.grid(padx=1, pady=1,sticky='w', row=45,column=1)
+        self.LFOFadeValue.grid(padx=1, pady=1,sticky='w', row=45,column=2)
+        self.LFOTempoSynSw=ttk.Label(top, style="Default.TLabel", text='LFO Tempo Sync Switch')
+        self.BtnLFOTempoSynSwVar=tk.IntVar()
+        self.BtnLFOTempoSynSw=ttk.Checkbutton(top, text='LFO Tempo Sync Switch', style='ONOFF.TCheckbutton',cursor='diamond_cross',variable=self.BtnLFOTempoSynSwVar)
+        self.LFOTempoSynSw.grid(padx=1, pady=1,sticky='w', row=46,column=0)
+        self.BtnLFOTempoSynSw.grid(padx=1, pady=1,sticky='w', row=46,column=1)
+        self.LFOPitchDepth=ttk.Label(top, style="Default.TLabel", text='LFO Pitch Depth')
+        self.SclLFOPitchDepthVar=tk.IntVar()
+        self.SclLFOPitchDepth=ttk.Scale(top, variable=self.SclLFOPitchDepthVar, from_=1, to=127)
+        self.SclLFOPitchDepthVar.set(0)
+        self.SclLFOPitchDepth.configure(command=lambda x: self.SclLFOPitchDepthVar.set(round(float(x))))
+        self.LFOPitchDepthValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclLFOPitchDepthVar)
+        self.LFOPitchDepth.grid(padx=1, pady=1,sticky='w', row=48,column=0)
+        self.SclLFOPitchDepth.grid(padx=1, pady=1,sticky='w', row=48,column=1)
+        self.LFOPitchDepthValue.grid(padx=1, pady=1,sticky='w', row=48,column=2)
+        self.LFOFilterDepth=ttk.Label(top, style="Default.TLabel", text='LFO Filter Depth')
+        self.SclLFOFilterDepthVar=tk.IntVar()
+        self.SclLFOFilterDepth=ttk.Scale(top, variable=self.SclLFOFilterDepthVar, from_=1, to=127)
+        self.SclLFOFilterDepthVar.set(0)
+        self.SclLFOFilterDepth.configure(command=lambda x: self.SclLFOFilterDepthVar.set(round(float(x))))
+        self.LFOFilterDepthValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclLFOFilterDepthVar)
+        self.LFOFilterDepth.grid(padx=1, pady=1,sticky='w', row=49,column=0)
+        self.SclLFOFilterDepth.grid(padx=1, pady=1,sticky='w', row=49,column=1)
+        self.LFOFilterDepthValue.grid(padx=1, pady=1,sticky='w', row=49,column=2)
+        self.LFOAmpDepth=ttk.Label(top, style="Default.TLabel", text='LFO Amp Depth')
+        self.SclLFOAmpDepthVar=tk.IntVar()
+        self.SclLFOAmpDepth=ttk.Scale(top, variable=self.SclLFOAmpDepthVar, from_=1, to=127)
+        self.SclLFOAmpDepthVar.set(0)
+        self.SclLFOAmpDepth.configure(command=lambda x: self.SclLFOAmpDepthVar.set(round(float(x))))
+        self.LFOAmpDepthValue=ttk.Label(top, style="Default.TLabel", textvariable=self.SclLFOAmpDepthVar)
+        self.LFOAmpDepth.grid(padx=1, pady=1,sticky='w', row=50,column=0)
+        self.SclLFOAmpDepth.grid(padx=1, pady=1,sticky='w', row=50,column=1)
+        self.LFOAmpDepthValue.grid(padx=1, pady=1,sticky='w', row=50,column=2)
+        self.LFOKeyTrigger=ttk.Label(top, style="Default.TLabel", text='LFO Key Trigger')
+        self.BtnLFOKeyTriggerVar=tk.IntVar()
+        self.BtnLFOKeyTrigger=ttk.Checkbutton(top, text='LFO Key Trigger', style='ONOFF.TCheckbutton',cursor='diamond_cross',variable=self.BtnLFOKeyTriggerVar)
+        self.LFOKeyTrigger.grid(padx=1, pady=1,sticky='w', row=51,column=0)
+        self.BtnLFOKeyTrigger.grid(padx=1, pady=1,sticky='w', row=51,column=1)
+        self.LFOPitchMCFrame=ttk.Frame(top, style='JDXIFrame.Frame')
+        self.LFOPitchMCFrame.grid(padx=1, pady=1,sticky='nwse', row=52)
+        self.LFOPitchMC=ttk.Label(self.LFOPitchMCFrame, text='LFO Pitch Modulation Control')
+        self.SclLFOPitchMCVar=tk.IntVar()
+        self.SclLFOPitchMC=ttk.Scale(self.LFOPitchMCFrame, variable=self.SclLFOPitchMCVar, from_=1, to=127)
+        self.SclLFOPitchMCVar.set(0)
+        self.SclLFOPitchMC.configure(command=lambda x: self.SclLFOPitchMCVar.set(round(float(x))))
+        self.LFOPitchMCValue=ttk.Label(self.LFOPitchMCFrame,  textvariable=self.SclLFOPitchMCVar)
+        self.LFOPitchMC.grid(padx=1, pady=1,sticky='w', row=53,column=0)
+        self.SclLFOPitchMC.grid(padx=1, pady=1,sticky='w', row=53,column=1)
+        self.LFOPitchMCValue.grid(padx=1, pady=1,sticky='w', row=53,column=2)
+        self.LFOFilterMC=ttk.Label(self.LFOPitchMCFrame, text='LFO Filter Modulation Control')
+        self.SclLFOFilterMCVar=tk.IntVar()
+        self.SclLFOFilterMC=ttk.Scale(self.LFOPitchMCFrame, variable=self.SclLFOFilterMCVar, from_=1, to=127)
+        self.SclLFOFilterMCVar.set(0)
+        self.SclLFOFilterMC.configure(command=lambda x: self.SclLFOFilterMCVar.set(round(float(x))))
+        self.LFOFilterMCValue=ttk.Label(self.LFOPitchMCFrame,  textvariable=self.SclLFOFilterMCVar)
+        self.LFOFilterMC.grid(padx=1, pady=1,sticky='w', row=54,column=0)
+        self.SclLFOFilterMC.grid(padx=1, pady=1,sticky='w', row=54,column=1)
+        self.LFOFilterMCValue.grid(padx=1, pady=1,sticky='w', row=54,column=2)
+        self.LFOAmpMC=ttk.Label(self.LFOPitchMCFrame, text='LFO Amp Modulation Control')
+        self.SclLFOAmpMCVar=tk.IntVar()
+        self.SclLFOAmpMC=ttk.Scale(self.LFOPitchMCFrame, variable=self.SclLFOAmpMCVar, from_=1, to=127)
+        self.SclLFOAmpMCVar.set(0)
+        self.SclLFOAmpMC.configure(command=lambda x: self.SclLFOAmpMCVar.set(round(float(x))))
+        self.LFOAmpMCValue=ttk.Label(self.LFOPitchMCFrame,  textvariable=self.SclLFOAmpMCVar)
+        self.LFOAmpMC.grid(padx=1, pady=1,sticky='w', row=55,column=0)
+        self.SclLFOAmpMC.grid(padx=1, pady=1,sticky='w', row=55,column=1)
+        self.LFOAmpMCValue.grid(padx=1, pady=1,sticky='w', row=55,column=2)
+        self.LFORateMC=ttk.Label(self.LFOPitchMCFrame, text='LFO Rate Modulation Control')
+        self.SclLFORateMCVar=tk.IntVar()
+        self.SclLFORateMC=ttk.Scale(self.LFOPitchMCFrame, variable=self.SclLFORateMCVar, from_=1, to=127)
+        self.SclLFORateMCVar.set(0)
+        self.SclLFORateMC.configure(command=lambda x: self.SclLFORateMCVar.set(round(float(x))))
+        self.LFORateMCValue=ttk.Label(self.LFOPitchMCFrame,  textvariable=self.SclLFORateMCVar)
+        self.LFORateMC.grid(padx=1, pady=1,sticky='w', row=56,column=0)
+        self.SclLFORateMC.grid(padx=1, pady=1,sticky='w', row=56,column=1)
+        self.LFORateMCValue.grid(padx=1, pady=1,sticky='w', row=56,column=2)
+        
 
 
 class Digital1():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Digital1")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.PortamentoSw=ttk.Label(top, style="Default.TLabel", text='Portamento Switch')
+        self.BtnPortamentoSwVar=tk.IntVar()
+        self.BtnPortamentoSw=ttk.Checkbutton(top, text='Portamento Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPortamentoSwVar)
+        self.PortamentoSw.grid()
+        self.BtnPortamentoSw.grid()
+        self.Partial1Sw=ttk.Label(top, style="Default.TLabel", text='Partial1 Switch')
+        self.BtnPartial1SwVar=tk.IntVar()
+        self.BtnPartial1Sw=ttk.Checkbutton(top, text='Partial1 Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial1SwVar)
+        self.Partial1Sw.grid()
+        self.BtnPartial1Sw.grid()
+        self.Partial1Sel=ttk.Label(top, style="Default.TLabel", text='Partial1 Select')
+        self.BtnPartial1SelVar=tk.IntVar()
+        self.BtnPartial1Sel=ttk.Checkbutton(top, text='Partial1 Select', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial1SelVar)
+        self.Partial1Sel.grid()
+        self.BtnPartial1Sel.grid()
+        self.Partial2Sw=ttk.Label(top, style="Default.TLabel", text='Partia2 Switch')
+        self.BtnPartial2SwVar=tk.IntVar()
+        self.BtnPartial2Sw=ttk.Checkbutton(top, text='Partia2 Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial2SwVar)
+        self.Partial2Sw.grid()
+        self.BtnPartial2Sw.grid()
+        self.Partial2Sel=ttk.Label(top, style="Default.TLabel", text='Partial2 Select')
+        self.BtnPartial2SelVar=tk.IntVar()
+        self.BtnPartial2Sel=ttk.Checkbutton(top, text='Partial2 Select', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial2SelVar)
+        self.Partial2Sel.grid()
+        self.BtnPartial2Sel.grid()
+        self.Partial3Sw=ttk.Label(top, style="Default.TLabel", text='Partial3 Switch')
+        self.BtnPartial3SwVar=tk.IntVar()
+        self.BtnPartial3Sw=ttk.Checkbutton(top, text='Partial3 Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial3SwVar)
+        self.Partial3Sw.grid()
+        self.BtnPartial3Sw.grid()
+        self.Partial3Sel=ttk.Label(top, style="Default.TLabel", text='Partial3 Select')
+        self.BtnPartial3SelVar=tk.IntVar()
+        self.BtnPartial3Sel=ttk.Checkbutton(top, text='Partial3 Select', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial3SelVar)
+        self.Partial3Sel.grid()
+        self.BtnPartial3Sel.grid()
+        self.RINGSw=ttk.Label(top, style="Default.TLabel", text='RING Switch')
+        self.BtnRINGSwVar=tk.IntVar()
+        self.BtnRINGSw=ttk.Checkbutton(top, text='RING Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnRINGSwVar)
+        self.RINGSw.grid()
+        self.BtnRINGSw.grid()
+        self.UnisonSw=ttk.Label(top, style="Default.TLabel", text='Unison Switch')
+        self.BtnUnisonSwVar=tk.IntVar()
+        self.BtnUnisonSw=ttk.Checkbutton(top, text='Unison Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnUnisonSwVar)
+        self.UnisonSw.grid()
+        self.BtnUnisonSw.grid()
+        self.LegatoSw=ttk.Label(top, style="Default.TLabel", text='Legato Switch')
+        self.BtnLegatoSwVar=tk.IntVar()
+        self.BtnLegatoSw=ttk.Checkbutton(top, text='Legato Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnLegatoSwVar)
+        self.LegatoSw.grid()
+        self.BtnLegatoSw.grid()
+
+
+
 class Digital2():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Digital2")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.PortamentoSw=ttk.Label(top, style="Default.TLabel", text='Portamento Switch')
+        self.BtnPortamentoSwVar=tk.IntVar()
+        self.BtnPortamentoSw=ttk.Checkbutton(top, text='Portamento Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPortamentoSwVar)
+        self.PortamentoSw.grid()
+        self.BtnPortamentoSw.grid()
+        self.Partial1Sw=ttk.Label(top, style="Default.TLabel", text='Partial1 Switch')
+        self.BtnPartial1SwVar=tk.IntVar()
+        self.BtnPartial1Sw=ttk.Checkbutton(top, text='Partial1 Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial1SwVar)
+        self.Partial1Sw.grid()
+        self.BtnPartial1Sw.grid()
+        self.Partial1Sel=ttk.Label(top, style="Default.TLabel", text='Partial1 Select')
+        self.BtnPartial1SelVar=tk.IntVar()
+        self.BtnPartial1Sel=ttk.Checkbutton(top, text='Partial1 Select', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial1SelVar)
+        self.Partial1Sel.grid()
+        self.BtnPartial1Sel.grid()
+        self.Partial2Sw=ttk.Label(top, style="Default.TLabel", text='Partia2 Switch')
+        self.BtnPartial2SwVar=tk.IntVar()
+        self.BtnPartial2Sw=ttk.Checkbutton(top, text='Partia2 Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial2SwVar)
+        self.Partial2Sw.grid()
+        self.BtnPartial2Sw.grid()
+        self.Partial2Sel=ttk.Label(top, style="Default.TLabel", text='Partial2 Select')
+        self.BtnPartial2SelVar=tk.IntVar()
+        self.BtnPartial2Sel=ttk.Checkbutton(top, text='Partial2 Select', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial2SelVar)
+        self.Partial2Sel.grid()
+        self.BtnPartial2Sel.grid()
+        self.Partial3Sw=ttk.Label(top, style="Default.TLabel", text='Partial3 Switch')
+        self.BtnPartial3SwVar=tk.IntVar()
+        self.BtnPartial3Sw=ttk.Checkbutton(top, text='Partial3 Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial3SwVar)
+        self.Partial3Sw.grid()
+        self.BtnPartial3Sw.grid()
+        self.Partial3Sel=ttk.Label(top, style="Default.TLabel", text='Partial3 Select')
+        self.BtnPartial3SelVar=tk.IntVar()
+        self.BtnPartial3Sel=ttk.Checkbutton(top, text='Partial3 Select', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnPartial3SelVar)
+        self.Partial3Sel.grid()
+        self.BtnPartial3Sel.grid()
+        self.RINGSw=ttk.Label(top, style="Default.TLabel", text='RING Switch')
+        self.BtnRINGSwVar=tk.IntVar()
+        self.BtnRINGSw=ttk.Checkbutton(top, text='RING Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnRINGSwVar)
+        self.RINGSw.grid()
+        self.BtnRINGSw.grid()
+        self.UnisonSw=ttk.Label(top, style="Default.TLabel", text='Unison Switch')
+        self.BtnUnisonSwVar=tk.IntVar()
+        self.BtnUnisonSw=ttk.Checkbutton(top, text='Unison Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnUnisonSwVar)
+        self.UnisonSw.grid()
+        self.BtnUnisonSw.grid()
+        self.LegatoSw=ttk.Label(top, style="Default.TLabel", text='Legato Switch')
+        self.BtnLegatoSwVar=tk.IntVar()
+        self.BtnLegatoSw=ttk.Checkbutton(top, text='Legato Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='diamond_cross',variable=self.BtnLegatoSwVar)
+        self.LegatoSw.grid()
+        self.BtnLegatoSw.grid()
+
 class Voice():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Voice")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.AutoPitchSwitch=ttk.Label(top, style="Default.TLabel", text='Auto Pitch Switch')
+        self.AutoPitchSwitch.grid()
+        self.BtnAutoPitchSwitchVar=tk.IntVar()
+        self.BtnAutoPitchSwitch=ttk.Checkbutton(top, text='Auto Pitch Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnAutoPitchSwitchVar)
+        self.BtnAutoPitchSwitch.grid()
+        self.VocoderSwitch=ttk.Label(top, style="Default.TLabel", text='Vocoder Switch')
+        self.VocoderSwitch.grid()
+        self.BtnVocoderSwitchVar=tk.IntVar()
+        self.BtnVocoderSwitch=ttk.Checkbutton(top, text='Vocoder Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnVocoderSwitchVar)
+        self.BtnVocoderSwitch.grid()
 
 class Effects():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Effects")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.DelayEnable=ttk.Label(top, style="Default.TLabel", text='Delay Enable')
+        self.DelayEnable.grid()
+        self.BtnDelayEnableVar=tk.IntVar()
+        self.BtnDelayEnable=ttk.Checkbutton(top, text='Delay Enable', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnDelayEnableVar)
+        self.BtnDelayEnable.grid()
+        self.ReverbEnable=ttk.Label(top, style="Default.TLabel", text='Reverb Enable')
+        self.ReverbEnable.grid()
+        self.BtnReverbEnableVar=tk.IntVar()
+        self.BtnReverbEnable=ttk.Checkbutton(top, text='Reverb Enable', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnReverbEnableVar)
+        self.BtnReverbEnable.grid()
+
 class ProgramController():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Arpeggio")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.ArpeggioSwitch=ttk.Label(top, style="Default.TLabel", text='Arpeggio Switch')
+        self.ArpeggioSwitch.grid()
+        self.BtnArpeggioSwitchVar=tk.IntVar()
+        self.BtnArpeggioSwitch=ttk.Checkbutton(top, text='Arpeggio Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnArpeggioSwitchVar)
+        self.BtnArpeggioSwitch.grid()
+
+
 class Program():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Program")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
+        self.ArpeggioSwitch=ttk.Label(top, style="Default.TLabel", text='Arpeggio Switch')
+        self.ArpeggioSwitch.grid()
+        self.BtnArpeggioSwitchVar=tk.IntVar()
+        self.BtnArpeggioSwitch=ttk.Checkbutton(top, text='Arpeggio Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnArpeggioSwitchVar)
+        self.BtnArpeggioSwitch.grid()
+
+
 class Drums():
-    def __init__(self, top=None):
+    def __init__(self, top=None,loc=None,siz=None, name=None):
         top.geometry("762x300+187+88")
         top.minsize(400, 200)
         top.maxsize(1905, 1050)
         top.resizable(1,  1)
         top.title("JD-Xi Drums")
+        top.configure(background=default_bg)
+
         self.top = top
         self.Top_TExit = ttk.Button(self.top)
         self.Top_TExit.place(relx=0.874, rely=0.033, height=28, width=83)
-        self.Top_TExit.configure(command=do_exit)
+        self.Top_TExit.configure(command=on_ExitClick)
         self.Top_TExit.configure(text='''Exit''')
         self.Top_TExit.configure(compound='left')
         self.Top_TExit.configure(cursor="cross")
 
-        
+        self.PartialReceiveExpression=ttk.Label(top, style="Default.TLabel", text='Partial Receive Expression')
+        self.PartialReceiveExpression.grid()
+        self.BtnPartialReceiveExpressionVar=tk.IntVar()
+        self.BtnPartialReceiveExpression=ttk.Checkbutton(top, text='Partial Receive Expression', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnPartialReceiveExpressionVar)
+        self.BtnPartialReceiveExpression.grid()
+        self.PartialReceiveHold_1=ttk.Label(top, style="Default.TLabel", text='Partial Receive Hold-1')
+        self.PartialReceiveHold_1.grid()
+        self.BtnPartialReceiveHold_1Var=tk.IntVar()
+        self.BtnPartialReceiveHold_1=ttk.Checkbutton(top, text='Partial Receive Hold-1', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnPartialReceiveHold_1Var)
+        self.BtnPartialReceiveHold_1.grid()
+        self.WMT1WaveSwitch=ttk.Label(top, style="Default.TLabel", text='WMT1 Wave Switch')
+        self.WMT1WaveSwitch.grid()
+        self.BtnWMT1WaveSwitchVar=tk.IntVar()
+        self.BtnWMT1WaveSwitch=ttk.Checkbutton(top, text='WMT1 Wave Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT1WaveSwitchVar)
+        self.BtnWMT1WaveSwitch.grid()
+        self.WMT1WaveFXMSwitch=ttk.Label(top, style="Default.TLabel", text='WMT1 Wave FXM Switch')
+        self.WMT1WaveFXMSwitch.grid()
+        self.BtnWMT1WaveFXMSwitchVar=tk.IntVar()
+        self.BtnWMT1WaveFXMSwitch=ttk.Checkbutton(top, text='WMT1 Wave FXM Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT1WaveFXMSwitchVar)
+        self.BtnWMT1WaveFXMSwitch.grid()
+        self.WMT1WaveTempoSync=ttk.Label(top, style="Default.TLabel", text='WMT1 Wave Tempo Sync')
+        self.WMT1WaveTempoSync.grid()
+        self.BtnWMT1WaveTempoSyncVar=tk.IntVar()
+        self.BtnWMT1WaveTempoSync=ttk.Checkbutton(top, text='WMT1 Wave Tempo Sync', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT1WaveTempoSyncVar)
+        self.BtnWMT1WaveTempoSync.grid()
+        self.WMT1WaveRandomPanSwitch=ttk.Label(top, style="Default.TLabel", text='WMT1 Wave Random Pan Switch')
+        self.WMT1WaveRandomPanSwitch.grid()
+        self.BtnWMT1WaveRandomPanSwitchVar=tk.IntVar()
+        self.BtnWMT1WaveRandomPanSwitch=ttk.Checkbutton(top, text='WMT1 Wave Random Pan Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT1WaveRandomPanSwitchVar)
+        self.BtnWMT1WaveRandomPanSwitch.grid()
+        self.WMT2WaveSwitch=ttk.Label(top, style="Default.TLabel", text='WMT2 Wave Switch')
+        self.WMT2WaveSwitch.grid()
+        self.BtnWMT2WaveSwitchVar=tk.IntVar()
+        self.BtnWMT2WaveSwitch=ttk.Checkbutton(top, text='WMT2 Wave Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT2WaveSwitchVar)
+        self.BtnWMT2WaveSwitch.grid()
+        self.WMT2WaveFXMSwitch=ttk.Label(top, style="Default.TLabel", text='WMT2 Wave FXM Switch')
+        self.WMT2WaveFXMSwitch.grid()
+        self.BtnWMT2WaveFXMSwitchVar=tk.IntVar()
+        self.BtnWMT2WaveFXMSwitch=ttk.Checkbutton(top, text='WMT2 Wave FXM Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT2WaveFXMSwitchVar)
+        self.BtnWMT2WaveFXMSwitch.grid()
+        self.WMT2WaveTempoSync=ttk.Label(top, style="Default.TLabel", text='WMT2 Wave Tempo Sync')
+        self.WMT2WaveTempoSync.grid()
+        self.BtnWMT2WaveTempoSyncVar=tk.IntVar()
+        self.BtnWMT2WaveTempoSync=ttk.Checkbutton(top, text='WMT2 Wave Tempo Sync', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT2WaveTempoSyncVar)
+        self.BtnWMT2WaveTempoSync.grid()
+        self.WMT2WaveRandomPanSwitch=ttk.Label(top, style="Default.TLabel", text='WMT2 Wave Random Pan Switch')
+        self.WMT2WaveRandomPanSwitch.grid()
+        self.BtnWMT2WaveRandomPanSwitchVar=tk.IntVar()
+        self.BtnWMT2WaveRandomPanSwitch=ttk.Checkbutton(top, text='WMT2 Wave Random Pan Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT2WaveRandomPanSwitchVar)
+        self.BtnWMT2WaveRandomPanSwitch.grid()
+        self.WMT3WaveSwitch=ttk.Label(top, style="Default.TLabel", text='WMT3 Wave Switch')
+        self.WMT3WaveSwitch.grid()
+        self.BtnWMT3WaveSwitchVar=tk.IntVar()
+        self.BtnWMT3WaveSwitch=ttk.Checkbutton(top, text='WMT3 Wave Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT3WaveSwitchVar)
+        self.BtnWMT3WaveSwitch.grid()
+        self.WMT3WaveFXMSwitch=ttk.Label(top, style="Default.TLabel", text='WMT3 Wave FXM Switch')
+        self.WMT3WaveFXMSwitch.grid()
+        self.BtnWMT3WaveFXMSwitchVar=tk.IntVar()
+        self.BtnWMT3WaveFXMSwitch=ttk.Checkbutton(top, text='WMT3 Wave FXM Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT3WaveFXMSwitchVar)
+        self.BtnWMT3WaveFXMSwitch.grid()
+        self.WMT3WaveTempoSync=ttk.Label(top, style="Default.TLabel", text='WMT3 Wave Tempo Sync')
+        self.WMT3WaveTempoSync.grid()
+        self.BtnWMT3WaveTempoSyncVar=tk.IntVar()
+        self.BtnWMT3WaveTempoSync=ttk.Checkbutton(top, text='WMT3 Wave Tempo Sync', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT3WaveTempoSyncVar)
+        self.BtnWMT3WaveTempoSync.grid()
+        self.WMT3WaveRandomPanSwitch=ttk.Label(top, style="Default.TLabel", text='WMT3 Wave Random Pan Switch')
+        self.WMT3WaveRandomPanSwitch.grid()
+        self.BtnWMT3WaveRandomPanSwitchVar=tk.IntVar()
+        self.BtnWMT3WaveRandomPanSwitch=ttk.Checkbutton(top, text='WMT3 Wave Random Pan Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT3WaveRandomPanSwitchVar)
+        self.BtnWMT3WaveRandomPanSwitch.grid()
+        self.WMT4WaveSwitch=ttk.Label(top, style="Default.TLabel", text='WMT4 Wave Switch')
+        self.WMT4WaveSwitch.grid()
+        self.BtnWMT4WaveSwitchVar=tk.IntVar()
+        self.BtnWMT4WaveSwitch=ttk.Checkbutton(top, text='WMT4 Wave Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT4WaveSwitchVar)
+        self.BtnWMT4WaveSwitch.grid()
+        self.WMT4WaveFXMSwitch=ttk.Label(top, style="Default.TLabel", text='WMT4 Wave FXM Switch')
+        self.WMT4WaveFXMSwitch.grid()
+        self.BtnWMT4WaveFXMSwitchVar=tk.IntVar()
+        self.BtnWMT4WaveFXMSwitch=ttk.Checkbutton(top, text='WMT4 Wave FXM Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT4WaveFXMSwitchVar)
+        self.BtnWMT4WaveFXMSwitch.grid()
+        self.WMT4WaveTempoSync=ttk.Label(top, style="Default.TLabel", text='WMT4 Wave Tempo Sync')
+        self.WMT4WaveTempoSync.grid()
+        self.BtnWMT4WaveTempoSyncVar=tk.IntVar()
+        self.BtnWMT4WaveTempoSync=ttk.Checkbutton(top, text='WMT4 Wave Tempo Sync', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT4WaveTempoSyncVar)
+        self.BtnWMT4WaveTempoSync.grid()
+        self.WMT4WaveRandomPanSwitch=ttk.Label(top, style="Default.TLabel", text='WMT4 Wave Random Pan Switch')
+        self.WMT4WaveRandomPanSwitch.grid()
+        self.BtnWMT4WaveRandomPanSwitchVar=tk.IntVar()
+        self.BtnWMT4WaveRandomPanSwitch=ttk.Checkbutton(top, text='WMT4 Wave Random Pan Switch', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnWMT4WaveRandomPanSwitchVar)
+        self.BtnWMT4WaveRandomPanSwitch.grid()
+        self.OneShotMode=ttk.Label(top, style="Default.TLabel", text='One Shot Mode')
+        self.OneShotMode.grid()
+        self.BtnOneShotModeVar=tk.IntVar()
+        self.BtnOneShotMode=ttk.Checkbutton(top, text='One Shot Mode', style='OnOff.TCheckbutton',image=[_img0, 'selected', _img1,'active',_img2],cursor='cross',variable=self.BtnOneShotModeVar)
+        self.BtnOneShotMode.grid()
+
+
+def calculate_backgrounds():
+    global notesstring, defaultinstrument, instrumentlist
+    global  w1, w2, w3, w4, w5, w6, w7, w8, w9, top, top_Analog, top_Digital1, top_Digital2, top_Voice, top_Effects, top_ProgramController, top_Program, top_Drums
+
+    pass        
 
 def close_or_hide(*args, **kwargs):
     window=kwargs['window']
@@ -2736,40 +3641,45 @@ def close_or_hide(*args, **kwargs):
 
 def make_root_windows():
   global notesstring, defaultinstrument, instrumentlist
-  global  w1, w2, w3, w4, w5, w6, w7, w8, w9, top, top_Analog, top_Digital1, top_Digital2, top_Voice, top_Effects, top_Arpeggio, top_Program, top_Drums
+  global  w1, w2, w3, w4, w5, w6, w7, w8, w9, top, top_Analog, top_Digital1, top_Digital2, top_Voice, top_Effects, top_ProgramController, top_Program, top_Drums
 
   # TODO!!! tk.theme(theme)
 
   top = root
   root.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=root))
 
-  w1 = JDXi_manager(top=root,loc=(10,1),siz=(740, 350))
+
+
+  w1 = JDXi_manager(top=root,loc=(10,1),siz=(900, 350),name="root")
+  w1.top.update()
+  w1.update_labels()
   # Creates a toplevel widget.
   top_Analog = tk.Toplevel(root)
-  w2 = Analog(top_Analog)
+  w2 = Analog(top=top_Analog,name="top_Analog")
   top_Analog.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Analog))
   top_Digital1 = tk.Toplevel(root)
-  w3 = Digital1(top_Digital1)
+  w3 = Digital1(top=top_Digital1, name="top_Digital1")
   top_Digital1.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Digital1))
   top_Digital2 = tk.Toplevel(root)
-  w4 = Digital2(top_Digital2)
+  w4 = Digital2(top=top_Digital2, name="top_Digital2")
   top_Digital2.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Digital2))
   top_Voice = tk.Toplevel(root)
-  w5 = Voice(top_Voice)
+  w5 = Voice(top=top_Voice, name="top_Voice")
   top_Voice.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Voice))
   top_Effects = tk.Toplevel(root)
-  w6 = Effects(top_Effects)
+  w6 = Effects(top=top_Effects, name="top_Effects")
   top_Effects.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Effects))
   top_ProgramController = tk.Toplevel(root)
-  w7 = ProgramController(top_ProgramController)
+  w7 = ProgramController(top=top_ProgramController, name="top_ProgramController")
   top_ProgramController.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_ProgramController))
   top_Program = tk.Toplevel(root)
-  w8 = Program(top_Program)
+  w8 = Program(top=top_Program, name="top_Program")
   top_Program.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Program))
   top_Drums = tk.Toplevel(root)
-  w9 = Drums(top_Drums)
+  w9 = Drums(top=top_Drums, name="top_Drums")
   top_Drums.protocol( 'WM_DELETE_WINDOW' , lambda :close_or_hide(window=top_Drums))
-
+  calculate_backgrounds()
+  
   return 
 
 def make_main_window(root, theme, loc, siz):
@@ -3042,7 +3952,12 @@ def main(*args):
     # TODO menubar.add_cascade(menu=menu_help, label='Help')
     #main_window=make_main_window(tk.theme(),(10,1),(565, 575))
 ####    main_window=make_main_window(root, 'default',(10,1),(565, 575))
+    prepare_images()
+
     make_root_windows()
+    root.mainloop()
+    sys.exit(0)    
+    
     AnalogSynth=Analog_Synth()
     ret=AnalogSynth.get_data()
     ret=1
